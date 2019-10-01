@@ -23,6 +23,16 @@ public class LoginServlet extends HttpServlet {
             userName = session.getAttribute("username").toString();
         }
         response.sendError(403,userName);
+        synchronized (this) {
+            if(UsersDataBase.usernameExists(userName)) {
+                    UsersDataBase.addUserName(userName);
+            }
+            else
+            {
+                response.sendError(403,"User name already exists");
+            }
+        }
+
 //        if(userName==null){
 //            String userNameFromRequest=request.getParameter("userName");
 //            UserManager userManager=ServletUtils.getUserManaqer(getServletContext());
@@ -37,5 +47,9 @@ public class LoginServlet extends HttpServlet {
 //                }
 //            }
 //        }
+    }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req,resp);
     }
 }

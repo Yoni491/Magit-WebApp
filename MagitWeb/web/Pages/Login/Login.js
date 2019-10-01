@@ -1,21 +1,23 @@
+
 $(function () {
     var userName=$("#userName");
-    $("#logInBtn").click(function () {
+    var msg=$("#s");
+    $("#logInBtn").bind("click",function () {
         $.ajax({
             data:userName,
             url: '/Login',
             success:function () {
-                $("#s").text("you logged in");
-                $("#s").css("color","black");
-                location.href='/pages/userPage/UserPage.html';
+                msg.text("you logged in");
+                msg.css("color","black");
+                location.href='Pages/UserPage/UserPage.html';
             },
             error: function (xhr, status, error) {
                 if(xhr.status===403){
-                    $("#s").text("name already exist!");
-                    $("#s").css("color","red")
+                    msg.text("name already exist!");
+                    msg.css("color","red")
                 }
                 else{
-                    $("#s").text("failed to get result from server")
+                    msg.text("failed to get result from server")
                 }
             }
         });
