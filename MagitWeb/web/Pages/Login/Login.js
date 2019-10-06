@@ -5,7 +5,7 @@ $(function () {
     $("#logInBtn").bind("click",function () {
         $.ajax({
             data:userName,
-            url: '/Login',
+            url: 'getLoginServlet',
             success:function () {
                 msg.text("you logged in");
                 msg.css("color","black");
@@ -21,5 +21,10 @@ $(function () {
                 }
             }
         });
+        // $( "userName" ).data(userName);
+        // $.get('getLoginServlet', function(data) {
+        //     alert(data);
+        // });
+
     })
 })

@@ -11,18 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String userName;
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            userName = null;
-        } else {
-            userName = session.getAttribute("username").toString();
-        }
-        response.sendError(403,userName);
+        userName=request.getParameter("userName");
         synchronized (this) {
             if(UsersDataBase.usernameExists(userName)) {
                     UsersDataBase.addUserName(userName);
