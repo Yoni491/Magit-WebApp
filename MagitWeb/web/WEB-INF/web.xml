@@ -5,11 +5,19 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_4_0.xsd"
            version="4.0">
     <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>servlets.LoginServlet</servlet-class>
+        <servlet-name>SignInServlet</servlet-name>
+        <servlet-class>servlets.SignInServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/Pages/Login/getLoginServlet</url-pattern>
+        <servlet-name>SignInServlet</servlet-name>
+        <url-pattern>/Pages/Login/getSignInServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SignUpServlet</servlet-name>
+        <servlet-class>servlets.SignUpServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignUpServlet</servlet-name>
+        <url-pattern>/Pages/Login/getSignUpServlet</url-pattern>
     </servlet-mapping>
 </web-app>

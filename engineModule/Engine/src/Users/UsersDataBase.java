@@ -10,5 +10,6 @@ public class UsersDataBase {
      public static void addUserName(String name){
         usersMap.put(name,new UserData(name));
     }
+
 }
 
