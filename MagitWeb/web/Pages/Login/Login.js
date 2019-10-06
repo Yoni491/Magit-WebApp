@@ -10,7 +10,7 @@ $(function () {
                 msg.text("you logged in");
                 msg.css("color","black");
 
-                window.location.replace("Magit/Pages/UserPage/UserPage.html");
+                window.location.replace("../../Pages/UserPage/UserPage.html");
             },
             error: function (xhr, status, error) {
                 if(xhr.status===403){
