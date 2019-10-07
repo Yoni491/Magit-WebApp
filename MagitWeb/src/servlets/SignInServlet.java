@@ -24,6 +24,8 @@ public class SignInServlet extends HttpServlet {
             if(!UsersDataBase.usernameExists(userName)) {
                 response.sendError(403,"User name doesn't exists");
             }
+            else
+                request.getSession(true).setAttribute("userName", userName);
         }
     }
     @Override

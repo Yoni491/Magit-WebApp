@@ -10,7 +10,7 @@
 
         <title>M.A-GitHub</title>
         <script src="../../common/jquery-2.0.3.min.js"></script>
-        <script src="../../common/context-path-helper.js"></script>
+        <script src="UserPage.js"></script>
         <script src="main.js"></script>
 
         <link rel="stylesheet" href="css/sidebar.css">
@@ -30,6 +30,10 @@
             <div class="container">
 
                 <h2>UserName : <%=usernameFromSession%></h2>
+
+                <a href="../../logout" role="button">logout</a>
+
+
                 <h1 class="my-4">My Repositories</h1>
                 <!-- Repositories Icons Section -->
                 <!-- /.row -->
