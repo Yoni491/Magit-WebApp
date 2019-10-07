@@ -16,10 +16,12 @@ public class SignUpServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String userName;
+
         userName=request.getParameter("userName");
         synchronized (this) {
             if(!UsersDataBase.usernameExists(userName)) {
                 UsersDataBase.addUserName(userName);
+                request.getSession(true).setAttribute("userName", userName);
             }
             else
             {

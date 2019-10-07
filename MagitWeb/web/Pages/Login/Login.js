@@ -10,7 +10,7 @@ $(function () {
                 msg.text("you logged in");
                 msg.css("color","black");
 
-                window.location.replace("../../Pages/UserPage/UserPage.html");
+                window.location.replace("../../Pages/UserPage/UserPage.jsp");
             },
             error: function (xhr, status, error) {
                 if(xhr.status===403){
@@ -40,7 +40,7 @@ $(function () {
             success:function () {
                 msg.text("you logged in");
                 msg.css("color","black");
-                location.href='Pages/UserPage/UserPage.html';
+                location.href='Pages/UserPage/UserPage.jsp';
             },
             error: function (xhr) {
                 if(xhr.status===403){
