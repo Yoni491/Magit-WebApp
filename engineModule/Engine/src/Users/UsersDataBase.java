@@ -1,15 +1,31 @@
 package Users;
 
+import Repository.Repository;
+
+import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 public class UsersDataBase {
-    public static HashMap<String,UserData> usersMap=new HashMap<>();
+    private static HashMap<String,UserData> usersMap=new HashMap<>();
      public static boolean usernameExists(String name){
         return usersMap.containsKey(name);
     }
      public static void addUserName(String name){
         usersMap.put(name,new UserData(name));
+         new File("C:/magit-ex3/"+name).mkdir();
+    }
+    public static void addRepo(String username,String repoName, Repository repo){
+             usersMap.get(username).repoMap.put(repoName,repo);
     }
 
+    public static Set<String> getUsers() {
+         return usersMap.keySet();
+    }
+
+    public static Collection<UserData> getAllRepoNames() {
+       return usersMap.values();
+    }
 }
 

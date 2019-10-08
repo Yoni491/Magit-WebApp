@@ -1,4 +1,8 @@
 <%@ page import="servlets.SessionUtils" %>
+<%@ page import="static servlets.SessionUtils.errorMsgXml" %>
+<%@ page import="Users.UsersDataBase" %>
+<%@ page import="Users.UserData" %>
+<%@ page import="Repository.Repository" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -28,26 +32,34 @@
             <% String usernameFromSession = SessionUtils.getUsername(request);%>
             <% if (usernameFromSession != null) {%>
             <div class="container">
-
                 <h2>UserName : <%=usernameFromSession%></h2>
-
-                <a href="../../logout" role="button">logout</a>
-
-
-                <h1 class="my-4">My Repositories</h1>
+                <h1 class="my-4">Repositories</h1>
                 <!-- Repositories Icons Section -->
                 <!-- /.row -->
-
                 <!-- Call to Action Section -->
                 <div class="row mb-4">
                     <div class="col-md-8">
                         <p>Upload a new repository from XML file now!</p>
+                        <ul style="list-style-type:circle;">
+                                <% for(UserData user : UsersDataBase.getAllRepoNames()){
+                                for(Repository repo: user.repoMap.values()){
+                                %>
+                            <li><%=repo.getName()%></li>
+                            <% }}%>
+                        </ul>
                     </div>
                     <div class="col-md-4">
-                        <form id="uploadRepositoryForm" action="upload-repository" enctype="multipart/form-data" method="POST">
+                        <form id="uploadRepositoryForm" action="upload" enctype="multipart/form-data" method="POST">
+                            <a href="../../logout" role="button">logout</a>
                             <input class="btn btn-lg btn-secondary btn-block upload-repository" id="uploadRepositoryBtn" type="file" accept=".xml" name="xml-repository" href="#"><br>
                             <input type="submit" value="Upload File"><br>
-                            <!--                 <a class="btn btn-lg btn-secondary btn-block upload-repository" id="uploadRepositoryBtn" href="#">Upload a repository!</a>-->
+                            <% if(!errorMsgXml.equals("")){%>
+                            <h3><%=errorMsgXml%></h3>
+                            <%errorMsgXml="";
+                            }%>
+
+
+
                         </form>
                     </div>
                 </div>
@@ -55,4 +67,3 @@
             <%}%>
     </body>
 </html>
-

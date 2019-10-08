@@ -1,5 +1,6 @@
 package servlets;
 
+import EngineRunner.ModuleTwo;
 import Users.UsersDataBase;
 
 import java.io.IOException;
@@ -16,11 +17,13 @@ public class SignUpServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String userName;
-
         userName=request.getParameter("userName");
+        if(userName.equals(""))
+            response.sendError(403,"Please enter a username");
         synchronized (this) {
             if(!UsersDataBase.usernameExists(userName)) {
                 UsersDataBase.addUserName(userName);
+                ModuleTwo.updateUsername(userName);
                 request.getSession(true).setAttribute("userName", userName);
             }
             else

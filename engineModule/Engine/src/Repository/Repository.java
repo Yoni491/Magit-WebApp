@@ -30,14 +30,15 @@ public class Repository {
     private Map<String, MagitObject> objList; //<sha1,object>
     private ArrayList<Branch> branches;
     private Branch headBranch = null;
-    private String path;
+    private String path;//update
     private String name;
-    private static String username = "default";
+    private static String username = "default"; //update
     private Delta currDelta;
     private HashMap<String, MergeCase> conflictMap = new HashMap<>();
     private String latestMergedBranchSha1 = null;
-    private String remoteRepoPath = "";
-    private String remoteRepoName;
+    private String remoteRepoPath = "";//update
+    private String remoteRepoName;//update
+    //private String remoteRepoUsername;//update
 
     public Repository(String _path, Map<String, MagitObject> _objList, ArrayList<Branch> _branches) {
         path = _path;

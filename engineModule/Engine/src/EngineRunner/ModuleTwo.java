@@ -20,11 +20,12 @@ import java.util.List;
 
 
 public class ModuleTwo {
-
+    public static String Username="";
     private static Repository activeRepo = null;
 
     public static void updateUsername(String name) {
         Repository.updateUsername(name);
+        Username=name;
     }
 
     public static void makeRemoteRepositoryFiles(String path) throws IOException {
@@ -49,26 +50,26 @@ public class ModuleTwo {
         activeRepo = repo;
     }
 
-    public static void loadRepo(String path) throws XmlNotValidException, IOException, NoSuchRepoException, ClassNotFoundException {
-
-        XmlData reader = new XmlData(path);
-        String pathFromXml = reader.getMagitRepository().getLocation();
-        Path p = Paths.get(pathFromXml + "/.magit");
-        boolean deleteRepo = true;
-        if (Files.isDirectory(p)) {
-//            deleteRepo = Controller.deleteOrNot();
-        }
-        if (deleteRepo) {
-            FileUtils.deleteDirectory(new File(reader.getMagitRepository().getLocation()));
-            new File(reader.getMagitRepository().getLocation()).mkdir();
-            activeRepo = Repository.makeRepoFromXmlRepo(reader);
-            activeRepo.createEmptyRepo();
-            activeRepo.makeRemoteFiles();
-            activeRepo.createFiles();
-        } else {
-            SwitchRepo(pathFromXml);
-        }
-    }
+//    public static void loadRepo(String path) throws XmlNotValidException, IOException, NoSuchRepoException, ClassNotFoundException {
+//
+//        XmlData reader = new XmlData(path);
+//        String pathFromXml = reader.getMagitRepository().getLocation();
+//        Path p = Paths.get(pathFromXml + "/.magit");
+//        boolean deleteRepo = true;
+//        if (Files.isDirectory(p)) {
+////            deleteRepo = Controller.deleteOrNot();
+//        }
+//        if (deleteRepo) {
+//            FileUtils.deleteDirectory(new File(reader.getMagitRepository().getLocation()));
+//            new File(reader.getMagitRepository().getLocation()).mkdir();
+//            activeRepo = Repository.makeRepoFromXmlRepo(reader);
+//            activeRepo.createEmptyRepo();
+//            activeRepo.makeRemoteFiles();
+//            activeRepo.createFiles();
+//        } else {
+//            SwitchRepo(pathFromXml);
+//        }
+//    }
 
     public static boolean executeCommit(String msg) throws NoActiveRepositoryException, CommitCannotExecutException, IOException {
         checkIfActiveRepoExists();
@@ -206,5 +207,25 @@ public class ModuleTwo {
             SwitchRepo(myPath);
             activeRepo.updateRB();
         }
+    }
+    public static void buildDir_Ex3()
+    {
+        new File("C:/magit-ex3").mkdir();
+        new File("C:/magit-ex3/XML").mkdir();
+    }
+    public static void makeFileForXML_Ex3(String content) throws FileNotFoundException {
+        File f = new File("C:/magit-ex3/XML/tempXML.xml");
+        if(f.exists())
+            f.delete();
+        PrintWriter out = new PrintWriter("C:/magit-ex3/XML/tempXML.xml");
+        out.println(content);
+        out.close();
+    }
+    public static void makeXMLfromRepo_Ex3() throws XmlNotValidException, IOException {
+
+        activeRepo =Repository.makeRepoFromXmlRepo(new XmlData("C:/magit-ex3/XML/tempXML.xml",Username));
+        activeRepo.createEmptyRepo();
+        activeRepo.createFiles();
+        Users.UsersDataBase.addRepo(Username,activeRepo.getName(),activeRepo);
     }
 }

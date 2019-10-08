@@ -1,5 +1,6 @@
 package servlets;
 
+import EngineRunner.ModuleTwo;
 import Users.UsersDataBase;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class SignInServlet extends HttpServlet {
                 response.sendError(403,"User name doesn't exists");
             }
             else
+                ModuleTwo.updateUsername(userName);
                 request.getSession(true).setAttribute("userName", userName);
         }
     }

@@ -43,18 +43,20 @@ public class XmlData {
     }
 
 
-    public XmlData(String XmlPath) throws XmlNotValidException {
+    public XmlData(String XmlPath,String username) throws XmlNotValidException {
         File file = new File(XmlPath);
         try {
             checkIfXmlExists(file);
             JAXBContext jaxbContext = JAXBContext.newInstance(MagitRepository.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             magitRepository = (MagitRepository) jaxbUnmarshaller.unmarshal(file);
+            magitRepository.setLocation("C:/magit-ex3/"+username+"/"+magitRepository.getName());
+            new File("C:/magit-ex3/"+username+"/"+magitRepository.getName()).mkdir();
             magitBranches = magitRepository.getMagitBranches();
             magitCommits = magitRepository.getMagitCommits();
             magitFolders = magitRepository.getMagitFolders();
             magitBlobs = magitRepository.getMagitBlobs();
-            repositoryPath = magitRepository.getLocation();
+            repositoryPath ="C:/magit-ex3/"+username+"/"+magitRepository.getName();
             remoteReference = magitRepository.getMagitRemoteReference();
             if(remoteReference!=null){
                 remotePath = remoteReference.getLocation();

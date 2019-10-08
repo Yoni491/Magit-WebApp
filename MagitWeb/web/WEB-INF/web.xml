@@ -13,11 +13,19 @@
         <url-pattern>/Pages/Login/getSignInServlet</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>SignUpServlet</servlet-name>
-        <servlet-class>servlets.SignUpServlet</servlet-class>
-    </servlet>
+    <servlet-name>SignUpServlet</servlet-name>
+    <servlet-class>servlets.SignUpServlet</servlet-class>
+</servlet>
     <servlet-mapping>
         <servlet-name>SignUpServlet</servlet-name>
         <url-pattern>/Pages/Login/getSignUpServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>UploadXMLServlet</servlet-name>
+        <servlet-class>servlets.UploadXMLServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadXMLServlet</servlet-name>
+        <url-pattern>/Pages/UserPage/upload</url-pattern>
     </servlet-mapping>
 </web-app>

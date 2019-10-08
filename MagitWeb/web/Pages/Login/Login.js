@@ -22,11 +22,6 @@ $(function () {
                 }
             }
         });
-        // $( "userName" ).data(userName);
-        // $.get('getLoginServlet', function(data) {
-        //     alert(data);
-        // });
-
     })
 });
 
@@ -52,10 +47,6 @@ $(function () {
                 }
             }
         });
-        // $( "userName" ).data(userName);
-        // $.get('getLoginServlet', function(data) {
-        //     alert(data);
-        // });
 
     })
 });

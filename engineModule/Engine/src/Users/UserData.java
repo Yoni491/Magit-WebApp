@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class UserData {
         String username;
         boolean loggedIn;
-        HashMap<String, Repository> repoMap;
+        public HashMap<String, Repository> repoMap;
         UserData(String username){
             this.username = username;
             loggedIn = true;
