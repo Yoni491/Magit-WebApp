@@ -25,3 +25,9 @@
 //
 //     })
 // });
+    // locate your element and add the Click Event Listener
+    document.getElementById("allUsers").addEventListener("click",function() {
+    // e.target is our targetted element.
+    // try doing console.log(e.target.nodeName), it will result LI
+        setUsernameForRepos(request,"");
+});

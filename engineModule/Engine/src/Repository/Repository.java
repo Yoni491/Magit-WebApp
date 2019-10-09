@@ -483,7 +483,18 @@ public class Repository {
         Collections.sort(commitLst);
         return commitLst;
     }
+    public  String getLastCommitDate_Ex3()
+    {
+        ArrayList<Commit> commits=getCommits();
+        return commits.get(commits.size()-1).getDateAndTime().getDate();
 
+    }
+    public  String getLastCommitMsg_Ex3()
+    {
+        ArrayList<Commit> commits=getCommits();
+        return commits.get(commits.size()-1).getCommitPurposeMSG();
+
+    }
     public Branch getHeadBranch() {
         return headBranch;
     }

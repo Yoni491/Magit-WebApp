@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Scanner;
 
-import static servlets.SessionUtils.errorMsgXml;
+import static servlets.SessionUtils.*;
 
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
@@ -47,6 +47,7 @@ public class UploadXMLServlet extends HttpServlet {
         ModuleTwo.makeFileForXML_Ex3(XMLFileContent.toString());
         try {
             ModuleTwo.makeXMLfromRepo_Ex3();
+            successMsg="File uploaded successfully.";
         } catch (XmlNotValidException e) {
             errorMsgXml=e.getMessage();
         }

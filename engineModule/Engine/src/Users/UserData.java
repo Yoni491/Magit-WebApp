@@ -13,4 +13,8 @@ public class UserData {
             loggedIn = true;
             repoMap = new HashMap<>();
         }
+
+    public String getName() {
+            return username;
+    }
 }

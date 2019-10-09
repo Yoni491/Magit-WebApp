@@ -3,6 +3,8 @@
 <%@ page import="Users.UsersDataBase" %>
 <%@ page import="Users.UserData" %>
 <%@ page import="Repository.Repository" %>
+<%@ page import="static servlets.SessionUtils.successMsg" %>
+<%@ page import="static servlets.SessionUtils.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -29,8 +31,8 @@
     </head>
     <body>
         <div class="container">
-            <% String usernameFromSession = SessionUtils.getUsername(request);%>
-            <% if (usernameFromSession != null) {%>
+            <% String usernameFromSession = SessionUtils.getUsername(request);
+            if (usernameFromSession != null) {%>
             <div class="container">
                 <h2>UserName : <%=usernameFromSession%></h2>
                 <h1 class="my-4">Repositories</h1>
@@ -42,10 +44,17 @@
                         <p>Upload a new repository from XML file now!</p>
                         <ul style="list-style-type:circle;">
                                 <% for(UserData user : UsersDataBase.getAllRepoNames()){
+                                    if(user.getName().equals(getUsernameForRepos(request))||getUsernameForRepos(request).equals(""))
+                                    {
                                 for(Repository repo: user.repoMap.values()){
                                 %>
-                            <li><%=repo.getName()%></li>
-                            <% }}%>
+                            <h2><%=repo.getName()%></h2>
+                            <h4>Active branch name: <%=repo.getHeadBranchName()%></h4>
+                            <h4>Number of branches: <%=repo.getBranches().size()%></h4>
+                            <h4>Last commit date: <%=repo.getLastCommitDate_Ex3()%></h4>
+                            <h4>Last commit message: <%=repo.getLastCommitMsg_Ex3()%></h4>
+
+                            <% }}}%>
                         </ul>
                     </div>
                     <div class="col-md-4">
@@ -57,9 +66,25 @@
                             <h3><%=errorMsgXml%></h3>
                             <%errorMsgXml="";
                             }%>
+                            <% if(!successMsg.equals("")){%>
+                            <h3><%=successMsg%></h3>
+<%--                            <script>var snd = new Audio("wow.mp3");--%>
+<%--                            snd.play();</script>--%>
+                            <%successMsg="";
+                            }%>
+                            <ul>
+                                <li><a href="../../" onclick=<%setUsernameForRepos(request,"");%>>
+                                        All users
+                                </li>
+                            <% for(UserData user : UsersDataBase.getAllRepoNames()){
+                                if(!user.repoMap.isEmpty()){%>
 
+                            <li><a href="../../" onclick=<%=setUsernameForRepos(request,user.getName())%>>
+                                    <%=user.getName()%>
+                            </li>
 
-
+                                <%}}%>
+                            </ul>
                         </form>
                     </div>
                 </div>
