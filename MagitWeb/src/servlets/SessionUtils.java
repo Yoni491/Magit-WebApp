@@ -22,6 +22,39 @@ public class SessionUtils {
             session.setAttribute("pressed", username);
         }
     }
+    public static void setRepoName (HttpServletRequest request,String username) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("repoName", username);
+        }
+    }
+    public static String getRepoName (HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Object sessionAttribute = session != null ? session.getAttribute("repoName") : null;
+        return sessionAttribute != null ? sessionAttribute.toString() : "";
+    }
+    public static void setBranch (HttpServletRequest request,String username) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("branchName", username);
+        }
+    }
+    public static String getBranch (HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Object sessionAttribute = session != null ? session.getAttribute("branchName") : null;
+        return sessionAttribute != null ? sessionAttribute.toString() : "";
+    }
+    public static void setCommit (HttpServletRequest request,String username) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("commitName", username);
+        }
+    }
+    public static String getCommit (HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Object sessionAttribute = session != null ? session.getAttribute("commitName") : null;
+        return sessionAttribute != null ? sessionAttribute.toString() : "";
+    }
 
     public static void clearSession (HttpServletRequest request) {
         request.getSession().invalidate();

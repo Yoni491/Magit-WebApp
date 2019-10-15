@@ -36,4 +36,29 @@
         <servlet-name>UserRepoServlet</servlet-name>
         <url-pattern>/Pages/UserPage/selectUser</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RepoPageServlet</servlet-name>
+        <servlet-class>servlets.RepoPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RepoPageServlet</servlet-name>
+        <url-pattern>/Pages/UserPage/repoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>BranchServlet</servlet-name>
+        <servlet-class>servlets.BranchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BranchServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/BranchServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>commitServlet</servlet-name>
+        <servlet-class>servlets.commitServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>commitServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/commitServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

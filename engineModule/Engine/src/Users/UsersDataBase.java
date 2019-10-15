@@ -23,7 +23,9 @@ public class UsersDataBase {
     public static Set<String> getUsers() {
          return usersMap.keySet();
     }
-
+    public static Repository getRepo(String repo,String username){
+         return usersMap.get(username).repoMap.get(repo);
+    }
     public static Collection<UserData> getAllRepoNames() {
        return usersMap.values();
     }

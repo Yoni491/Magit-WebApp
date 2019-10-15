@@ -333,6 +333,26 @@ public class Repository {
             }
         }
     }
+    public List<String> commitFileNames_ex3(Commit commit)
+    {
+        List<String> res=new ArrayList<>();
+        try {
+            recursiveRootFolderToList_ex3(res,(Folder)objList.get(commit.getRootFolderSha1()),getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+    private void recursiveRootFolderToList_ex3(List<String> res, Folder _folder, String _path) throws IOException {
+        String newPath;
+        for (Fof fof : _folder.getFofList()) {
+            newPath = _path + "/" + fof.getName();
+            if (fof.getIsBlob())
+                res.add(newPath);
+            else
+                recursiveRootFolderToList_ex3(res,(Folder) objList.get(fof.getSha1()), newPath);
+        }
+    }
 
     public static void deleteWCFiles(String _path) throws IOException {
         File file = new File(_path);

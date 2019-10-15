@@ -53,7 +53,10 @@
                             <h4>Number of branches: <%=repo.getBranches().size()%></h4>
                             <h4>Last commit date: <%=repo.getLastCommitDate_Ex3()%></h4>
                             <h4>Last commit message: <%=repo.getLastCommitMsg_Ex3()%></h4>
-
+                            <form method="Post" action="repoServlet">
+                                <input type="hidden" name="repoName" value="<%=repo.getName()%>">
+                                <button type="submit" >Open repository</button>
+                            </form>
                             <% }}}%>
                         </ul>
                     </div>
