@@ -44,7 +44,7 @@
                         <p>Upload a new repository from XML file now!</p>
                         <ul style="list-style-type:circle;">
                                 <% for(UserData user : UsersDataBase.getAllRepoNames()){
-                                    if(user.getName().equals(getUsernameForRepos(request))||getUsernameForRepos(request).equals(""))
+                                    if(user.getName().equals(getUsernameForRepos(request))||getUsernameForRepos(request).equals("allUsers")||getUsernameForRepos(request).equals(""))
                                     {
                                 for(Repository repo: user.repoMap.values()){
                                 %>
@@ -72,23 +72,26 @@
 <%--                            snd.play();</script>--%>
                             <%successMsg="";
                             }%>
+                        </form>
                             <ul>
-                                <li><a href="../../" onclick=<%setUsernameForRepos(request,"");%>>
-                                        All users
-                                </li>
+                                <form method="Post" action="selectUser">
+                                    <input type="hidden"name="user" value="allUsers">
+                                    <button type="submit">allUsers</button>
+                                </form>
+
+
                             <% for(UserData user : UsersDataBase.getAllRepoNames()){
                                 if(!user.repoMap.isEmpty()){%>
-
-                            <li><a href="../../" onclick=<%=setUsernameForRepos(request,user.getName())%>>
-                                    <%=user.getName()%>
-                            </li>
-
+                                <form method="Post" action="selectUser">
+                                    <input type="hidden" name="user" value="<%=user.getName()%>">
+                                    <button type="submit" ><%=user.getName()%></button>
+                                </form>
                                 <%}}%>
                             </ul>
-                        </form>
                     </div>
                 </div>
         </div>
             <%}%>
     </body>
 </html>
+

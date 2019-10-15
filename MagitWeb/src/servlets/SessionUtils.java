@@ -13,13 +13,13 @@ public class SessionUtils {
     }
     public static String getUsernameForRepos (HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        Object sessionAttribute = session != null ? session.getAttribute("userNameForRepos") : null;
+        Object sessionAttribute = session != null ? session.getAttribute("pressed") : null;
         return sessionAttribute != null ? sessionAttribute.toString() : "";
     }
     public static void setUsernameForRepos (HttpServletRequest request,String username) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            session.setAttribute("userNameForRepos", username);
+            session.setAttribute("pressed", username);
         }
     }
 
