@@ -343,6 +343,15 @@ public class Repository {
         }
         return res;
     }
+    public Commit sha1ToCommit_ex3(String pressedCommitSha1)
+    {
+        return getCommits().stream().filter(ct->ct.getSha1().equals(pressedCommitSha1)).findFirst().orElse(null);
+    }
+    public Branch branchLambda_ex3(String branchName)
+    {
+        return (Branch)getBranches().stream().filter(br->br.getName().equals(branchName)).findFirst().orElse(null);
+
+    }
     private void recursiveRootFolderToList_ex3(List<String> res, Folder _folder, String _path) throws IOException {
         String newPath;
         for (Fof fof : _folder.getFofList()) {

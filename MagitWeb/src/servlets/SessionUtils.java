@@ -1,5 +1,8 @@
 package servlets;
 
+import Repository.Repository;
+import Users.UsersDataBase;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -56,7 +59,16 @@ public class SessionUtils {
         return sessionAttribute != null ? sessionAttribute.toString() : "";
     }
 
+    public static Repository getRepo(HttpServletRequest request)
+    {
+        String repoName = getRepoName(request);
+        String username = SessionUtils.getUsername(request);
+        return UsersDataBase.getRepo(repoName,username);
+
+    }
     public static void clearSession (HttpServletRequest request) {
         request.getSession().invalidate();
     }
+
+
 }

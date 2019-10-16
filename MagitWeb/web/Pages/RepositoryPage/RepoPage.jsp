@@ -40,19 +40,30 @@
         Commit pressedCommit;
         if(pressedCommitSha1.equals(""))
             pressedCommit=repo.getCommits().get(0);
-        else
-            pressedCommit= repo.getCommits().stream().filter(ct->ct.getSha1().equals(pressedCommitSha1)).findFirst().orElse(null);
-        Branch pressedBranch = (Branch)repo.getBranches().stream().filter(br->br.getName().equals(SessionUtils.getBranch(request))).findFirst().orElse(null);
+        else {
+            pressedCommit=repo.sha1ToCommit_ex3(pressedCommitSha1);
+        }
+        Branch pressedBranch = repo.branchLambda_ex3(SessionUtils.getBranch(request));
         if(pressedBranch==null)
             pressedBranch=repo.getHeadBranch();
         %>
         <h1>Repository-<%=repoName%></h1>
+
+        <form method="Post" action="MakeNewBranch">
+            <label>
+                <input type="text" name="newBranch">
+            </label>
+            <button type="submit">Make New Branch</button>
+        </form>
+
+
         <h2>Branches</h2>
         <form method="Post" action="BranchServlet">
             <input type="hidden" name="branch" value="<%=repo.getHeadBranchName()%>">
             <button type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
         </form>
-        <%for(Branch branch:repo.getBranches()) {%>
+        <%for(Branch branch:repo.getBranches()) {
+        %>
         <form method="Post" action="BranchServlet">
             <input type="hidden" name="branch" value="<%=branch.getName()%>">
             <button type="submit">Branch : <%=branch.getName()%></button>
@@ -60,9 +71,11 @@
         <%}%>
         <div class="col-md-8">
             <h2>Commits</h2>
-            <%for(Commit commit:repo.getBranchCommits(pressedBranch)) {%>
+
+            <%for(Commit commit:repo.getBranchCommits(pressedBranch)) {
+            %>
             <form method="Post" action="commitServlet">
-                <input type="hidden" name="branch" value="<%=commit.getSha1()%>">
+                <input type="hidden" name="commitSha1" value="<%=commit.getSha1()%>">
                  Sha1:   <%=commit.getSha1()%>
                  Date:   <%=commit.getDateAndTime()%>
                  Message: <%=commit.getCommitPurposeMSG()%>

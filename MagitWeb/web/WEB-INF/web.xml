@@ -61,4 +61,12 @@
         <servlet-name>commitServlet</servlet-name>
         <url-pattern>/Pages/RepositoryPage/commitServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>MakeNewBranchServlet</servlet-name>
+        <servlet-class>servlets.MakeNewBranchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MakeNewBranchServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/MakeNewBranch</url-pattern>
+    </servlet-mapping>
 </web-app>

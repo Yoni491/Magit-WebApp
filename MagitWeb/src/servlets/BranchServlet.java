@@ -1,5 +1,7 @@
 package servlets;
 
+import Repository.Repository;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +14,13 @@ public class BranchServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String press = request.getParameter("branchName");
+        String press = request.getParameter("branch");
+
         if(press!=null) {
             SessionUtils.setBranch(request,press);
+            SessionUtils.setCommit(request,"");
         }
+
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 
