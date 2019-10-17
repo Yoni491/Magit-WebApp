@@ -32,6 +32,7 @@
     <body>
         <div class="container">
             <% String usernameFromSession = SessionUtils.getUsername(request);
+            boolean isInForked,isUserEqualsRepoUser,isMainUser,isAllUsers;
             if (usernameFromSession != null) {%>
             <div class="container">
                 <h2>UserName : <%=usernameFromSession%></h2>
@@ -43,18 +44,16 @@
                     <div class="col-md-8">
                         <p>Upload a new repository from XML file now!</p>
                         <ul style="list-style-type:circle;">
-                                <% String usernameTemp=SessionUtils.getUsernameForRepos(request);
-                                boolean forked;
-                                if(getUsernameForRepos(request).equals("allUsers"))
-                                    usernameTemp=usernameFromSession;
-
+                                <%
+                                isAllUsers =getUsernameForRepos(request).equals("allUsers");
                                 for(UserData user : UsersDataBase.getAllRepoNames()){
-                                    if(user.getName().equals(getUsernameForRepos(request))||getUsernameForRepos(request).equals("allUsers")||getUsernameForRepos(request).equals(""))
+                                    isUserEqualsRepoUser = getUsernameForRepos(request).equals(user.getName());
+                                    isMainUser=getUsername(request).equals(user.getName());
+                                    if(isUserEqualsRepoUser || isAllUsers ||getUsernameForRepos(request).equals(""))
                                     {
                                     for(Repository repo: user.repoMap.values()){
-                                        if(usernameTemp.equals(usernameFromSession))
-                                            forked=true;
-                                        if((!((user.isInForkedRepos(repo.getName()))&&!(user.getName().equals(usernameFromSession)))))
+                                        isInForked=user.isInForkedRepos(repo.getName());
+                                        if(!(isInForked&&!(isMainUser)))
                                         {
                                     %>
                             <h2><%=repo.getName()%></h2>
