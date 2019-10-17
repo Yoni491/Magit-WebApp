@@ -62,14 +62,13 @@
         <div class="container">
             <h1>File Content</h1>
             <h2>File Name : <%=pressedFile%></h2>
-            <%if(!pressedFile.equals(""))
-                blobContent = repo.getFileContent_ex3(SessionUtils.getBlobSha1(request));%>
+            <%if(!pressedFile.equals("")){
+                blobContent = repo.getFileContent_ex3(SessionUtils.getBlobSha1(request));}%>
             <form method="Post" action="saveFileContent">
             <label><textarea name="fileContent"><%=blobContent%></textarea></label>
                 <label><input type="hidden" name="blobSha1" value="<%=SessionUtils.getBlobSha1(request)%>"></label>
                 <button type="submit">save</button>
             </form>
-
         </div>
     </body>
 </html>

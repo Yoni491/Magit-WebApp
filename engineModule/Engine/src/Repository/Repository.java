@@ -981,6 +981,12 @@ public class Repository {
         }
     return null;
     }
+
+    public void changeBlobSha1_ex3(String blobSha1, Blob updatedBlob) {
+        objList.put(updatedBlob.getSha1(),updatedBlob);
+        objList.remove(blobSha1);
+
+    }
 }
 
 

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static servlets.SessionUtils.getRepoName;
+
 
 public class forkRepoServlet extends HttpServlet {
     @Override
