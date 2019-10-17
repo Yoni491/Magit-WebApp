@@ -40,6 +40,10 @@ public class Repository {
     private String remoteRepoName;//update
     //private String remoteRepoUsername;//update
 
+    public boolean isForkOfOtherRepo_ex3()
+    {
+        return !remoteRepoPath.equals("");
+    }
     public Repository(String _path, Map<String, MagitObject> _objList, ArrayList<Branch> _branches) {
         path = _path;
         objList = _objList;
@@ -65,7 +69,7 @@ public class Repository {
         currDelta = repo.currDelta;
         conflictMap = repo.conflictMap;
         latestMergedBranchSha1 = repo.latestMergedBranchSha1;
-        remoteRepoPath = repo.remoteRepoPath;
+        remoteRepoPath = repo.path;
         remoteRepoName = repo.remoteRepoName;
     }
 

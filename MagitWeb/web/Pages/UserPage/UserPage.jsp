@@ -32,7 +32,7 @@
     <body>
         <div class="container">
             <% String usernameFromSession = SessionUtils.getUsername(request);
-            boolean isInForked,isUserEqualsRepoUser,isMainUser,isAllUsers;
+            boolean isForked,isUserEqualsRepoUser,isMainUser,isAllUsers;
             if (usernameFromSession != null) {%>
             <div class="container">
                 <h2>UserName : <%=usernameFromSession%></h2>
@@ -46,14 +46,16 @@
                         <ul style="list-style-type:circle;">
                                 <%
                                 isAllUsers =getUsernameForRepos(request).equals("allUsers");
+                                if(getUsernameForRepos(request).equals(""))
+                                    isAllUsers=true;
                                 for(UserData user : UsersDataBase.getAllRepoNames()){
                                     isUserEqualsRepoUser = getUsernameForRepos(request).equals(user.getName());
                                     isMainUser=getUsername(request).equals(user.getName());
-                                    if(isUserEqualsRepoUser || isAllUsers ||getUsernameForRepos(request).equals(""))
+                                    if(isUserEqualsRepoUser || isAllUsers)
                                     {
                                     for(Repository repo: user.repoMap.values()){
-                                        isInForked=user.isInForkedRepos(repo.getName());
-                                        if(!(isInForked&&!(isMainUser)))
+                                        isForked =repo.isForkOfOtherRepo_ex3();
+                                        if((!(isForked &&!(isMainUser)))&&!(isAllUsers&&isForked))
                                         {
                                     %>
                             <h2><%=repo.getName()%></h2>
