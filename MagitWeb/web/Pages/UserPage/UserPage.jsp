@@ -57,7 +57,8 @@
                                     for(Repository repo: user.repoMap.values()){
                                         isForked=UsersDataBase.getUserData(usernameFromSession).isInForkedRepos(repo.getName());
                                         isForkOfRepo =repo.isForkOfOtherRepo_ex3();
-                                        if((!(isForkOfRepo &&!(isMainUser)))&&!(isAllUsers&& isForkOfRepo))
+
+                                        if((!(isForkOfRepo &&!(isMainUser)))&&(!(isAllUsers&& isForkOfRepo)))
                                         {
                                     %>
                             <h2><%=repo.getName()%></h2>
@@ -65,18 +66,20 @@
                             <h4>Number of branches: <%=repo.getBranches().size()%></h4>
                             <h4>Last commit date: <%=repo.getLastCommitDate_Ex3()%></h4>
                             <h4>Last commit message: <%=repo.getLastCommitMsg_Ex3()%></h4>
-                            <%if(isUserEqualsRepoUser||(isAllUsers&&(!isForked))){%>
+
+                            <%boolean temp=(isMainUser||(isAllUsers&&isForked))||(isAllUsers&&isUserEqualsRepoUser);
+                                if(temp){%>
                             <form method="Post" action="repoServlet">
                                 <input type="hidden" name="repoName" value="<%=repo.getName()%>">
                                 <button type="submit" >Open repository</button>
                             </form>
-                            <% }else if(isForked){%>
+                            <% }if(!isForked&&!temp){%>
                             <form method="Post" action="forkRepoServlet">
                                 <input type="hidden" name="ForkUsername" value="<%=user.getName()%>">
                                 <input type="hidden" name="forkRepoName" value="<%=repo.getName()%>">
                                 <button type="submit" >Fork repository</button>
                             </form>
-                            <%}else{%>
+                            <%}if(isForked&&!temp){%>
                                 <h3>Forked repository</h3>
                                <% }}}}}%>
                         </ul>
