@@ -94,7 +94,7 @@
                         </form>
                             <ul>
                                 <form method="Post" action="selectUser">
-                                    <input type="hidden"name="user" value="allUsers">
+                                    <input type="hidden" name="user" value="allUsers">
                                     <button type="submit">allUsers</button>
                                 </form>
 

@@ -30,8 +30,24 @@
         <link href="css/modern-business.css" rel="stylesheet">
     </head>
     <body>
+
+    <form method="Post" action="Commit">
+        <button type="submit" >Commit</button>
+    </form>
+
+    <form method="Post" action="MakeNewFile">
+        <label><input type="text" name="newFile"></label>
+        <button type="submit">Make New File</button>
+    </form>
+
         <div class="container">
             <h1>Files</h1>
+
+        </div>
+        <div class="container">
+            <h1>File Content</h1>
+            <h2>File Name : <% %></h2>
+
 
         </div>
     </body>
