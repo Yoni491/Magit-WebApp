@@ -56,7 +56,7 @@
                     <label><input type="hidden" name="blobSha1" value="<%=entry.getValue().getSha1()%>"></label>
                     <button type="submit"><%=entry.getKey()%></button>
                 </form>
-            <%}%>1
+            <%}%>
 
         </div>
         <div class="container">
