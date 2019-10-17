@@ -32,7 +32,7 @@
     <body>
         <div class="container">
             <% String usernameFromSession = SessionUtils.getUsername(request);
-            boolean isForked,isUserEqualsRepoUser,isMainUser,isAllUsers;
+            boolean isForkOfRepo,isUserEqualsRepoUser,isMainUser,isAllUsers,isForked;
             if (usernameFromSession != null) {%>
             <div class="container">
                 <h2>UserName : <%=usernameFromSession%></h2>
@@ -46,16 +46,18 @@
                         <ul style="list-style-type:circle;">
                                 <%
                                 isAllUsers =getUsernameForRepos(request).equals("allUsers");
-                                if(getUsernameForRepos(request).equals(""))
-                                    isAllUsers=true;
+                                if(getUsernameForRepos(request).equals("")) {
+                                    isAllUsers = true;
+                                }
                                 for(UserData user : UsersDataBase.getAllRepoNames()){
                                     isUserEqualsRepoUser = getUsernameForRepos(request).equals(user.getName());
                                     isMainUser=getUsername(request).equals(user.getName());
                                     if(isUserEqualsRepoUser || isAllUsers)
                                     {
                                     for(Repository repo: user.repoMap.values()){
-                                        isForked =repo.isForkOfOtherRepo_ex3();
-                                        if((!(isForked &&!(isMainUser)))&&!(isAllUsers&&isForked))
+                                        isForked=UsersDataBase.getUserData(usernameFromSession).isInForkedRepos(repo.getName());
+                                        isForkOfRepo =repo.isForkOfOtherRepo_ex3();
+                                        if((!(isForkOfRepo &&!(isMainUser)))&&!(isAllUsers&& isForkOfRepo))
                                         {
                                     %>
                             <h2><%=repo.getName()%></h2>
@@ -63,17 +65,19 @@
                             <h4>Number of branches: <%=repo.getBranches().size()%></h4>
                             <h4>Last commit date: <%=repo.getLastCommitDate_Ex3()%></h4>
                             <h4>Last commit message: <%=repo.getLastCommitMsg_Ex3()%></h4>
-                            <%if(user.getName().equals(usernameFromSession)){%>
+                            <%if(isUserEqualsRepoUser||(isAllUsers&&(!isForked))){%>
                             <form method="Post" action="repoServlet">
                                 <input type="hidden" name="repoName" value="<%=repo.getName()%>">
                                 <button type="submit" >Open repository</button>
                             </form>
-                            <% } else{%>
+                            <% }else if(isForked){%>
                             <form method="Post" action="forkRepoServlet">
                                 <input type="hidden" name="ForkUsername" value="<%=user.getName()%>">
                                 <input type="hidden" name="forkRepoName" value="<%=repo.getName()%>">
                                 <button type="submit" >Fork repository</button>
                             </form>
+                            <%}else{%>
+                                <h3>Forked repository</h3>
                                <% }}}}}%>
                         </ul>
                     </div>

@@ -10,13 +10,12 @@ public class UserData {
         String username;
         boolean loggedIn;
         public HashMap<String, Repository> repoMap;
-        private static Set<String> forkedRepos=new HashSet<>();
+        private Set<String> forkedRepos=new HashSet<>();
         UserData(String username){
             this.username = username;
             loggedIn = true;
             repoMap = new HashMap<>();
         }
-
     public String getName() {
             return username;
     }
