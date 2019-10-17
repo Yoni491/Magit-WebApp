@@ -965,6 +965,10 @@ public class Repository {
     public void setName(String newName) {
         name=newName;
     }
+
+    public String getFileContent_ex3(String sha1OfBlob) {
+        return objList.get(sha1OfBlob).getContent();
+    }
 }
 
 

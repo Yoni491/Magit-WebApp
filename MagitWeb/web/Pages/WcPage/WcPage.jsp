@@ -7,6 +7,8 @@
 <%@ page import="static servlets.SessionUtils.*" %>
 <%@ page import="Objects.Folder.Fof" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.io.File" %>
+<%@ page import="java.io.FileInputStream" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -34,6 +36,8 @@
     <body>
 <%Repository repo = SessionUtils.getRepo(request);
     String pressedFile = SessionUtils.getFile(request);
+    String blobContent = "";
+
 %>
     <form method="Post" action="Commit">
         <button type="submit" >Commit</button>
@@ -48,16 +52,19 @@
             <h1>Files</h1>
             <%for(Map.Entry<String, Fof> entry: repo.getCommitFiles_ex3(repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1())).entrySet()){%>
                 <form method="Post" action="FileContentServlet">
-                <label><input type="hidden" name="filePath" value="<%=entry.getKey()%>"></label>
-                <button type="submit"><%=entry.getKey()%></button>
+                    <label><input type="hidden" name="filePath" value="<%=entry.getKey()%>"></label>
+                    <label><input type="hidden" name="blobSha1" value="<%=entry.getValue().getSha1()%>"></label>
+                    <button type="submit"><%=entry.getKey()%></button>
                 </form>
-            <%}%>
+            <%}%>1
 
         </div>
         <div class="container">
             <h1>File Content</h1>
             <h2>File Name : <%=pressedFile%></h2>
-            <label><textarea name="fileContent"></textarea></label>
+            <%if(!pressedFile.equals(""))
+                blobContent = repo.getFileContent_ex3(SessionUtils.getBlobSha1(request));%>
+            <label><textarea name="fileContent"><%=blobContent%></textarea></label>
 
 
         </div>

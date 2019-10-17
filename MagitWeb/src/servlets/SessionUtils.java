@@ -77,6 +77,17 @@ public class SessionUtils {
         Object sessionAttribute = session != null ? session.getAttribute("filePath") : null;
         return sessionAttribute != null ? sessionAttribute.toString() : "";
     }
+    public static void setBlobSha1(HttpServletRequest request, String blobSha1) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("blobSha1", blobSha1);
+        }
+    }
+    public static String getBlobSha1 (HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Object sessionAttribute = session != null ? session.getAttribute("blobSha1") : null;
+        return sessionAttribute != null ? sessionAttribute.toString() : "";
+    }
     public static void clearSession (HttpServletRequest request) {
         request.getSession().invalidate();
     }
