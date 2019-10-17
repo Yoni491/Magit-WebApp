@@ -85,4 +85,13 @@
         <servlet-name>WcServlet</servlet-name>
         <url-pattern>/Pages/RepositoryPage/WcServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>FileContentServlet</servlet-name>
+        <servlet-class>servlets.FileContentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileContentServlet</servlet-name>
+        <url-pattern>/Pages/WcPage/FileContentServlet</url-pattern>
+    </servlet-mapping>
+
 </web-app>

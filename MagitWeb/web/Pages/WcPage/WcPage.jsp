@@ -32,7 +32,9 @@
         <link href="css/modern-business.css" rel="stylesheet">
     </head>
     <body>
-<%Repository repo = SessionUtils.getRepo(request);%>
+<%Repository repo = SessionUtils.getRepo(request);
+    String pressedFile = SessionUtils.getFile(request);
+%>
     <form method="Post" action="Commit">
         <button type="submit" >Commit</button>
     </form>
@@ -45,7 +47,7 @@
         <div class="container">
             <h1>Files</h1>
             <%for(Map.Entry<String, Fof> entry: repo.getCommitFiles_ex3(repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1())).entrySet()){%>
-                <form method="Post" action="changeFileForFileContent">
+                <form method="Post" action="FileContentServlet">
                 <label><input type="hidden" name="filePath" value="<%=entry.getKey()%>"></label>
                 <button type="submit"><%=entry.getKey()%></button>
                 </form>
@@ -54,7 +56,7 @@
         </div>
         <div class="container">
             <h1>File Content</h1>
-            <h2>File Name : <%%></h2>
+            <h2>File Name : <%=pressedFile%></h2>
             <label><textarea name="fileContent"></textarea></label>
 
 

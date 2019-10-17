@@ -66,6 +66,17 @@ public class SessionUtils {
         return UsersDataBase.getRepo(repoName,username);
 
     }
+    public static void setFile (HttpServletRequest request,String username) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("filePath", username);
+        }
+    }
+    public static String getFile (HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Object sessionAttribute = session != null ? session.getAttribute("filePath") : null;
+        return sessionAttribute != null ? sessionAttribute.toString() : "";
+    }
     public static void clearSession (HttpServletRequest request) {
         request.getSession().invalidate();
     }

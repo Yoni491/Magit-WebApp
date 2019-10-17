@@ -18,8 +18,10 @@ public class FileContentServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String filePath = request.getParameter("filePath");
-        File file = new File(filePath);
-        response.sendRedirect("../UserPage/UserPage.jsp");
+        if(filePath!=null) {
+            SessionUtils.setFile(request,filePath);
+        }
+            response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
