@@ -55,6 +55,20 @@ public class Repository {
         remoteRepoName = remoteName;
     }
 
+    public Repository(Repository repo) {
+        objList = repo.objList;
+        branches = repo.branches;
+        headBranch = repo.headBranch;
+        path = repo.path;
+        name = repo.name;
+        username = username;
+        currDelta = repo.currDelta;
+        conflictMap = repo.conflictMap;
+        latestMergedBranchSha1 = repo.latestMergedBranchSha1;
+        remoteRepoPath = repo.remoteRepoPath;
+        remoteRepoName = repo.remoteRepoName;
+    }
+
 
     public String getPath() {
         return path;
@@ -926,6 +940,10 @@ public class Repository {
             r.close();
             new File(this.path+"/.magit/branches/"+this.remoteRepoName+"/").mkdir();
         }
+    }
+
+    public void setName(String newName) {
+        name=newName;
     }
 }
 

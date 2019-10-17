@@ -29,5 +29,8 @@ public class UsersDataBase {
     public static Collection<UserData> getAllRepoNames() {
        return usersMap.values();
     }
+    public static UserData getUserData(String nameOfUser){
+         return usersMap.get(nameOfUser);
+    }
 }
 

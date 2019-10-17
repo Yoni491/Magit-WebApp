@@ -43,21 +43,37 @@
                     <div class="col-md-8">
                         <p>Upload a new repository from XML file now!</p>
                         <ul style="list-style-type:circle;">
-                                <% for(UserData user : UsersDataBase.getAllRepoNames()){
+                                <% String usernameTemp=SessionUtils.getUsernameForRepos(request);
+                                boolean forked;
+                                if(getUsernameForRepos(request).equals("allUsers"))
+                                    usernameTemp=usernameFromSession;
+
+                                for(UserData user : UsersDataBase.getAllRepoNames()){
                                     if(user.getName().equals(getUsernameForRepos(request))||getUsernameForRepos(request).equals("allUsers")||getUsernameForRepos(request).equals(""))
                                     {
-                                for(Repository repo: user.repoMap.values()){
-                                %>
+                                    for(Repository repo: user.repoMap.values()){
+                                        if(usernameTemp.equals(usernameFromSession))
+                                            forked=true;
+                                        if((!((user.isInForkedRepos(repo.getName()))&&!(user.getName().equals(usernameFromSession)))))
+                                        {
+                                    %>
                             <h2><%=repo.getName()%></h2>
                             <h4>Active branch name: <%=repo.getHeadBranchName()%></h4>
                             <h4>Number of branches: <%=repo.getBranches().size()%></h4>
                             <h4>Last commit date: <%=repo.getLastCommitDate_Ex3()%></h4>
                             <h4>Last commit message: <%=repo.getLastCommitMsg_Ex3()%></h4>
+                            <%if(user.getName().equals(usernameFromSession)){%>
                             <form method="Post" action="repoServlet">
                                 <input type="hidden" name="repoName" value="<%=repo.getName()%>">
                                 <button type="submit" >Open repository</button>
                             </form>
-                            <% }}}%>
+                            <% } else{%>
+                            <form method="Post" action="forkRepoServlet">
+                                <input type="hidden" name="ForkUsername" value="<%=user.getName()%>">
+                                <input type="hidden" name="forkRepoName" value="<%=repo.getName()%>">
+                                <button type="submit" >Fork repository</button>
+                            </form>
+                               <% }}}}}%>
                         </ul>
                     </div>
                     <div class="col-md-4">

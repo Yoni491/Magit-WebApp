@@ -39,7 +39,7 @@
         String pressedCommitSha1 = SessionUtils.getCommit(request);
         Commit pressedCommit;
         if(pressedCommitSha1.equals(""))
-            pressedCommit=repo.getCommits().get(0);
+            pressedCommit=repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1());
         else {
             pressedCommit=repo.sha1ToCommit_ex3(pressedCommitSha1);
         }
@@ -69,17 +69,17 @@
             <button type="submit">Branch : <%=branch.getName()%></button>
         </form>
         <%}%>
-        <div class="col-md-8">
+        <div class="col-md-4">
             <h2>Commits</h2>
 
             <%for(Commit commit:repo.getBranchCommits(pressedBranch)) {
             %>
             <form method="Post" action="commitServlet">
                 <input type="hidden" name="commitSha1" value="<%=commit.getSha1()%>">
-                 Sha1:   <%=commit.getSha1()%>
-                 Date:   <%=commit.getDateAndTime()%>
-                 Message: <%=commit.getCommitPurposeMSG()%>
-                 Modifier: <%=commit.getNameOfModifier()%>
+                 <p>Sha1:   <%=commit.getSha1()%></p>
+                <p>Date:   <%=commit.getDateAndTime().getDate()%></p>
+                <p>Message: <%=commit.getCommitPurposeMSG()%></p>
+                <p>Modifier: <%=commit.getNameOfModifier()%></p>
                 <button type="submit">Show commit</button>
             </form>
             <%}%>

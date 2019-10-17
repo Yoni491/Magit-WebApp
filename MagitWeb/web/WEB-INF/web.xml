@@ -69,4 +69,12 @@
         <servlet-name>MakeNewBranchServlet</servlet-name>
         <url-pattern>/Pages/RepositoryPage/MakeNewBranch</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>forkRepoServlet</servlet-name>
+        <servlet-class>servlets.forkRepoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>forkRepoServlet</servlet-name>
+        <url-pattern>/Pages/UserPage/forkRepoServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
