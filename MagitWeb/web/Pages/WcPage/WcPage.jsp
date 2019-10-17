@@ -5,6 +5,8 @@
 <%@ page import="Repository.Repository" %>
 <%@ page import="static servlets.SessionUtils.successMsg" %>
 <%@ page import="static servlets.SessionUtils.*" %>
+<%@ page import="Objects.Folder.Fof" %>
+<%@ page import="java.util.Map" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -30,7 +32,7 @@
         <link href="css/modern-business.css" rel="stylesheet">
     </head>
     <body>
-
+<%Repository repo = SessionUtils.getRepo(request);%>
     <form method="Post" action="Commit">
         <button type="submit" >Commit</button>
     </form>
@@ -42,6 +44,12 @@
 
         <div class="container">
             <h1>Files</h1>
+            <%for(Map.Entry<String, Fof> entry: repo.getCommitFiles_ex3(repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1())).entrySet()){%>
+                <form method="Post" action="changeFileForFileContent">
+                <label><input type="text" name="<%=entry.getKey()%>"></label>
+                <button type="submit"><%=entry.getKey()%></button>
+                </form>
+            <%}%>
 
         </div>
         <div class="container">

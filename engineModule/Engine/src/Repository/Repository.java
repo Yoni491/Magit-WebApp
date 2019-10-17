@@ -347,6 +347,16 @@ public class Repository {
             }
         }
     }
+    public Map<String,Fof> getCommitFiles_ex3(Commit commit)
+    {
+        HashMap<String,Fof> res=new HashMap<>();
+        try {
+            recursiveRootFolderToMap_ex3(res,(Folder)objList.get(commit.getRootFolderSha1()),getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
     public List<String> commitFileNames_ex3(Commit commit)
     {
         List<String> res=new ArrayList<>();
@@ -374,6 +384,16 @@ public class Repository {
                 res.add(newPath);
             else
                 recursiveRootFolderToList_ex3(res,(Folder) objList.get(fof.getSha1()), newPath);
+        }
+    }
+    private void recursiveRootFolderToMap_ex3(HashMap<String,Fof> res, Folder _folder, String _path) throws IOException {
+        String newPath;
+        for (Fof fof : _folder.getFofList()) {
+            newPath = _path + "/" + fof.getName();
+            if (fof.getIsBlob())
+                res.put(newPath,fof);
+            else
+                recursiveRootFolderToMap_ex3(res,(Folder) objList.get(fof.getSha1()), newPath);
         }
     }
 
