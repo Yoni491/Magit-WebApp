@@ -973,6 +973,14 @@ public class Repository {
     public String getFileContent_ex3(String sha1OfBlob) {
         return objList.get(sha1OfBlob).getContent();
     }
+
+    public Blob sha1ToBlob_ex3(String blobSha1) {
+        for (Map.Entry<String, MagitObject> entry : objList.entrySet()) {
+            if (entry.getValue().getSha1().equals(blobSha1))
+                return (Blob) entry.getValue();
+        }
+    return null;
+    }
 }
 
 

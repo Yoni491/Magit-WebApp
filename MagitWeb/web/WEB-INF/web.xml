@@ -93,5 +93,13 @@
         <servlet-name>FileContentServlet</servlet-name>
         <url-pattern>/Pages/WcPage/FileContentServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>saveFileContent</servlet-name>
+        <servlet-class>servlets.saveFileContent</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>saveFileContent</servlet-name>
+        <url-pattern>/Pages/WcPage/saveFileContent</url-pattern>
+    </servlet-mapping>
 
 </web-app>
