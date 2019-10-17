@@ -77,4 +77,12 @@
         <servlet-name>forkRepoServlet</servlet-name>
         <url-pattern>/Pages/UserPage/forkRepoServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>WcServlet</servlet-name>
+        <servlet-class>servlets.WcServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WcServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/WcServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

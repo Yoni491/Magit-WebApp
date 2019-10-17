@@ -70,8 +70,13 @@
         </form>
         <%}%>
         <div class="col-md-4">
-            <h2>Commits</h2>
+            <div class="col-md-8">
+                <form method="Post" action="WcServlet">
+                    <button type="submit">WC</button>
+                </form>
+            </div>
 
+            <h2>Commits</h2>
             <%for(Commit commit:repo.getBranchCommits(pressedBranch)) {
             %>
             <form method="Post" action="commitServlet">
