@@ -20,8 +20,11 @@ public class saveFileContent extends HttpServlet {
         String blobSha1 = request.getParameter("blobSha1");
         Repository repo = SessionUtils.getRepo(request);
         Blob blobToChange =repo.sha1ToBlob_ex3(blobSha1);
-        if(blobToChange!=null)
+        if(blobToChange!=null) {
             blobToChange.setContent(newContent);
+            SessionUtils.setBlobSha1(request, blobToChange.getSha1());
+            repo.changeBlobSha1_ex3(blobSha1,blobToChange);
+        }
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
