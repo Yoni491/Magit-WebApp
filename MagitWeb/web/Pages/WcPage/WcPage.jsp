@@ -66,6 +66,8 @@
                 blobContent = repo.getFileContent_ex3(SessionUtils.getBlobSha1(request));}%>
             <form method="Post" action="saveFileContent">
             <label><textarea name="fileContent"><%=blobContent%></textarea></label>
+                <label><input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>"></label>
+                <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
                 <label><input type="hidden" name="blobSha1" value="<%=SessionUtils.getBlobSha1(request)%>"></label>
                 <button type="submit">save</button>
             </form>

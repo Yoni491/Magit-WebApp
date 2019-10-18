@@ -72,6 +72,7 @@
         <div class="col-md-4">
             <div class="col-md-8">
                 <form method="Post" action="WcServlet">
+                    <input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>">
                     <button type="submit">WC</button>
                 </form>
             </div>

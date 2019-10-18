@@ -13,6 +13,8 @@ public class WcServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String currCommit = request.getParameter("currCommit");
+
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 

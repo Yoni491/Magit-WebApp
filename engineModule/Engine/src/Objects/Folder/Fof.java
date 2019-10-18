@@ -50,4 +50,8 @@ public class Fof implements Serializable,Comparable {
     public int compareTo(Object fof) {
         return ((Fof)fof).sha1.compareTo(sha1);
     }
+
+    public void setSha1(String updatedSha1) {
+        this.sha1=updatedSha1;
+    }
 }

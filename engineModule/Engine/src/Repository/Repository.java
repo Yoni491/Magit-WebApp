@@ -390,6 +390,29 @@ public class Repository {
                 recursiveRootFolderToList_ex3(res,(Folder) objList.get(fof.getSha1()), newPath);
         }
     }
+    public void updateSha1OfFolders(Commit commit,String updatedSha1,String path){
+        Folder rootFolder = (Folder)objList.get(commit.getRootFolderSha1());
+        recSha1Updater_ex3(path,rootFolder,updatedSha1);
+    }
+
+    private Fof recSha1Updater_ex3(String path, Folder rootFolder, String updatedSha1) {
+        String[] parts = path.split("/");
+        String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
+        Fof newFof;
+        Fof oldFof;
+        Fof f = rootFolder.getFofList().stream().filter(fof->fof.getName().equals(parts[1])).findFirst().orElse(null);
+        if(f.getIsBlob())
+            f.setSha1(updatedSha1);
+        else {
+            String newPath =String.join("/",yourArray);
+            oldFof = ((Folder)objList.get(f.getSha1())).getFofList().stream().filter(fof -> fof.getName().equals(parts[1])).findFirst().orElse(null);
+            newFof = recSha1Updater_ex3(newPath,((Folder)objList.get(f.getSha1())),updatedSha1);
+            ((Folder)objList.get(f.getSha1())).getFofList().remove(oldFof);
+            ((Folder)objList.get(f.getSha1())).getFofList().add(newFof);
+        }
+        return f;
+    }
+
     private void recursiveRootFolderToMap_ex3(HashMap<String,Fof> res, Folder _folder, String _path) throws IOException {
         String newPath;
         for (Fof fof : _folder.getFofList()) {
@@ -984,8 +1007,6 @@ public class Repository {
 
     public void changeBlobSha1_ex3(String blobSha1, Blob updatedBlob) {
         objList.put(updatedBlob.getSha1(),updatedBlob);
-        objList.remove(blobSha1);
-
     }
 }
 
