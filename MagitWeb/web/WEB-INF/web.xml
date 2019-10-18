@@ -101,5 +101,13 @@
         <servlet-name>saveFileContent</servlet-name>
         <url-pattern>/Pages/WcPage/saveFileContent</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>MakeNewFile</servlet-name>
+        <servlet-class>servlets.MakeNewFile</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MakeNewFile</servlet-name>
+        <url-pattern>/Pages/WcPage/MakeNewFile</url-pattern>
+    </servlet-mapping>
 
 </web-app>

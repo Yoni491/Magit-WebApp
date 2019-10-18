@@ -263,6 +263,31 @@ public class Repository {
         return fof;
     }
 
+    public void makeNewFof_ex3(String fileName, Commit currCommit ){
+        Fof fof;
+        MagitObject obj = null;
+        ArrayList<Fof> fofLst = new ArrayList<>();
+        String[] parts = fileName.split("/");
+        for(int i=parts.length-1;i>0;i--){
+            if(i==parts.length-1){
+                obj = new Blob("");
+                objList.put(obj.getSha1(),obj);
+            }
+            else{
+                if (((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().contains(parts[i]))
+                    continue;
+                else {
+                    obj = new Folder(fofLst);
+                    objList.put(obj.getSha1(), obj);
+                }
+            }
+            fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+            fofLst.add(fof);
+            ((Folder)objList.get(currCommit.getRootFolderSha1())).getFofList().add(fof);
+        }
+        updateSha1OfFolders(currCommit,obj.getSha1(),fileName);
+    }
+
     private void recursiveMapBuilder(String folderSha1, Map<String, Fof> map, String _path) {
         if (objList.get(folderSha1) instanceof Folder) {
             for (Fof fof : ((Folder) objList.get(folderSha1)).getFofList()) {

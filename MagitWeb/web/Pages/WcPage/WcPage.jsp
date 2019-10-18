@@ -44,7 +44,7 @@
     </form>
 
     <form method="Post" action="MakeNewFile">
-        <label><input type="text" name="newFile"></label>
+        <label><input type="text" name="fileName" placeholder="<%=repo.getName()+"/"%>"></label>
         <button type="submit">Make New File</button>
     </form>
 
