@@ -42,6 +42,7 @@ public class Repository {
     private String remoteRepoName;//update
     private String remoteRepoUsername;//update
     public HashMap<String, PR> PrMap=new HashMap<>();//<username of other repo, PR>
+    public Commit Wc;
     public String getUsername() {
         return username;
     }
@@ -301,9 +302,8 @@ public class Repository {
                 }
             }
             objList.put(obj.getSha1(),obj);
-
-            ((Folder)objList.get(currCommit.getRootFolderSha1())).getFofList().add(fof);
         }
+        ((Folder)objList.get(currCommit.getRootFolderSha1())).getFofList().addAll(fofLst);
         updateSha1OfFolders(currCommit,blobToUpdate.getSha1(),fileName);
     }
 
@@ -1063,6 +1063,13 @@ public class Repository {
 
     public Map<String, MagitObject> getObjList() {
         return objList;
+    }
+
+    public void setWc_ex3(Commit commitToCopy) {
+        Wc = new Commit(commitToCopy.getRootFolderSha1(),commitToCopy.getPreviousCommitSha1(),commitToCopy.getSecondPrecedingSha1(),commitToCopy.getCommitPurposeMSG(),commitToCopy.getNameOfModifier(),commitToCopy.getDateAndTime());
+    }
+    public Commit getWc_ex3(){
+        return Wc;
     }
 }
 

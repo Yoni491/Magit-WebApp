@@ -50,7 +50,7 @@
 
         <div class="container">
             <h1>Files</h1>
-            <%for(Map.Entry<String, Fof> entry: repo.getCommitFiles_ex3(repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1())).entrySet()){%>
+            <%for(Map.Entry<String, Fof> entry: repo.getCommitFiles_ex3(repo.getWc_ex3()).entrySet()){%>
                 <form method="Post" action="FileContentServlet">
                     <label><input type="hidden" name="filePath" value="<%=entry.getKey()%>"></label>
                     <label><input type="hidden" name="blobSha1" value="<%=entry.getValue().getSha1()%>"></label>
@@ -70,6 +70,12 @@
                 <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
                 <label><input type="hidden" name="blobSha1" value="<%=SessionUtils.getBlobSha1(request)%>"></label>
                 <button type="submit">save</button>
+            </form>
+            <form method="Post" action="deleteFileServlet">
+                <label><input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>"></label>
+                <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
+                <label><input type="hidden" name="blobSha1" value="<%=SessionUtils.getBlobSha1(request)%>"></label>
+                <button type="submit">delete File</button>
             </form>
         </div>
     </body>

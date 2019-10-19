@@ -1,5 +1,7 @@
 package servlets;
 
+import Repository.Repository;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +16,8 @@ public class WcServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String currCommit = request.getParameter("currCommit");
-        SessionUtils.setCommit(request,currCommit);
+        Repository repo = SessionUtils.getRepo(request);
+        repo.setWc_ex3(repo.sha1ToCommit_ex3(currCommit));
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
