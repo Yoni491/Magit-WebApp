@@ -284,23 +284,21 @@ public class Repository {
                 obj = new Blob("");
                 blobToUpdate = (Blob)obj;
                 fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                fofLst.add(fof);
             }
             else {
                 String finalName1 = name;
                 if ((((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().contains(parts[i-1]) || i==1)&&(((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().stream().filter(ffof->ffof.getName().equals(finalName1)).findFirst().orElse(null)==null)){
                     obj = new Folder(fofLst);
                     fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                    fofLst.add(fof);
                 }
                 else {
                     String finalName = name;
                     obj=(objList.get(((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().stream().filter(f->f.getName().equals(finalName)).findFirst().orElse(null).getSha1()));
                     ((Folder)obj).getFofList().addAll(fofLst);
                     fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                    fofLst.add(fof);
                 }
             }
+            fofLst.add(fof);
             objList.put(obj.getSha1(),obj);
         }
         ((Folder)objList.get(currCommit.getRootFolderSha1())).getFofList().addAll(fofLst);
