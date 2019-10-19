@@ -1,8 +1,10 @@
 package servlets;
 
+import Objects.Api.MagitObject;
 import Objects.Branch.Branch;
 import Repository.Repository;
 import Users.Message;
+import Users.PR;
 import Users.UsersDataBase;
 
 import javax.servlet.ServletException;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 public class PullRequestServlet extends HttpServlet {
     @Override
@@ -19,16 +22,33 @@ public class PullRequestServlet extends HttpServlet {
             throws ServletException, IOException {
         String localBranch = request.getParameter("localBranch");
         String remoteBranch = request.getParameter("remoteBranch");
+        String PrPurpose = request.getParameter("PrPurpose");
+
         if((localBranch!=null)&&remoteBranch!=null) {
-            Repository repo = SessionUtils.getRepo(request);
-            Repository remoteRepo = UsersDataBase.getRepo(repo.getRemoteRepoName(),repo.getRemoteRepoUserName());
-            //need to copy all the objlist from one repo to another, to not have problems with commit files.
-            Branch br2=repo.getBranches().stream().filter(br->br.getName().equals(localBranch)).findFirst().orElse(null);
-            if(br2!=null) {
-                Message msg = new Message(repo.getName(),SessionUtils.getUsername(request), repo.getRemoteRepoUserName(),
-                        localBranch, remoteBranch,br2.getSha1());
-                UsersDataBase.getUserData(repo.getRemoteRepoUserName()).MsgList.add(msg);
+            Repository localRepo = SessionUtils.getRepo(request);
+            Repository remoteRepo = UsersDataBase.getRepo(localRepo.getRemoteRepoName(),localRepo.getRemoteRepoUserName());
+            for(Map.Entry<String, MagitObject> entry: localRepo.getObjList().entrySet())
+            {
+                if(!remoteRepo.getObjList().entrySet().contains(entry))
+                    remoteRepo.getObjList().put(entry.getKey(),entry.getValue());
             }
+            Branch br2=localRepo.getBranches().stream().filter(br->br.getName().equals(localBranch)).findFirst().orElse(null);
+            if(localRepo.getHeadBranchName().equals(localBranch))
+                br2=localRepo.getHeadBranch();
+            if(remoteRepo.getHeadBranchName().equals(remoteBranch)||
+                    (remoteRepo.getBranches().stream().filter(br->br.getName().equals(localBranch)).findFirst().orElse(null)==null))
+                if(br2!=null) {
+                    Message msg = new Message(localRepo.getName(),SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+                            localBranch, remoteBranch,br2.getSha1());
+                    PR pr = new PR(localRepo.getName(),SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+                            localBranch, remoteBranch,br2.getSha1(),PrPurpose);
+                    UsersDataBase.getUserData(localRepo.getRemoteRepoUserName()).MsgList.add(msg);
+                    remoteRepo.PrMap.put(SessionUtils.getUsername(request),pr);
+                }
+            else
+                {
+                    //print error msg: no remote branch with this name exists.
+                }
 
         }
 

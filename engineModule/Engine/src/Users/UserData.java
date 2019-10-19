@@ -2,10 +2,7 @@ package Users;
 
 import Repository.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class UserData {
         String username;
@@ -13,6 +10,7 @@ public class UserData {
         public HashMap<String, Repository> repoMap;
         private Set<String> forkedRepos=new HashSet<>();
         public ArrayList<Message> MsgList=new ArrayList<>();
+
         UserData(String username){
             this.username = username;
             loggedIn = true;
