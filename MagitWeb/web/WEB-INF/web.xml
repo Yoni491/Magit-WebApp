@@ -109,5 +109,12 @@
         <servlet-name>MakeNewFile</servlet-name>
         <url-pattern>/Pages/WcPage/MakeNewFile</url-pattern>
     </servlet-mapping>
-
+    <servlet>
+        <servlet-name>PullRequestServlet</servlet-name>
+        <servlet-class>servlets.PullRequestServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PullRequestServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/PullRequestServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

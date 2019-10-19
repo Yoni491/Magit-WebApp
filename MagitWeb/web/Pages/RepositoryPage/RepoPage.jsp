@@ -94,8 +94,13 @@
             <%for(String fileDetails :repo.commitFileNames_ex3(pressedCommit)) {%>
                 <li><%=fileDetails%></li>
             <%}%>
-            </ul>
 
+            </ul>
+            <form method="Post" action="PullRequestServlet">
+                <input type="input" name="localBranch" >
+                <input type="input" name="remoteBranch" >
+                <button type="submit">Pull request</button>
+            </form>
         </div>
 
 
