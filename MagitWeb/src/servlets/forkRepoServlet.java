@@ -20,6 +20,7 @@ public class forkRepoServlet extends HttpServlet {
         String press = request.getParameter("forkRepoName");
         String username = request.getParameter("ForkUsername");
         Repository repo= new Repository(UsersDataBase.getRepo(press,username));
+        repo.updateUsername(SessionUtils.getUsername(request));
         UsersDataBase.getUserData(SessionUtils.getUsername(request)).addForkedRepo(repo.getName());
         UsersDataBase.addRepo(SessionUtils.getUsername(request),repo.getName(),repo);
         response.sendRedirect("../UserPage/UserPage.jsp");

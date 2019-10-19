@@ -33,15 +33,17 @@ public class Repository {
     private Branch headBranch = null;
     private String path;//update
     private String name;
-    private static String username = "default"; //update
+    private String username = "default"; //update
     private Delta currDelta;
     private HashMap<String, MergeCase> conflictMap = new HashMap<>();
     private String latestMergedBranchSha1 = null;
     private String remoteRepoPath = "";//update
     private String remoteRepoName;//update
+    private String remoteRepoUsername;//update
 
-    //private String remoteRepoUsername;//update
-
+    public String getUsername() {
+        return username;
+    }
     public boolean isForkOfOtherRepo_ex3()
     {
         return !remoteRepoPath.equals("");
@@ -74,7 +76,7 @@ public class Repository {
         latestMergedBranchSha1 = repo.latestMergedBranchSha1;
         remoteRepoPath = repo.path;
         remoteRepoName = repo.getName();
-
+        remoteRepoUsername = repo.getUsername();
     }
 
 
@@ -94,7 +96,7 @@ public class Repository {
         return name;
     }
 
-    public static void updateUsername(String name) {
+    public void updateUsername(String name) {
         username = name;
     }
 
@@ -269,27 +271,39 @@ public class Repository {
 
     public void makeNewFof_ex3(String fileName, Commit currCommit ){
         Fof fof;
+        String name;
         MagitObject obj = null;
+        Blob blobToUpdate = null;
         ArrayList<Fof> fofLst = new ArrayList<>();
         String[] parts = fileName.split("/");
         for(int i=parts.length-1;i>0;i--){
+            name = parts[i];
             if(i==parts.length-1){
                 obj = new Blob("");
-                objList.put(obj.getSha1(),obj);
+                blobToUpdate = (Blob)obj;
+                fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                fofLst.add(fof);
             }
-            else{
-                if (((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().contains(parts[i]))
-                    continue;
-                else {
+            else {
+                String finalName1 = name;
+                if ((((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().contains(parts[i-1]) || i==1)&&(((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().stream().filter(ffof->ffof.getName().equals(finalName1)).findFirst().orElse(null)==null)){
                     obj = new Folder(fofLst);
-                    objList.put(obj.getSha1(), obj);
+                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                    fofLst.add(fof);
+                }
+                else {
+                    String finalName = name;
+                    obj=(objList.get(((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().stream().filter(f->f.getName().equals(finalName)).findFirst().orElse(null).getSha1()));
+                    ((Folder)obj).getFofList().addAll(fofLst);
+                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                    fofLst.add(fof);
                 }
             }
-            fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-            fofLst.add(fof);
+            objList.put(obj.getSha1(),obj);
+
             ((Folder)objList.get(currCommit.getRootFolderSha1())).getFofList().add(fof);
         }
-        updateSha1OfFolders(currCommit,obj.getSha1(),fileName);
+        updateSha1OfFolders(currCommit,blobToUpdate.getSha1(),fileName);
     }
 
     private void recursiveMapBuilder(String folderSha1, Map<String, Fof> map, String _path) {
@@ -1036,6 +1050,14 @@ public class Repository {
 
     public void changeBlobSha1_ex3(String blobSha1, Blob updatedBlob) {
         objList.put(updatedBlob.getSha1(),updatedBlob);
+    }
+
+    public String getRemoteRepoName() {
+        return remoteRepoName;
+    }
+
+    public String getRemoteRepoUserName() {
+        return remoteRepoUsername;
     }
 }
 

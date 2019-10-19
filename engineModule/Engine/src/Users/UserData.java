@@ -12,7 +12,7 @@ public class UserData {
         boolean loggedIn;
         public HashMap<String, Repository> repoMap;
         private Set<String> forkedRepos=new HashSet<>();
-        public ArrayList<String> MsgList=new ArrayList<>();
+        public ArrayList<Message> MsgList=new ArrayList<>();
         UserData(String username){
             this.username = username;
             loggedIn = true;
