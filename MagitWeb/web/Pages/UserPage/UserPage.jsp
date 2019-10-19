@@ -105,8 +105,6 @@
                                     <input type="hidden" name="user" value="allUsers">
                                     <button type="submit">allUsers</button>
                                 </form>
-
-
                             <% for(UserData user : UsersDataBase.getAllRepoNames()){
                                 if(!user.repoMap.isEmpty()){%>
                                 <form method="Post" action="selectUser">
@@ -115,6 +113,7 @@
                                 </form>
                                 <%}}%>
                             </ul>
+
                     </div>
                 </div>
         </div>

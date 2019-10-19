@@ -94,8 +94,15 @@
             <%for(String fileDetails :repo.commitFileNames_ex3(pressedCommit)) {%>
                 <li><%=fileDetails%></li>
             <%}%>
-            </ul>
 
+            </ul>
+            <%if(repo.isForkOfOtherRepo_ex3()){%>
+            <form method="Post" action="PullRequestServlet">
+                local branch name:<input type="input" name="localBranch" >
+                remote branch name:<input type="input" name="remoteBranch" >
+                <button type="submit">Pull request</button>
+            </form>
+            <%}%>
         </div>
 
 

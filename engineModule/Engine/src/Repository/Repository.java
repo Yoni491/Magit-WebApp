@@ -29,17 +29,21 @@ import java.util.zip.*;
 public class Repository {
     private Map<String, MagitObject> objList; //<sha1,object>
     private ArrayList<Branch> branches;
+    private ArrayList<Branch> remoteBranches;
     private Branch headBranch = null;
     private String path;//update
     private String name;
-    private static String username = "default"; //update
+    private String username = "default"; //update
     private Delta currDelta;
     private HashMap<String, MergeCase> conflictMap = new HashMap<>();
     private String latestMergedBranchSha1 = null;
     private String remoteRepoPath = "";//update
     private String remoteRepoName;//update
-    //private String remoteRepoUsername;//update
+    private String remoteRepoUsername;//update
 
+    public String getUsername() {
+        return username;
+    }
     public boolean isForkOfOtherRepo_ex3()
     {
         return !remoteRepoPath.equals("");
@@ -62,6 +66,7 @@ public class Repository {
     public Repository(Repository repo) {
         objList = repo.objList;
         branches = repo.branches;
+        remoteBranches=repo.remoteBranches;
         headBranch = repo.headBranch;
         path = repo.path;
         name = repo.name;
@@ -70,7 +75,8 @@ public class Repository {
         conflictMap = repo.conflictMap;
         latestMergedBranchSha1 = repo.latestMergedBranchSha1;
         remoteRepoPath = repo.path;
-        remoteRepoName = repo.remoteRepoName;
+        remoteRepoName = repo.getName();
+        remoteRepoUsername = repo.getUsername();
     }
 
 
@@ -90,7 +96,7 @@ public class Repository {
         return name;
     }
 
-    public static void updateUsername(String name) {
+    public void updateUsername(String name) {
         username = name;
     }
 
@@ -1044,6 +1050,14 @@ public class Repository {
 
     public void changeBlobSha1_ex3(String blobSha1, Blob updatedBlob) {
         objList.put(updatedBlob.getSha1(),updatedBlob);
+    }
+
+    public String getRemoteRepoName() {
+        return remoteRepoName;
+    }
+
+    public String getRemoteRepoUserName() {
+        return remoteRepoUsername;
     }
 }
 

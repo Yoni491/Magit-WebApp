@@ -24,7 +24,6 @@ public class ModuleTwo {
     private static Repository activeRepo = null;
 
     public static void updateUsername(String name) {
-        Repository.updateUsername(name);
         Username=name;
     }
 
@@ -226,6 +225,7 @@ public class ModuleTwo {
         activeRepo =Repository.makeRepoFromXmlRepo(new XmlData("C:/magit-ex3/XML/tempXML.xml",Username));
         activeRepo.createEmptyRepo();
         activeRepo.createFiles();
+        activeRepo.updateUsername(Username);
         Users.UsersDataBase.addRepo(Username,activeRepo.getName(),activeRepo);
     }
     public static void getLastCommit_Ex3()
