@@ -265,27 +265,39 @@ public class Repository {
 
     public void makeNewFof_ex3(String fileName, Commit currCommit ){
         Fof fof;
+        String name;
         MagitObject obj = null;
+        Blob blobToUpdate = null;
         ArrayList<Fof> fofLst = new ArrayList<>();
         String[] parts = fileName.split("/");
         for(int i=parts.length-1;i>0;i--){
+            name = parts[i];
             if(i==parts.length-1){
                 obj = new Blob("");
-                objList.put(obj.getSha1(),obj);
+                blobToUpdate = (Blob)obj;
+                fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                fofLst.add(fof);
             }
-            else{
-                if (((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().contains(parts[i]))
-                    continue;
-                else {
+            else {
+                String finalName1 = name;
+                if ((((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().contains(parts[i-1]) || i==1)&&(((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().stream().filter(ffof->ffof.getName().equals(finalName1)).findFirst().orElse(null)==null)){
                     obj = new Folder(fofLst);
-                    objList.put(obj.getSha1(), obj);
+                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                    fofLst.add(fof);
+                }
+                else {
+                    String finalName = name;
+                    obj=(objList.get(((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().stream().filter(f->f.getName().equals(finalName)).findFirst().orElse(null).getSha1()));
+                    ((Folder)obj).getFofList().addAll(fofLst);
+                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                    fofLst.add(fof);
                 }
             }
-            fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-            fofLst.add(fof);
+            objList.put(obj.getSha1(),obj);
+
             ((Folder)objList.get(currCommit.getRootFolderSha1())).getFofList().add(fof);
         }
-        updateSha1OfFolders(currCommit,obj.getSha1(),fileName);
+        updateSha1OfFolders(currCommit,blobToUpdate.getSha1(),fileName);
     }
 
     private void recursiveMapBuilder(String folderSha1, Map<String, Fof> map, String _path) {
