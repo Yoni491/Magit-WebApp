@@ -10,6 +10,7 @@ import Objects.Commit.Commit;
 import Objects.Date.DateAndTime;
 import Objects.Folder.Fof;
 import Objects.Folder.Folder;
+import Users.PR;
 import XML.XmlData;
 import XMLpackage.*;
 import org.apache.commons.io.FileUtils;
@@ -40,7 +41,7 @@ public class Repository {
     private String remoteRepoPath = "";//update
     private String remoteRepoName;//update
     private String remoteRepoUsername;//update
-
+    public HashMap<String, PR> PrMap=new HashMap<>();//<username of other repo, PR>
     public String getUsername() {
         return username;
     }
@@ -1058,6 +1059,10 @@ public class Repository {
 
     public String getRemoteRepoUserName() {
         return remoteRepoUsername;
+    }
+
+    public Map<String, MagitObject> getObjList() {
+        return objList;
     }
 }
 

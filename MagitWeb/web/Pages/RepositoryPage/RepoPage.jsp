@@ -8,6 +8,9 @@
 <%@ page import="Objects.Branch.Branch" %>
 <%@ page import="Objects.Commit.Commit" %>
 <%@ page import="java.io.File" %>
+<%@ page import="Users.PR" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -100,9 +103,21 @@
             <form method="Post" action="PullRequestServlet">
                 local branch name:<input type="input" name="localBranch" >
                 remote branch name:<input type="input" name="remoteBranch" >
+                PR purpose:<input type="input" name="PrPurpose" >
                 <button type="submit">Pull request</button>
             </form>
             <%}%>
+            <h1>PR List</h1>
+            <%for(Map.Entry<String, PR> entry: repo.PrMap.entrySet()){%>
+                <p>remote branch name:<%=entry.getValue().SenderBranch%></p>
+                <p>local branch name:<%=entry.getValue().ReceiverBranch%></p>
+                <p>PR purpose:<%=entry.getValue().purpose%></p>
+                <p>from user:<%=entry.getValue().Sender%></p>
+            <form method="Post" action="PullRequestServlet">
+                <button type="submit">Pull request</button>
+            </form>
+            <%}%>
+
         </div>
 
 
