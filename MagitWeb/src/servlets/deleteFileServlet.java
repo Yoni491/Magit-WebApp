@@ -16,19 +16,11 @@ public class deleteFileServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String currCommitSha1 = request.getParameter("currCommit");
         Repository repo =SessionUtils.getRepo(request);
-        Commit commit = repo.sha1ToCommit_ex3(currCommitSha1);
-        String filePath = request.getParameter("filePath");
-        String newContent = request.getParameter("fileContent");
-        String blobSha1 = request.getParameter("blobSha1");
-        Blob blobToChange =repo.sha1ToBlob_ex3(blobSha1);
-        if(blobToChange!=null) {
-            blobToChange.setContent(newContent);
-            SessionUtils.setBlobSha1(request, blobToChange.getSha1());
-            repo.updateSha1OfFolders(commit,blobToChange.getSha1(),filePath);
-            repo.changeBlobSha1_ex3(blobSha1,blobToChange);
-        }
+        String fileSha1 = request.getParameter("blobSha1");
+
+        if(fileSha1!=null)
+            repo.deleteFile_ex3(fileSha1);
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
