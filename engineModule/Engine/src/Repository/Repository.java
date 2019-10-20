@@ -43,6 +43,7 @@ public class Repository {
     private String remoteRepoName;//update
     private String remoteRepoUsername;//update
     public HashMap<String, PR> PrMap=new HashMap<>();//<username of other repo, PR>
+    public Commit Wc;
     public String getUsername() {
         return username;
     }
@@ -67,11 +68,13 @@ public class Repository {
 
     public Repository(Repository repo) {
         objList = repo.objList;
+        branches = repo.branches;
         remoteBranches=repo.remoteBranches;
         remoteTrackingBranches=repo.remoteBranches;
         headBranch = repo.headBranch;
         path = repo.path;
         name = repo.name;
+        username = username;
         currDelta = repo.currDelta;
         conflictMap = repo.conflictMap;
         latestMergedBranchSha1 = repo.latestMergedBranchSha1;
@@ -79,6 +82,7 @@ public class Repository {
         remoteRepoName = repo.getName();
         remoteRepoUsername = repo.getUsername();
     }
+
 
     public String getPath() {
         return path;
@@ -269,42 +273,7 @@ public class Repository {
         return fof;
     }
 
-    public void makeNewFof_ex3(String fileName, Commit currCommit ){
-        Fof fof;
-        String name;
-        MagitObject obj = null;
-        Blob blobToUpdate = null;
-        ArrayList<Fof> fofLst = new ArrayList<>();
-        String[] parts = fileName.split("/");
-        for(int i=parts.length-1;i>0;i--){
-            name = parts[i];
-            if(i==parts.length-1){
-                obj = new Blob("");
-                blobToUpdate = (Blob)obj;
-                fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                fofLst.add(fof);
-            }
-            else {
-                String finalName1 = name;
-                if ((((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().contains(parts[i-1]) || i==1)&&(((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().stream().filter(ffof->ffof.getName().equals(finalName1)).findFirst().orElse(null)==null)){
-                    obj = new Folder(fofLst);
-                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                    fofLst.add(fof);
-                }
-                else {
-                    String finalName = name;
-                    obj=(objList.get(((Folder) objList.get(currCommit.getRootFolderSha1())).getFofList().stream().filter(f->f.getName().equals(finalName)).findFirst().orElse(null).getSha1()));
-                    ((Folder)obj).getFofList().addAll(fofLst);
-                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                    fofLst.add(fof);
-                }
-            }
-            objList.put(obj.getSha1(),obj);
 
-            ((Folder)objList.get(currCommit.getRootFolderSha1())).getFofList().add(fof);
-        }
-        updateSha1OfFolders(currCommit,blobToUpdate.getSha1(),fileName);
-    }
 
     private void recursiveMapBuilder(String folderSha1, Map<String, Fof> map, String _path) {
         if (objList.get(folderSha1) instanceof Folder) {
@@ -436,8 +405,54 @@ public class Repository {
         Folder rootFolder = (Folder)objList.get(commit.getRootFolderSha1());
         recSha1Updater_ex3(path,rootFolder,updatedSha1);
     }
+    public void makeNewFof_ex3(String fileName ){
+        boolean first = true;
+        Folder folderToSave = null;
+        Fof fof;
+        String name;
+        MagitObject obj;
+        Blob blobToUpdate = null;
+        Fof fofToPass = null;
+        ArrayList<Fof> fofLst = new ArrayList<>();
+        String[] parts = fileName.split("/");
+        for(int i=parts.length-1;i>0;i--){
+            name = parts[i];
+            if(i==parts.length-1){
+                obj = new Blob("");
+                blobToUpdate = (Blob)obj;
+                fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                fofToPass = fof;
+            }
+            else {
+                String finalName1 = name;
+                if ((((Folder) objList.get(Wc.getRootFolderSha1())).getFofList().contains(parts[i-1]) || i==1)&&(((Folder) objList.get(Wc.getRootFolderSha1())).getFofList().stream().filter(ffof->ffof.getName().equals(finalName1)).findFirst().orElse(null)==null)){
+                    obj = new Folder(fofLst);
+                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                }
+                else {
+                    String finalName = name;
+                    obj=(objList.get(((Folder) objList.get(Wc.getRootFolderSha1())).getFofList().stream().filter(f->f.getName().equals(finalName)).findFirst().orElse(null).getSha1()));
+                    ((Folder)obj).getFofList().addAll(fofLst);
+                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
+                }
+                if(first){
+                    ((Folder)obj).getFofList().add(fofToPass);
+                    first = false;
+                }
+                else{
+                    folderToSave.getFofList().add(fofToPass);
+                }
+                fofToPass = fof;
+                folderToSave = (Folder)obj;
+            }
+            fofLst.add(fof);
+            objList.put(obj.getSha1(),obj);
+        }
+        ((Folder)objList.get(Wc.getRootFolderSha1())).getFofList().add(fofToPass);
+        updateSha1OfFolders(Wc,blobToUpdate.getSha1(),fileName);
+    }
 
-    private Fof recSha1Updater_ex3(String path, Folder rootFolder, String updatedSha1) {
+        private Fof recSha1Updater_ex3(String path, Folder rootFolder, String updatedSha1) {
         String[] parts = path.split("/");
         String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
         Fof newFof;
@@ -1061,6 +1076,16 @@ public class Repository {
 
     public Map<String, MagitObject> getObjList() {
         return objList;
+    }
+
+    public void setWc_ex3(Commit commitToCopy) {
+        Wc = new Commit(commitToCopy.getRootFolderSha1(),commitToCopy.getPreviousCommitSha1(),commitToCopy.getSecondPrecedingSha1(),commitToCopy.getCommitPurposeMSG(),commitToCopy.getNameOfModifier(),commitToCopy.getDateAndTime());
+    }
+    public Commit getWc_ex3(){
+        return Wc;
+    }
+    public void deleteFile_ex3(String fileSha1){
+
     }
 
     public ArrayList<Branch> getRemoteBranches() {

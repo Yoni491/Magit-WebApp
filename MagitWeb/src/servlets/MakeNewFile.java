@@ -1,6 +1,5 @@
 package servlets;
 
-import Objects.Commit.Commit;
 import Repository.Repository;
 
 import javax.servlet.ServletException;
@@ -17,11 +16,8 @@ public class MakeNewFile extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String fileName = request.getParameter("fileName");
-        String currCommitSha1 = SessionUtils.getCommit(request);
         Repository repo =SessionUtils.getRepo(request);
-        Commit commit = repo.sha1ToCommit_ex3(currCommitSha1);
-        repo.makeNewFof_ex3(fileName,commit);
-
+        repo.makeNewFof_ex3(fileName);
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 

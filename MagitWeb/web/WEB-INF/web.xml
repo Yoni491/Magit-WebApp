@@ -117,4 +117,12 @@
         <servlet-name>PullRequestServlet</servlet-name>
         <url-pattern>/Pages/RepositoryPage/PullRequestServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>deleteFileServlet</servlet-name>
+        <servlet-class>servlets.deleteFileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteFileServlet</servlet-name>
+        <url-pattern>/Pages/WcPage/deleteFileServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

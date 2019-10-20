@@ -1,5 +1,7 @@
 package servlets;
 
+import Objects.Blob.Blob;
+import Objects.Commit.Commit;
 import Repository.Repository;
 
 import javax.servlet.ServletException;
@@ -8,16 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-public class WcServlet extends HttpServlet {
+public class deleteFileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String currCommit = request.getParameter("currCommit");
-        Repository repo = SessionUtils.getRepo(request);
-        repo.setWc_ex3(repo.sha1ToCommit_ex3(currCommit));
+        Repository repo =SessionUtils.getRepo(request);
+        String fileSha1 = request.getParameter("blobSha1");
+
+        if(fileSha1!=null)
+            repo.deleteFile_ex3(fileSha1);
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
