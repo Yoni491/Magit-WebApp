@@ -14,13 +14,18 @@ public class BranchServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String press = request.getParameter("branch");
-
-        if(press!=null) {
-            SessionUtils.setBranch(request,press);
-            SessionUtils.setCommit(request,"");
+        String branchName = request.getParameter("branch");
+        String isPr = request.getParameter("isPR");
+        String branchSha1 = request.getParameter("branchSha1");
+        if(isPr!=null)
+        {
+            SessionUtils.setPrBranchName(request,branchName);
         }
-
+        if(branchName!=null) {
+            SessionUtils.setBranch(request,branchName);
+            SessionUtils.setPrBranchName(request,"");
+        }
+        SessionUtils.setCommit(request,branchSha1);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 
