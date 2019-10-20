@@ -31,6 +31,7 @@ public class Repository {
     private Map<String, MagitObject> objList; //<sha1,object>
     private ArrayList<Branch> branches;
     private ArrayList<Branch> remoteBranches;
+    private ArrayList<Branch> remoteTrackingBranches;
     private Branch headBranch = null;
     private String path;//update
     private String name;
@@ -66,8 +67,8 @@ public class Repository {
 
     public Repository(Repository repo) {
         objList = repo.objList;
-        branches = repo.branches;
         remoteBranches=repo.remoteBranches;
+        remoteTrackingBranches=repo.remoteBranches;
         headBranch = repo.headBranch;
         path = repo.path;
         name = repo.name;
@@ -1063,6 +1064,10 @@ public class Repository {
 
     public Map<String, MagitObject> getObjList() {
         return objList;
+    }
+
+    public ArrayList<Branch> getRemoteBranches() {
+        return remoteBranches;
     }
 }
 

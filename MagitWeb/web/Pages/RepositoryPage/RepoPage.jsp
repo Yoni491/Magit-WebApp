@@ -72,6 +72,13 @@
             <button type="submit">Branch : <%=branch.getName()%></button>
         </form>
         <%}%>
+        <%for(Branch branch:repo.getRemoteBranches()) {
+        %>
+        <form method="Post" action="BranchServlet">
+            <input type="hidden" name="branch" value="<%=branch.getName()%>">
+            <button type="submit">Remote branch : <%=branch.getName()%></button>
+        </form>
+        <%}%>
         <div class="col-md-4">
             <div class="col-md-8">
                 <form method="Post" action="WcServlet">

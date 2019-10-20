@@ -32,7 +32,7 @@ public class PullRequestServlet extends HttpServlet {
                 if(!remoteRepo.getObjList().entrySet().contains(entry))
                     remoteRepo.getObjList().put(entry.getKey(),entry.getValue());
             }
-            Branch br2=localRepo.getBranches().stream().filter(br->br.getName().equals(localBranch)).findFirst().orElse(null);
+            Branch br2=localRepo.getRemoteBranches().stream().filter(br->br.getName().equals(localBranch)).findFirst().orElse(null);
             if(localRepo.getHeadBranchName().equals(localBranch))
                 br2=localRepo.getHeadBranch();
             if(remoteRepo.getHeadBranchName().equals(remoteBranch)||
