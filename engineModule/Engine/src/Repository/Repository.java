@@ -72,7 +72,6 @@ public class Repository {
         headBranch = repo.headBranch;
         path = repo.path;
         name = repo.name;
-        username = username;
         currDelta = repo.currDelta;
         conflictMap = repo.conflictMap;
         latestMergedBranchSha1 = repo.latestMergedBranchSha1;
@@ -378,7 +377,6 @@ public class Repository {
     public void deployCommit(Commit commit, String pathOfCommit) throws IOException {
         if (commit != null)
             recursiveObjectToWCBuilder((Folder) objList.get(commit.getRootFolderSha1()), pathOfCommit);
-
     }
 
     private void recursiveObjectToWCBuilder(Folder _folder, String _path) throws IOException {
