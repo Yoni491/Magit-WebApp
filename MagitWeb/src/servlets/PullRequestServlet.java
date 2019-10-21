@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -20,11 +21,11 @@ public class PullRequestServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String localBranch = request.getParameter("localBranch");
-        String remoteBranch = request.getParameter("remoteBranch");
+        String localBranchName = request.getParameter("localBranch");
+        String remoteBranchName = request.getParameter("remoteBranch");
         String PrPurpose = request.getParameter("PrPurpose");
 
-        if((localBranch!=null)&&remoteBranch!=null) {
+        if((localBranchName!=null)&&remoteBranchName!=null) {
             Repository localRepo = SessionUtils.getRepo(request);
             Repository remoteRepo = UsersDataBase.getRepo(localRepo.getRemoteRepoName(),localRepo.getRemoteRepoUserName());
             for(Map.Entry<String, MagitObject> entry: localRepo.getObjList().entrySet())
@@ -32,16 +33,24 @@ public class PullRequestServlet extends HttpServlet {
                 if(!remoteRepo.getObjList().entrySet().contains(entry))
                     remoteRepo.getObjList().put(entry.getKey(),entry.getValue());
             }
-            Branch br2=localRepo.getBranches().stream().filter(br->br.getName().equals(localBranch)).findFirst().orElse(null);
-            if(localRepo.getHeadBranchName().equals(localBranch))
-                br2=localRepo.getHeadBranch();
-            if(remoteRepo.getHeadBranchName().equals(remoteBranch)||
-                    (remoteRepo.getBranches().stream().filter(br->br.getName().equals(localBranch)).findFirst().orElse(null)==null))
-                if(br2!=null) {
+            Branch localBranch=localRepo.getRemoteBranches().stream().filter(br->br.getName().equals(localBranchName)).findFirst().orElse(null);
+            if(localRepo.getHeadBranchName().equals(localBranchName))
+                localBranch=localRepo.getHeadBranch();
+            if(remoteRepo.getHeadBranchName().equals(remoteBranchName)||
+                    (remoteRepo.getBranches().stream().filter(br->br.getName().equals(localBranchName)).findFirst().orElse(null)==null))
+                if(localBranch!=null) {
+                    String path=remoteRepo.getPath()+"/.magit";
+                    new File(path).mkdir();
+                    path=path+"/PR";
+                    new File(path).mkdir();
+                    path=path+"/"+SessionUtils.getUsername(request);
+                    new File(path).mkdir();
+                    remoteRepo.deployCommit(remoteRepo.sha1ToCommit_ex3(localBranch.getSha1()),path);
+                    //second part of the function
                     Message msg = new Message(localRepo.getName(),SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                            localBranch, remoteBranch,br2.getSha1());
+                            localBranchName, remoteBranchName,localBranch.getSha1());
                     PR pr = new PR(localRepo.getName(),SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                            localBranch, remoteBranch,br2.getSha1(),PrPurpose);
+                            localBranchName, remoteBranchName,localBranch.getSha1(),PrPurpose,path);
                     UsersDataBase.getUserData(localRepo.getRemoteRepoUserName()).MsgList.add(msg);
                     remoteRepo.PrMap.put(SessionUtils.getUsername(request),pr);
                 }

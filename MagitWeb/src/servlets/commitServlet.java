@@ -13,9 +13,9 @@ public class commitServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String press = request.getParameter("commitSha1");
-        if(press!=null) {
-            SessionUtils.setCommit(request,press);
+        String commitSha1 = request.getParameter("commitSha1");
+        if(commitSha1!=null) {
+            SessionUtils.setCommit(request,commitSha1);
         }
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }

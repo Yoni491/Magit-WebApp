@@ -29,8 +29,9 @@ import java.util.zip.*;
 
 public class Repository {
     private Map<String, MagitObject> objList; //<sha1,object>
-    private ArrayList<Branch> branches;
-    private ArrayList<Branch> remoteBranches;
+    private ArrayList<Branch> branches=new ArrayList<>();;
+    private ArrayList<Branch> remoteBranches=new ArrayList<>();
+    private ArrayList<Branch> remoteTrackingBranches=new ArrayList<>();
     private Branch headBranch = null;
     private String path;//update
     private String name;
@@ -69,6 +70,7 @@ public class Repository {
         objList = repo.objList;
         branches = repo.branches;
         remoteBranches=repo.remoteBranches;
+        remoteTrackingBranches=repo.remoteBranches;
         headBranch = repo.headBranch;
         path = repo.path;
         name = repo.name;
@@ -318,8 +320,8 @@ public class Repository {
         return delta;
     }
 
-    public String deltaChangesBetweenCommitsToString(String sha1) throws IOException {
-        String commitPath = path + "/.magit/Commit files/";
+    public String deltaChangesBetweenCommitsToString(String sha1,String pathOfWc) throws IOException {
+        String commitPath = pathOfWc;
         Map<String, Fof> commitMap = getCommitMap((Commit) objList.get(sha1));
         Delta delta = new Delta(commitMap);
         recursiveWcToObjectBuilder(commitPath, "", false, username, delta);
@@ -343,7 +345,6 @@ public class Repository {
     public void deployCommit(Commit commit, String pathOfCommit) throws IOException {
         if (commit != null)
             recursiveObjectToWCBuilder((Folder) objList.get(commit.getRootFolderSha1()), pathOfCommit);
-
     }
 
     private void recursiveObjectToWCBuilder(Folder _folder, String _path) throws IOException {
@@ -1133,6 +1134,10 @@ public class Repository {
             String nextFolderSha1 = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null).getSha1();
             deleteFileRec_ex3(Arrays.copyOfRange(path, 1, path.length),(Folder)objList.get(nextFolderSha1));
         }
+    }
+
+    public ArrayList<Branch> getRemoteBranches() {
+        return remoteBranches;
     }
 }
 

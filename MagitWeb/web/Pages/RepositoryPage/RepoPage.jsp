@@ -41,6 +41,7 @@
         Repository repo=UsersDataBase.getRepo(repoName,username);
         String pressedCommitSha1 = SessionUtils.getCommit(request);
         Commit pressedCommit;
+        String PrBranch=SessionUtils.getPrBranchName(request);
         if(pressedCommitSha1.equals(""))
             pressedCommit=repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1());
         else {
@@ -63,13 +64,23 @@
         <h2>Branches</h2>
         <form method="Post" action="BranchServlet">
             <input type="hidden" name="branch" value="<%=repo.getHeadBranchName()%>">
+            <input type="hidden" name="branchSha1" value="<%=repo.getHeadBranch().getSha1()%>">
             <button type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
         </form>
         <%for(Branch branch:repo.getBranches()) {
         %>
         <form method="Post" action="BranchServlet">
             <input type="hidden" name="branch" value="<%=branch.getName()%>">
+            <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
             <button type="submit">Branch : <%=branch.getName()%></button>
+        </form>
+        <%}%>
+        <%for(Branch branch:repo.getRemoteBranches()) {
+        %>
+        <form method="Post" action="BranchServlet">
+            <input type="hidden" name="branch" value="<%=branch.getName()%>">
+            <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
+            <button type="submit">Remote branch : <%=branch.getName()%></button>
         </form>
         <%}%>
         <div class="col-md-4">
@@ -113,8 +124,10 @@
                 <p>local branch name:<%=entry.getValue().ReceiverBranch%></p>
                 <p>PR purpose:<%=entry.getValue().purpose%></p>
                 <p>from user:<%=entry.getValue().Sender%></p>
-            <form method="Post" action="PullRequestServlet">
-                <button type="submit">Pull request</button>
+            <form method="Post" action="BranchServlet">
+                <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
+                <input type="hidden" name="isPR" value="true">
+                <button type="submit">Show branch</button>
             </form>
             <%}%>
 
