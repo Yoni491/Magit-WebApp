@@ -17,7 +17,11 @@ public class MakeNewFile extends HttpServlet {
             throws ServletException, IOException {
         String fileName = request.getParameter("fileName");
         Repository repo =SessionUtils.getRepo(request);
-        repo.makeNewFof_ex3(fileName);
+        try {
+            repo.makeNewFof_ex3(fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
