@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 public class SessionUtils {
     public static String errorMsgXml="";
     public static String successMsg="";
+    public static String CommitSuccessOrFail="";
+
 
     public static String getUsername (HttpServletRequest request) {
         HttpSession session = request.getSession(false);

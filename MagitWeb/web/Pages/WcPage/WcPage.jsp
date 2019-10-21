@@ -42,6 +42,9 @@
     <form method="Post" action="ExecuteCommit">
         <label><input type="text" name="commitMsg" placeholder="Commit Message"></label>
         <button type="submit" >Commit</button>
+        <% if(!CommitSuccessOrFail.equals("")){%>
+        <h3><%=CommitSuccessOrFail%></h3>
+        <%}%>
         <a href="../RepositoryPage/RepoPage.jsp" role="button">back</a>
 
     </form>
