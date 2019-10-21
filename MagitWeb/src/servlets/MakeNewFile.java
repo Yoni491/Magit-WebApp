@@ -18,7 +18,7 @@ public class MakeNewFile extends HttpServlet {
         String fileName = request.getParameter("fileName");
         Repository repo =SessionUtils.getRepo(request);
         try {
-            repo.makeNewFof_ex3(fileName);
+            repo.makeNewFofNew_ex3(fileName);
         } catch (Exception e) {
             e.printStackTrace();
         }

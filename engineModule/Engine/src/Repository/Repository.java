@@ -410,7 +410,9 @@ public class Repository {
         if(!parts[0].equals(this.name))
             throw new Exception(); // repo is not this repo
         String[] pathParts = Arrays.copyOfRange(parts, 1, parts.length);
-        ((Folder)objList.get(Wc.getRootFolderSha1())).getFofList().add(makeNewFofRec_ex3(pathParts,(Folder)objList.get(Wc.getRootFolderSha1())));
+        Folder rootFolder = (Folder)objList.get(Wc.getRootFolderSha1());
+        rootFolder.getFofList().add(makeNewFofRec_ex3(pathParts,rootFolder));
+
     }
 
     public Fof makeNewFofRec_ex3(String[] pathParts , Folder lastFolder) {
@@ -418,7 +420,7 @@ public class Repository {
         ArrayList<Fof> fofLst;
         Folder currFolder;
         if(pathParts.length==1){
-            Blob blob = new Blob("");
+            Blob blob = new Blob(" ");
             objList.put(blob.getSha1(),blob);
             return new Fof(blob.getSha1(),pathParts[0],true,username,new DateAndTime());
         }
@@ -426,8 +428,8 @@ public class Repository {
             fofOfCurrFolder = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(pathParts[0])).findFirst().orElse(null);
             if (fofOfCurrFolder != null) {
                 currFolder = (Folder) objList.get(fofOfCurrFolder);
-                currFolder.getFofList().add(makeNewFofRec_ex3(Arrays.copyOfRange(pathParts, 1, pathParts.length), currFolder));
                 lastFolder.getFofList().remove(fofOfCurrFolder);
+                currFolder.getFofList().add(makeNewFofRec_ex3(Arrays.copyOfRange(pathParts, 1, pathParts.length), currFolder));
                 return new Fof(currFolder.getSha1(), pathParts[0],false, username, new DateAndTime());
             } else {
                 fofLst = new ArrayList<>();
@@ -1138,6 +1140,28 @@ public class Repository {
 
     public ArrayList<Branch> getRemoteBranches() {
         return remoteBranches;
+    }
+
+    public String saveFileContent_ex3(String filePath, String newContent) {
+        Folder rootFolder = (Folder)objList.get(Wc.getRootFolderSha1());
+        String[] parts = filePath.split("/");
+        String[] pathParts = Arrays.copyOfRange(parts, 1, parts.length);
+        return saveFileContentRec_ex3(pathParts,rootFolder,newContent);
+    }
+
+    private String saveFileContentRec_ex3(String[] path, Folder lastFolder , String newContent) {
+        if(path.length==1){
+            lastFolder.getFofList().remove(lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null));
+            Blob updatedFile = new Blob(newContent);
+            objList.put(updatedFile.getSha1(),updatedFile);
+            Fof fofOfUpdatedFile = new Fof(updatedFile.getSha1(),path[0],true,username,new DateAndTime());
+            lastFolder.getFofList().add(fofOfUpdatedFile);
+            return updatedFile.getSha1();
+        }
+        else{
+            String nextFolderSha1 = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null).getSha1();
+            return saveFileContentRec_ex3(Arrays.copyOfRange(path, 1, path.length),(Folder)objList.get(nextFolderSha1),newContent);
+        }
     }
 }
 
