@@ -125,4 +125,12 @@
         <servlet-name>deleteFileServlet</servlet-name>
         <url-pattern>/Pages/WcPage/deleteFileServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ExecuteCommit</servlet-name>
+        <servlet-class>servlets.ExecuteCommit</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExecuteCommit</servlet-name>
+        <url-pattern>/Pages/WcPage/ExecuteCommit</url-pattern>
+    </servlet-mapping>
 </web-app>

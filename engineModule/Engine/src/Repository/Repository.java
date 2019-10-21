@@ -28,6 +28,10 @@ import java.util.function.Function;
 import java.util.zip.*;
 
 public class Repository {
+
+
+    private boolean WC_HAS_OPEN_CHANGES = false;
+    private boolean CONTENT_CHANGED = false;
     private Map<String, MagitObject> objList; //<sha1,object>
     private ArrayList<Branch> branches=new ArrayList<>();
     private Branch headBranch = null;
@@ -41,7 +45,12 @@ public class Repository {
     private String remoteRepoName;//update
     private String remoteRepoUsername;//update
     public HashMap<String, PR> PrMap=new HashMap<>();//<username of other repo, PR>
-    public Commit Wc;
+    public Commit Wc = null;
+
+    public void setWcHasOpenChanges(boolean answer){
+        WC_HAS_OPEN_CHANGES = answer;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -234,6 +243,15 @@ public class Repository {
             recursiveMapBuilder(commit.getRootFolderSha1(), res, "");
         }
         return res;
+    }
+
+    public void executeCommit_ex3(String commitMsg) {
+        Wc.setMsg(commitMsg);
+        Wc.setTimeAndDate();
+        objList.put(Wc.getSha1(),Wc);
+        headBranch.UpdateSha1(Wc.getSha1());
+        WC_HAS_OPEN_CHANGES = false;
+        CONTENT_CHANGED = false;
     }
 
     private Fof recursiveWcToObjectBuilder(String location, String _path, boolean isCommit, String modifier, Delta delta) throws IOException {
@@ -1049,8 +1067,49 @@ public class Repository {
     }
 
     public void setWc_ex3(Commit commitToCopy) {
-        Wc = new Commit(commitToCopy.getRootFolderSha1(),commitToCopy.getPreviousCommitSha1(),commitToCopy.getSecondPrecedingSha1(),commitToCopy.getCommitPurposeMSG(),commitToCopy.getNameOfModifier(),commitToCopy.getDateAndTime());
+        if(Wc==null || WC_HAS_OPEN_CHANGES) {
+            String sha1OfUpdatedRootFolder = copyFilesOfCommitWithDifferentSha1_ex3((Folder) objList.get(commitToCopy.getRootFolderSha1()));
+            this.Wc = new Commit(sha1OfUpdatedRootFolder, commitToCopy.getSha1(), "", " ", username, commitToCopy.getDateAndTime());
+        }
     }
+
+    private String copyFilesOfCommitWithDifferentSha1_ex3(Folder originalRootFolder) {
+        ArrayList<Fof> fofLstOfNewRootFolder = new ArrayList<>();
+        Folder newRootFolder = new Folder(fofLstOfNewRootFolder);
+        for(Fof fof:originalRootFolder.getFofList()){
+            if(!fof.getIsBlob())
+                newRootFolder.getFofList().add(addSpaceToCopiedBlobs_ex3(fof,(Folder)objList.get(fof.getSha1())));
+            else
+                newRootFolder.getFofList().add(addSpaceToCopiedBlobs_ex3(fof,null)); // last folder doesnt matter in this case
+        }
+        newRootFolder.updateContent();
+        objList.put(newRootFolder.getSha1(),newRootFolder);
+        return newRootFolder.getSha1();
+    }
+
+    private Fof addSpaceToCopiedBlobs_ex3(Fof fof, Folder originalLastFolder) {
+        if(fof.getIsBlob()){
+            Blob updatedBlob = new Blob(objList.get(fof.getSha1()).getContent()+" ");
+            objList.put(updatedBlob.getSha1(),updatedBlob);
+            Fof fofOfUpdatedBlob = new Fof(updatedBlob.getSha1(),fof.getName(),true,fof.getNameOfModifier(),fof.getDateAndTime());
+            return fofOfUpdatedBlob;
+        }
+        else{
+            ArrayList<Fof> fofLstOfNewFolder = new ArrayList<>();
+            Folder newFolder = new Folder(fofLstOfNewFolder);
+            for(Fof f:originalLastFolder.getFofList()){
+                if(!f.getIsBlob())
+                    newFolder.getFofList().add(addSpaceToCopiedBlobs_ex3(f,(Folder)objList.get(f.getSha1())));
+                else
+                    newFolder.getFofList().add(addSpaceToCopiedBlobs_ex3(f,null));
+            }
+            newFolder.updateContent();
+            objList.put(newFolder.getSha1(),newFolder);
+            Fof fofOfUpdatedFolder = new Fof(newFolder.getSha1(),fof.getName(),false,fof.getNameOfModifier(),fof.getDateAndTime());
+            return fofOfUpdatedFolder;
+        }
+    }
+
     public Commit getWc_ex3(){
         return Wc;
     }
@@ -1082,8 +1141,11 @@ public class Repository {
 
     private String saveFileContentRec_ex3(String[] path, Folder lastFolder , String newContent) {
         if(path.length==1){
+            String oldSha1 = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null).getSha1();
             lastFolder.getFofList().remove(lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null));
             Blob updatedFile = new Blob(newContent);
+            if (!oldSha1.equals(updatedFile.getContent()))
+                CONTENT_CHANGED = true;
             objList.put(updatedFile.getSha1(),updatedFile);
             Fof fofOfUpdatedFile = new Fof(updatedFile.getSha1(),path[0],true,username,new DateAndTime());
             lastFolder.getFofList().add(fofOfUpdatedFile);
@@ -1094,6 +1156,8 @@ public class Repository {
             return saveFileContentRec_ex3(Arrays.copyOfRange(path, 1, path.length),(Folder)objList.get(nextFolderSha1),newContent);
         }
     }
+
+
 }
 
 

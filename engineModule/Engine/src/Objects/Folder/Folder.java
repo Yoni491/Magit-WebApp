@@ -25,4 +25,13 @@ public class Folder extends MagitObject {
         }
         return content.toString();
     }
+
+    public void updateContent() {
+        StringBuilder content = new StringBuilder();
+        Collections.sort(FofList);
+        for (Fof fof:FofList) {
+            content.append(fof.getContent());
+        }
+        this.content =content.toString();
+    }
 }
