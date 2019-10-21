@@ -39,7 +39,8 @@
     String blobContent = "";
 
 %>
-    <form method="Post" action="Commit">
+    <form method="Post" action="ExecuteCommit">
+        <label><input type="text" name="commitMsg" placeholder="Commit Message"></label>
         <button type="submit" >Commit</button>
         <a href="../RepositoryPage/RepoPage.jsp" role="button">back</a>
 

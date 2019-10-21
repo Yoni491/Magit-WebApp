@@ -65,6 +65,10 @@ public class Commit extends MagitObject implements Comparable<Commit>, CommitRep
         return rootFolderSha1;
     }
 
+    public void setRootFolderSha1(String newSha1) {
+        rootFolderSha1 = newSha1;
+    }
+
     public String getCommitPurposeMSG() {
         return CommitPurposeMSG;
     }
@@ -89,4 +93,11 @@ public class Commit extends MagitObject implements Comparable<Commit>, CommitRep
         return previousCommit2Sha1;
     }
 
+    public void setMsg(String commitMsg) {
+        CommitPurposeMSG = commitMsg;
+    }
+
+    public void setTimeAndDate() {
+        this.dateAndTime = new DateAndTime();
+    }
 }

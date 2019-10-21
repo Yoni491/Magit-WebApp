@@ -54,4 +54,8 @@ public class Fof implements Serializable,Comparable {
     public void setSha1(String updatedSha1) {
         this.sha1=updatedSha1;
     }
+
+    public DateAndTime getDateAndTime() {
+        return this.dateAndTime;
+    }
 }

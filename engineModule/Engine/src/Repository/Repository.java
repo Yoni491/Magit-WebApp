@@ -234,6 +234,13 @@ public class Repository {
         return res;
     }
 
+    public void executeCommit_ex3(String commitMsg) {
+        Wc.setMsg(commitMsg);
+        Wc.setTimeAndDate();
+        objList.put(Wc.getSha1(),Wc);
+        headBranch.UpdateSha1(Wc.getSha1());
+    }
+
     private Fof recursiveWcToObjectBuilder(String location, String _path, boolean isCommit, String modifier, Delta delta) throws IOException {
         ArrayList<Fof> fofLst = new ArrayList<>();
         File file = new File(location + _path);
@@ -1046,8 +1053,47 @@ public class Repository {
     }
 
     public void setWc_ex3(Commit commitToCopy) {
-        Wc = new Commit(commitToCopy.getRootFolderSha1(),commitToCopy.getPreviousCommitSha1(),commitToCopy.getSecondPrecedingSha1(),commitToCopy.getCommitPurposeMSG(),commitToCopy.getNameOfModifier(),commitToCopy.getDateAndTime());
+        String sha1OfUpdatedRootFolder = copyFilesOfCommitWithDifferentSha1_ex3((Folder)objList.get(commitToCopy.getRootFolderSha1()));
+        this.Wc = new Commit(sha1OfUpdatedRootFolder,commitToCopy.getSha1(),""," ",username,commitToCopy.getDateAndTime());
     }
+
+    private String copyFilesOfCommitWithDifferentSha1_ex3(Folder originalRootFolder) {
+        ArrayList<Fof> fofLstOfNewRootFolder = new ArrayList<>();
+        Folder newRootFolder = new Folder(fofLstOfNewRootFolder);
+        for(Fof fof:originalRootFolder.getFofList()){
+            if(!fof.getIsBlob())
+                newRootFolder.getFofList().add(addSpaceToCopiedBlobs_ex3(fof,(Folder)objList.get(fof.getSha1())));
+            else
+                newRootFolder.getFofList().add(addSpaceToCopiedBlobs_ex3(fof,null)); // last folder doesnt matter in this case
+        }
+        newRootFolder.updateContent();
+        objList.put(newRootFolder.getSha1(),newRootFolder);
+        return newRootFolder.getSha1();
+    }
+
+    private Fof addSpaceToCopiedBlobs_ex3(Fof fof, Folder originalLastFolder) {
+        if(fof.getIsBlob()){
+            Blob updatedBlob = new Blob(objList.get(fof.getSha1()).getContent()+" ");
+            objList.put(updatedBlob.getSha1(),updatedBlob);
+            Fof fofOfUpdatedBlob = new Fof(updatedBlob.getSha1(),fof.getName(),true,fof.getNameOfModifier(),fof.getDateAndTime());
+            return fofOfUpdatedBlob;
+        }
+        else{
+            ArrayList<Fof> fofLstOfNewFolder = new ArrayList<>();
+            Folder newFolder = new Folder(fofLstOfNewFolder);
+            for(Fof f:originalLastFolder.getFofList()){
+                if(!f.getIsBlob())
+                    newFolder.getFofList().add(addSpaceToCopiedBlobs_ex3(f,(Folder)objList.get(f.getSha1())));
+                else
+                    newFolder.getFofList().add(addSpaceToCopiedBlobs_ex3(f,null));
+            }
+            newFolder.updateContent();
+            objList.put(newFolder.getSha1(),newFolder);
+            Fof fofOfUpdatedFolder = new Fof(newFolder.getSha1(),fof.getName(),false,fof.getNameOfModifier(),fof.getDateAndTime());
+            return fofOfUpdatedFolder;
+        }
+    }
+
     public Commit getWc_ex3(){
         return Wc;
     }
@@ -1094,6 +1140,8 @@ public class Repository {
             return saveFileContentRec_ex3(Arrays.copyOfRange(path, 1, path.length),(Folder)objList.get(nextFolderSha1),newContent);
         }
     }
+
+
 }
 
 
