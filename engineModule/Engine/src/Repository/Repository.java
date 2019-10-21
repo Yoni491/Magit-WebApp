@@ -29,9 +29,7 @@ import java.util.zip.*;
 
 public class Repository {
     private Map<String, MagitObject> objList; //<sha1,object>
-    private ArrayList<Branch> branches=new ArrayList<>();;
-    private ArrayList<Branch> remoteBranches=new ArrayList<>();
-    private ArrayList<Branch> remoteTrackingBranches=new ArrayList<>();
+    private ArrayList<Branch> branches=new ArrayList<>();
     private Branch headBranch = null;
     private String path;//update
     private String name;
@@ -171,29 +169,29 @@ public class Repository {
         this.readBranches();
     }
 
-    private void readBranches() throws IOException {
-        File folder = new File(this.path + "/.magit/branches");
-        String nameOfHead = "";
-            for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
-                if (fileEntry.isDirectory())
-                    continue;
-                FileReader fr = new FileReader(fileEntry);
-                BufferedReader br = new BufferedReader(fr);
-                if (fileEntry.getName().equals("HEAD")) {
-                    nameOfHead = br.readLine();
-                    br.close();
-                    fr.close();
-                    continue;
-                }
-                Branch branch = new Branch(br.readLine(), fileEntry.getName());
-                this.branches.add(branch);
-                br.close();
-                fr.close();
-            }
-            String finalNameOfHead = nameOfHead;
-            headBranch = branches.stream().filter(Branch -> Branch.getName().equals(finalNameOfHead)).findFirst().orElse(null);
-            branches.remove(headBranch);
-    }
+//    private void readBranches() throws IOException {
+//        File folder = new File(this.path + "/.magit/branches");
+//        String nameOfHead = "";
+//            for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
+//                if (fileEntry.isDirectory())
+//                    continue;
+//                FileReader fr = new FileReader(fileEntry);
+//                BufferedReader br = new BufferedReader(fr);
+//                if (fileEntry.getName().equals("HEAD")) {
+//                    nameOfHead = br.readLine();
+//                    br.close();
+//                    fr.close();
+//                    continue;
+//                }
+//                Branch branch = new Branch(br.readLine(), fileEntry.getName());
+//                this.branches.add(branch);
+//                br.close();
+//                fr.close();
+//            }
+//            String finalNameOfHead = nameOfHead;
+//            headBranch = branches.stream().filter(Branch -> Branch.getName().equals(finalNameOfHead)).findFirst().orElse(null);
+//            branches.remove(headBranch);
+//    }
 
     private void readMagitObjects() throws IOException, ClassNotFoundException {
         File folder = new File(this.path + "/.magit/objects");
@@ -220,7 +218,7 @@ public class Repository {
             commit = new Commit(sha1OfRoot, headBranch.getSha1(), "", msg, username);
         else {
             commit = new Commit(sha1OfRoot, msg, username); //first commit
-            headBranch = new Branch(commit.getSha1(), "master");
+            headBranch = new Branch(commit.getSha1(), "master","local");
         }
         headBranch.UpdateSha1(commit.getSha1());
         objList.put(commit.getSha1(), commit);
@@ -295,7 +293,7 @@ public class Repository {
             throw new NoCommitHasBeenMadeException();
         if (branches.stream().filter(Branch -> Branch.getName().equals(name)).findFirst().orElse(null) == null
                 && !headBranch.getName().equals(name)) {
-            branch = new Branch(sha1, name);
+            branch = new Branch(sha1, name,"local");
             branches.add(branch);
             makeFileForBranch(branch.getSha1(), branch.getName());
         } else
@@ -343,6 +341,7 @@ public class Repository {
     }
 
     public void deployCommit(Commit commit, String pathOfCommit) throws IOException {
+        new File(pathOfCommit).mkdir();
         if (commit != null)
             recursiveObjectToWCBuilder((Folder) objList.get(commit.getRootFolderSha1()), pathOfCommit);
     }

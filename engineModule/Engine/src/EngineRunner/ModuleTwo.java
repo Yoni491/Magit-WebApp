@@ -222,7 +222,9 @@ public class ModuleTwo {
     }
     public static void makeXMLfromRepo_Ex3() throws XmlNotValidException, IOException {
 
+        new File("C:/magit-ex3/"+Username).mkdir();
         activeRepo =Repository.makeRepoFromXmlRepo(new XmlData("C:/magit-ex3/XML/tempXML.xml",Username));
+        new File("C:/magit-ex3/"+Username+"/"+activeRepo.getName()).mkdir();
         activeRepo.createEmptyRepo();
         activeRepo.createFiles();
         activeRepo.updateUsername(Username);
