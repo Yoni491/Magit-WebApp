@@ -41,6 +41,8 @@
 %>
     <form method="Post" action="Commit">
         <button type="submit" >Commit</button>
+        <a href="../RepositoryPage/RepoPage.jsp" role="button">back</a>
+
     </form>
 
     <form method="Post" action="MakeNewFile">
@@ -72,9 +74,7 @@
                 <button type="submit">save</button>
             </form>
             <form method="Post" action="deleteFileServlet">
-                <label><input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>"></label>
                 <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
-                <label><input type="hidden" name="blobSha1" value="<%=SessionUtils.getBlobSha1(request)%>"></label>
                 <button type="submit">delete File</button>
             </form>
         </div>

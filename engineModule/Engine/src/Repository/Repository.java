@@ -400,73 +400,40 @@ public class Repository {
                 recursiveRootFolderToList_ex3(res,(Folder) objList.get(fof.getSha1()), newPath);
         }
     }
-    public void updateSha1OfFolders(Commit commit,String updatedSha1,String path){
-        Folder rootFolder = (Folder)objList.get(commit.getRootFolderSha1());
-        recSha1Updater_ex3(path,rootFolder,updatedSha1);
-    }
-    public void makeNewFof_ex3(String fileName ){
-        boolean first = true;
-        Folder folderToSave = null;
-        Fof fof;
-        String name;
-        MagitObject obj;
-        Blob blobToUpdate = null;
-        Fof fofToPass = null;
-        ArrayList<Fof> fofLst = new ArrayList<>();
+    public void makeNewFofNew_ex3(String fileName ) throws Exception {
         String[] parts = fileName.split("/");
-        for(int i=parts.length-1;i>0;i--){
-            name = parts[i];
-            if(i==parts.length-1){
-                obj = new Blob("");
-                blobToUpdate = (Blob)obj;
-                fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                fofToPass = fof;
-            }
-            else {
-                String finalName1 = name;
-                if ((((Folder) objList.get(Wc.getRootFolderSha1())).getFofList().contains(parts[i-1]) || i==1)&&(((Folder) objList.get(Wc.getRootFolderSha1())).getFofList().stream().filter(ffof->ffof.getName().equals(finalName1)).findFirst().orElse(null)==null)){
-                    obj = new Folder(fofLst);
-                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                }
-                else {
-                    String finalName = name;
-                    obj=(objList.get(((Folder) objList.get(Wc.getRootFolderSha1())).getFofList().stream().filter(f->f.getName().equals(finalName)).findFirst().orElse(null).getSha1()));
-                    ((Folder)obj).getFofList().addAll(fofLst);
-                    fof = new Fof(obj.getSha1(), parts[i],i==parts.length-1,username, new DateAndTime());
-                }
-                if(first){
-                    ((Folder)obj).getFofList().add(fofToPass);
-                    first = false;
-                }
-                else{
-                    folderToSave.getFofList().add(fofToPass);
-                }
-                fofToPass = fof;
-                folderToSave = (Folder)obj;
-            }
-            fofLst.add(fof);
-            objList.put(obj.getSha1(),obj);
-        }
-        ((Folder)objList.get(Wc.getRootFolderSha1())).getFofList().add(fofToPass);
-        updateSha1OfFolders(Wc,blobToUpdate.getSha1(),fileName);
+        if(!parts[0].equals(this.name))
+            throw new Exception(); // repo is not this repo
+        String[] pathParts = Arrays.copyOfRange(parts, 1, parts.length);
+        Folder rootFolder = (Folder)objList.get(Wc.getRootFolderSha1());
+        rootFolder.getFofList().add(makeNewFofRec_ex3(pathParts,rootFolder));
+
     }
 
-        private Fof recSha1Updater_ex3(String path, Folder rootFolder, String updatedSha1) {
-        String[] parts = path.split("/");
-        String[] yourArray = Arrays.copyOfRange(parts, 1, parts.length);
-        Fof newFof;
-        Fof oldFof;
-        Fof f = rootFolder.getFofList().stream().filter(fof->fof.getName().equals(parts[1])).findFirst().orElse(null);
-        if(f.getIsBlob())
-            f.setSha1(updatedSha1);
-        else {
-            String newPath =String.join("/",yourArray);
-            oldFof = ((Folder)objList.get(f.getSha1())).getFofList().stream().filter(fof -> fof.getName().equals(parts[1])).findFirst().orElse(null);
-            newFof = recSha1Updater_ex3(newPath,((Folder)objList.get(f.getSha1())),updatedSha1);
-            ((Folder)objList.get(f.getSha1())).getFofList().remove(oldFof);
-            ((Folder)objList.get(f.getSha1())).getFofList().add(newFof);
+    public Fof makeNewFofRec_ex3(String[] pathParts , Folder lastFolder) {
+        Fof fofOfCurrFolder;
+        ArrayList<Fof> fofLst;
+        Folder currFolder;
+        if(pathParts.length==1){
+            Blob blob = new Blob(" ");
+            objList.put(blob.getSha1(),blob);
+            return new Fof(blob.getSha1(),pathParts[0],true,username,new DateAndTime());
         }
-        return f;
+        else {
+            fofOfCurrFolder = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(pathParts[0])).findFirst().orElse(null);
+            if (fofOfCurrFolder != null) {
+                currFolder = (Folder) objList.get(fofOfCurrFolder);
+                lastFolder.getFofList().remove(fofOfCurrFolder);
+                currFolder.getFofList().add(makeNewFofRec_ex3(Arrays.copyOfRange(pathParts, 1, pathParts.length), currFolder));
+                return new Fof(currFolder.getSha1(), pathParts[0],false, username, new DateAndTime());
+            } else {
+                fofLst = new ArrayList<>();
+                currFolder = new Folder(fofLst);
+                currFolder.getFofList().add(makeNewFofRec_ex3(Arrays.copyOfRange(pathParts, 1, pathParts.length), currFolder));
+                objList.put(currFolder.getSha1(), currFolder);
+                return new Fof(currFolder.getSha1(), pathParts[0],false, username, new DateAndTime());
+            }
+        }
     }
 
     private void recursiveRootFolderToMap_ex3(HashMap<String,Fof> res, Folder _folder, String _path) throws IOException {
@@ -1083,12 +1050,48 @@ public class Repository {
     public Commit getWc_ex3(){
         return Wc;
     }
-    public void deleteFile_ex3(String fileSha1){
 
+    public void deleteFile_ex3(String filePath){
+        Folder rootFolder = (Folder)objList.get(Wc.getRootFolderSha1());
+        String[] parts = filePath.split("/");
+        String[] pathParts = Arrays.copyOfRange(parts, 1, parts.length);
+        deleteFileRec_ex3(pathParts,rootFolder);
+    }
+
+    private void deleteFileRec_ex3(String[] path,Folder lastFolder) {
+        if(path.length==1){
+            lastFolder.getFofList().remove(lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null));
+        }
+        else{
+            String nextFolderSha1 = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null).getSha1();
+            deleteFileRec_ex3(Arrays.copyOfRange(path, 1, path.length),(Folder)objList.get(nextFolderSha1));
+        }
     }
 
     public ArrayList<Branch> getRemoteBranches() {
         return remoteBranches;
+    }
+
+    public String saveFileContent_ex3(String filePath, String newContent) {
+        Folder rootFolder = (Folder)objList.get(Wc.getRootFolderSha1());
+        String[] parts = filePath.split("/");
+        String[] pathParts = Arrays.copyOfRange(parts, 1, parts.length);
+        return saveFileContentRec_ex3(pathParts,rootFolder,newContent);
+    }
+
+    private String saveFileContentRec_ex3(String[] path, Folder lastFolder , String newContent) {
+        if(path.length==1){
+            lastFolder.getFofList().remove(lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null));
+            Blob updatedFile = new Blob(newContent);
+            objList.put(updatedFile.getSha1(),updatedFile);
+            Fof fofOfUpdatedFile = new Fof(updatedFile.getSha1(),path[0],true,username,new DateAndTime());
+            lastFolder.getFofList().add(fofOfUpdatedFile);
+            return updatedFile.getSha1();
+        }
+        else{
+            String nextFolderSha1 = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null).getSha1();
+            return saveFileContentRec_ex3(Arrays.copyOfRange(path, 1, path.length),(Folder)objList.get(nextFolderSha1),newContent);
+        }
     }
 }
 

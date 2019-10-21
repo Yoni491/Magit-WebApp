@@ -17,10 +17,9 @@ public class deleteFileServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Repository repo =SessionUtils.getRepo(request);
-        String fileSha1 = request.getParameter("blobSha1");
-
-        if(fileSha1!=null)
-            repo.deleteFile_ex3(fileSha1);
+        String filePath = request.getParameter("filePath");
+        if(filePath!=null)
+            repo.deleteFile_ex3(filePath);
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
