@@ -66,13 +66,17 @@ public class Repository {
 
     public Repository(Repository repo) {
         objList = repo.objList;
-        branches = repo.branches;
-        remoteBranches=repo.remoteBranches;
-        remoteTrackingBranches=repo.remoteBranches;
+        for(Branch br:repo.branches)
+        {
+            Branch newBranch=new Branch(br.getSha1(),br.getName(),"remote");
+            branches.add(newBranch);
+            newBranch=new Branch(br.getSha1(),br.getName(),"tracking");
+            branches.add(newBranch);
+        }
         headBranch = repo.headBranch;
+        headBranch.setType("remote");
         path = repo.path;
         name = repo.name;
-        username = username;
         currDelta = repo.currDelta;
         conflictMap = repo.conflictMap;
         latestMergedBranchSha1 = repo.latestMergedBranchSha1;
@@ -169,29 +173,29 @@ public class Repository {
         this.readBranches();
     }
 
-//    private void readBranches() throws IOException {
-//        File folder = new File(this.path + "/.magit/branches");
-//        String nameOfHead = "";
-//            for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
-//                if (fileEntry.isDirectory())
-//                    continue;
-//                FileReader fr = new FileReader(fileEntry);
-//                BufferedReader br = new BufferedReader(fr);
-//                if (fileEntry.getName().equals("HEAD")) {
-//                    nameOfHead = br.readLine();
-//                    br.close();
-//                    fr.close();
-//                    continue;
-//                }
-//                Branch branch = new Branch(br.readLine(), fileEntry.getName());
-//                this.branches.add(branch);
-//                br.close();
-//                fr.close();
-//            }
-//            String finalNameOfHead = nameOfHead;
-//            headBranch = branches.stream().filter(Branch -> Branch.getName().equals(finalNameOfHead)).findFirst().orElse(null);
-//            branches.remove(headBranch);
-//    }
+    private void readBranches() throws IOException {
+        File folder = new File(this.path + "/.magit/branches");
+        String nameOfHead = "";
+            for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
+                if (fileEntry.isDirectory())
+                    continue;
+                FileReader fr = new FileReader(fileEntry);
+                BufferedReader br = new BufferedReader(fr);
+                if (fileEntry.getName().equals("HEAD")) {
+                    nameOfHead = br.readLine();
+                    br.close();
+                    fr.close();
+                    continue;
+                }
+                Branch branch = new Branch(br.readLine(), fileEntry.getName(),"local");
+                this.branches.add(branch);
+                br.close();
+                fr.close();
+            }
+            String finalNameOfHead = nameOfHead;
+            headBranch = branches.stream().filter(Branch -> Branch.getName().equals(finalNameOfHead)).findFirst().orElse(null);
+            branches.remove(headBranch);
+    }
 
     private void readMagitObjects() throws IOException, ClassNotFoundException {
         File folder = new File(this.path + "/.magit/objects");
@@ -478,15 +482,15 @@ public class Repository {
             isHead = mr.getMagitBranches().getHead().equals(mgBranch.getName());
             if (mgBranch.getPointedCommit() != null) {
                 if (isHead && mgBranch.getPointedCommit().getId().equals("")) {
-                    repo.headBranch = new Branch("", "master");
+                    repo.headBranch = new Branch("", "master","local");
                     return repo;
                 }
                 singleCommit = xmldata.getCommitMap().get(mgBranch.getPointedCommit().getId());
                 commitSha1 = repo.recursiveSha1PrevCommitBuilder(singleCommit, xmldata);
                 if (isHead)
-                    repo.headBranch = new Branch(commitSha1, mgBranch.getName());
+                    repo.headBranch = new Branch(commitSha1, mgBranch.getName(),"local");
                 else {
-                        repo.branches.add(new Branch(commitSha1, mgBranch.getName()));
+                        repo.branches.add(new Branch(commitSha1, mgBranch.getName(),"local"));
                 }
             }
 
@@ -1068,9 +1072,6 @@ public class Repository {
         }
     }
 
-    public ArrayList<Branch> getRemoteBranches() {
-        return remoteBranches;
-    }
 
     public String saveFileContent_ex3(String filePath, String newContent) {
         Folder rootFolder = (Folder)objList.get(Wc.getRootFolderSha1());
