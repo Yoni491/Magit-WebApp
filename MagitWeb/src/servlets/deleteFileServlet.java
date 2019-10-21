@@ -18,8 +18,10 @@ public class deleteFileServlet extends HttpServlet {
             throws ServletException, IOException {
         Repository repo =SessionUtils.getRepo(request);
         String filePath = request.getParameter("filePath");
-        if(filePath!=null)
+        if(filePath!=null) {
             repo.deleteFile_ex3(filePath);
+            repo.setWcHasOpenChanges(true);
+        }
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
