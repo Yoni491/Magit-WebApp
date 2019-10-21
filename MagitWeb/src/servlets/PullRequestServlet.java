@@ -27,40 +27,43 @@ public class PullRequestServlet extends HttpServlet {
 
         if((localBranchName!=null)&&remoteBranchName!=null) {
             Repository localRepo = SessionUtils.getRepo(request);
-            Repository remoteRepo = UsersDataBase.getRepo(localRepo.getRemoteRepoName(),localRepo.getRemoteRepoUserName());
-            for(Map.Entry<String, MagitObject> entry: localRepo.getObjList().entrySet())
-            {
-                if(!remoteRepo.getObjList().entrySet().contains(entry))
-                    remoteRepo.getObjList().put(entry.getKey(),entry.getValue());
+            Repository remoteRepo = UsersDataBase.getRepo(localRepo.getRemoteRepoName(), localRepo.getRemoteRepoUserName());
+            for (Map.Entry<String, MagitObject> entry : localRepo.getObjList().entrySet()) {
+                if (!remoteRepo.getObjList().entrySet().contains(entry))
+                    remoteRepo.getObjList().put(entry.getKey(), entry.getValue());
             }
-            Branch localBranch=localRepo.getRemoteBranches().stream().filter(br->br.getName().equals(localBranchName)).findFirst().orElse(null);
-            if(localRepo.getHeadBranchName().equals(localBranchName))
-                localBranch=localRepo.getHeadBranch();
-            if(remoteRepo.getHeadBranchName().equals(remoteBranchName)||
-                    (remoteRepo.getBranches().stream().filter(br->br.getName().equals(localBranchName)).findFirst().orElse(null)==null))
-                if(localBranch!=null) {
-                    String path=remoteRepo.getPath()+"/.magit";
-                    new File(path).mkdir();
-                    path=path+"/PR";
-                    new File(path).mkdir();
-                    path=path+"/"+SessionUtils.getUsername(request);
-                    new File(path).mkdir();
-                    remoteRepo.deployCommit(remoteRepo.sha1ToCommit_ex3(localBranch.getSha1()),path);
-                    //second part of the function
-                    Message msg = new Message(localRepo.getName(),SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                            localBranchName, remoteBranchName,localBranch.getSha1());
-                    PR pr = new PR(localRepo.getName(),SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                            localBranchName, remoteBranchName,localBranch.getSha1(),PrPurpose,path);
-                    UsersDataBase.getUserData(localRepo.getRemoteRepoUserName()).MsgList.add(msg);
-                    remoteRepo.PrMap.put(SessionUtils.getUsername(request),pr);
-                }
+            Branch localBranch = localRepo.getBranches().stream().filter(br -> br.getName().equals(localBranchName)).filter(br -> br.getType().equals("local")).findFirst().orElse(null);
+            if (localRepo.getHeadBranchName().equals(localBranchName)) {
+                localBranch = localRepo.getHeadBranch();
+            }
+            if (localBranch != null && localBranch.getType().equals("local")) {
+                if (remoteRepo.getHeadBranchName().equals(remoteBranchName) ||
+                        (remoteRepo.getBranches().stream().filter(br -> br.getName().equals(localBranchName)).findFirst().orElse(null) == null))
+                     {
+                        String path = remoteRepo.getPath() + "/.magit";
+                        new File(path).mkdir();
+                        path = path + "/PR";
+                        new File(path).mkdir();
+                        path = path + "/" + SessionUtils.getUsername(request);
+                        new File(path).mkdir();
+                        remoteRepo.deployCommit(remoteRepo.sha1ToCommit_ex3(localBranch.getSha1()), path);
+                        //second part of the function
+                        Message msg = new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+                                localBranchName, remoteBranchName, localBranch.getSha1());
+                        PR pr = new PR(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+                                localBranchName, remoteBranchName, localBranch.getSha1(), PrPurpose, path);
+                        UsersDataBase.getUserData(localRepo.getRemoteRepoUserName()).MsgList.add(msg);
+                        remoteRepo.PrMap.put(SessionUtils.getUsername(request), pr);
+                        remoteRepo.getBranches().add(new Branch(localBranch.getSha1(),localBranchName,"PR"));
+                    } else {
+                        //print error msg: no remote branch with this name exists.
+                    }
+            }
             else
-                {
-                    //print error msg: no remote branch with this name exists.
-                }
-
+            {
+                //print error msg: no remote branch with this name exists.
+            }
         }
-
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 

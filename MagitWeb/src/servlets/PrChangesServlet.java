@@ -1,14 +1,13 @@
 package servlets;
 
-import Repository.Repository;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class BranchServlet extends HttpServlet {
+
+public class PrChangesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request,response);}
@@ -19,14 +18,9 @@ public class BranchServlet extends HttpServlet {
         String branchSha1 = request.getParameter("branchSha1");
         if(isPr!=null)
         {
-            //SessionUtils.setPrBranchName(request,branchName);//לא צריך את זה
-            SessionUtils.setBranch(request,branchName);
+            //צריך לעדכן את הענף ברפוסיטורי הקודם לremote
+
         }
-        if(branchName!=null) {
-            SessionUtils.setBranch(request,branchName);
-            SessionUtils.setPrBranchName(request,"");
-        }
-        SessionUtils.setCommit(request,branchSha1);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 

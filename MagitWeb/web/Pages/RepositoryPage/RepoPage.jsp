@@ -72,17 +72,14 @@
         <form method="Post" action="BranchServlet">
             <input type="hidden" name="branch" value="<%=branch.getName()%>">
             <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
+            <%if(branch.getType().equals("remote")){
+            %>
+            <button type="submit">Remote branch : <%=branch.getName()%></button>
+            <%}if(branch.getType().equals("local")){
+        %>
             <button type="submit">Branch : <%=branch.getName()%></button>
         </form>
-        <%}%>
-        <%for(Branch branch:repo.getRemoteBranches()) {
-        %>
-        <form method="Post" action="BranchServlet">
-            <input type="hidden" name="branch" value="<%=branch.getName()%>">
-            <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
-            <button type="submit">Remote branch : <%=branch.getName()%></button>
-        </form>
-        <%}%>
+        <%}}%>
         <div class="col-md-4">
             <div class="col-md-8">
                 <form method="Post" action="WcServlet">
@@ -128,6 +125,11 @@
                 <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
                 <input type="hidden" name="isPR" value="true">
                 <button type="submit">Show branch</button>
+            </form>
+            <form method="Post" action="ShowPrChanges">
+                <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
+                <input type="hidden" name="isPR" value="true">
+                <button type="submit">Show changes</button>
             </form>
             <%}%>
 

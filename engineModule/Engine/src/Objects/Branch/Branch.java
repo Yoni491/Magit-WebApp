@@ -11,7 +11,10 @@ public class Branch {
         nameOfBranch = _nameOfBranch;
         this.type=type;
     }
-
+    public void setType(String type)
+    {
+        this.type=type;
+    }
     public String getName() {
         return nameOfBranch;
     }
@@ -22,5 +25,9 @@ public class Branch {
 
     public void UpdateSha1(String sha1) {
         Sha1OfCommit = sha1;
+    }
+
+    public Object getType() {
+        return type;
     }
 }
