@@ -31,7 +31,6 @@ public class Repository {
 
 
     private boolean WC_HAS_OPEN_CHANGES = false;
-    private boolean CONTENT_CHANGED = false;
     private Map<String, MagitObject> objList; //<sha1,object>
     private ArrayList<Branch> branches=new ArrayList<>();
     private Branch headBranch = null;
@@ -47,6 +46,9 @@ public class Repository {
     public HashMap<String, PR> PrMap=new HashMap<>();//<username of other repo, PR>
     public Commit Wc = null;
 
+    public Boolean getWcHasOpenChanges(){
+        return WC_HAS_OPEN_CHANGES;
+    }
     public void setWcHasOpenChanges(boolean answer){
         WC_HAS_OPEN_CHANGES = answer;
     }
@@ -251,7 +253,6 @@ public class Repository {
         objList.put(Wc.getSha1(),Wc);
         headBranch.UpdateSha1(Wc.getSha1());
         WC_HAS_OPEN_CHANGES = false;
-        CONTENT_CHANGED = false;
     }
 
     private Fof recursiveWcToObjectBuilder(String location, String _path, boolean isCommit, String modifier, Delta delta) throws IOException {
@@ -423,6 +424,7 @@ public class Repository {
         }
     }
     public void makeNewFofNew_ex3(String fileName ) throws Exception {
+        WC_HAS_OPEN_CHANGES = true;
         String[] parts = fileName.split("/");
         if(!parts[0].equals(this.name))
             throw new Exception(); // repo is not this repo
@@ -1144,8 +1146,8 @@ public class Repository {
             String oldSha1 = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null).getSha1();
             lastFolder.getFofList().remove(lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null));
             Blob updatedFile = new Blob(newContent);
-            if (!oldSha1.equals(updatedFile.getContent()))
-                CONTENT_CHANGED = true;
+            if (!oldSha1.equals(updatedFile.getSha1()))
+                WC_HAS_OPEN_CHANGES = true;
             objList.put(updatedFile.getSha1(),updatedFile);
             Fof fofOfUpdatedFile = new Fof(updatedFile.getSha1(),path[0],true,username,new DateAndTime());
             lastFolder.getFofList().add(fofOfUpdatedFile);

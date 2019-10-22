@@ -87,8 +87,10 @@
                     <button type="submit">WC</button>
                 </form>
             </div>
-
-            <h2>Commits</h2>
+            <%if(repo.getWcHasOpenChanges()){%>
+            <br><h3>Open changes in working copy</h3>
+            <%}%>
+            <br><h2>Commits</h2>
             <%for(Commit commit:repo.getBranchCommits(pressedBranch)) {
             %>
             <form method="Post" action="commitServlet">

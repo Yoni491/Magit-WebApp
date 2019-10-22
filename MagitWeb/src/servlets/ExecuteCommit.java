@@ -17,7 +17,12 @@ public class ExecuteCommit extends HttpServlet {
             throws ServletException, IOException {
         String commitMsg = request.getParameter("commitMsg");
         Repository repo = SessionUtils.getRepo(request);
-        repo.executeCommit_ex3(commitMsg);
+        if(repo.getWcHasOpenChanges()) {
+            repo.executeCommit_ex3(commitMsg);
+            SessionUtils.CommitSuccessOrFail="Committed successfully";
+        }
+        else
+            SessionUtils.CommitSuccessOrFail="Can not commit";
         response.sendRedirect("../WcPage/WcPage.jsp");
     }
 
