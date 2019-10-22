@@ -20,18 +20,12 @@
 
         <title>M.A-GitHub</title>
         <script src="../../common/jquery-2.0.3.min.js"></script>
-        <script src="UserPage.js"></script>
-        <script src="main.js"></script>
 
-        <link rel="stylesheet" href="css/sidebar.css">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        <!-- Bootstrap core CSS -->
         <link href="../../common/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Custom styles for this template -->
-        <link href="css/modern-business.css" rel="stylesheet">
     </head>
     <body>
 <%Repository repo = SessionUtils.getRepo(request);
@@ -45,13 +39,13 @@
         <% if(!CommitSuccessOrFail.equals("")){%>
         <h3><%=CommitSuccessOrFail%></h3>
         <%}%>
-        <a href="../RepositoryPage/RepoPage.jsp" role="button">back</a>
+        <a class="btn btn-default" href="../RepositoryPage/RepoPage.jsp" role="button">back</a>
 
     </form>
 
     <form method="Post" action="MakeNewFile">
         <label><input type="text" name="fileName" placeholder="<%=repo.getName()+"/"%>"></label>
-        <button type="submit">Make New File</button>
+        <button class="btn btn-default" type="submit">Make New File</button>
     </form>
 
         <div class="container">
@@ -60,7 +54,7 @@
                 <form method="Post" action="FileContentServlet">
                     <label><input type="hidden" name="filePath" value="<%=entry.getKey()%>"></label>
                     <label><input type="hidden" name="blobSha1" value="<%=entry.getValue().getSha1()%>"></label>
-                    <button type="submit"><%=entry.getKey()%></button>
+                    <button class="btn btn-default" type="submit"><%=entry.getKey()%></button>
                 </form>
             <%}%>
 
@@ -75,11 +69,11 @@
                 <label><input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>"></label>
                 <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
                 <label><input type="hidden" name="blobSha1" value="<%=SessionUtils.getBlobSha1(request)%>"></label>
-                <button type="submit">save</button>
+                <button class="btn btn-default" type="submit">save</button>
             </form>
             <form method="Post" action="deleteFileServlet">
                 <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
-                <button type="submit">delete File</button>
+                <button class="btn btn-default" type="submit">delete File</button>
             </form>
         </div>
     </body>

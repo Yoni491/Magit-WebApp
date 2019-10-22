@@ -22,18 +22,10 @@
 
         <title>M.A-GitHub</title>
         <script src="../../common/jquery-2.0.3.min.js"></script>
-        <script src="UserPage.js"></script>
-        <script src="main.js"></script>
-
-        <link rel="stylesheet" href="css/sidebar.css">
-
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        <!-- Bootstrap core CSS -->
         <link href="../../common/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Custom styles for this template -->
-        <link href="css/modern-business.css" rel="stylesheet">
     </head>
     <body>
         <% String repoName = SessionUtils.getRepoName(request);
@@ -51,46 +43,50 @@
         if(pressedBranch==null)
             pressedBranch=repo.getHeadBranch();
         %>
-        <h1>Repository-<%=repoName%></h1>
-
-        <form method="Post" action="MakeNewBranch">
-            <label>
-                <input type="text" name="newBranch">
-            </label>
-            <button type="submit">Make New Branch</button>
-        </form>
-
-
-        <h2>Branches</h2>
-        <form method="Post" action="BranchServlet">
-            <input type="hidden" name="branch" value="<%=repo.getHeadBranchName()%>">
-            <input type="hidden" name="branchSha1" value="<%=repo.getHeadBranch().getSha1()%>">
-            <button type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
-        </form>
-        <%for(Branch branch:repo.getBranches()) {
-        %>
-        <form method="Post" action="BranchServlet">
-            <input type="hidden" name="branch" value="<%=branch.getName()%>">
-            <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
-            <%if(branch.getType().equals("remote")){
-            %>
-            <button type="submit">Remote branch : <%=branch.getName()%></button>
-            <button type="submit" formaction="checkOutServlet">checkOut</button>
-            <%}if(branch.getType().equals("local")){
-        %>
-            <button type="submit">Branch : <%=branch.getName()%></button>
-            <button type="submit" formaction="checkOutServlet">checkOut</button>
-            <%}%>
-        <%}%>
-            <h2><%=repo.getCheckOutMsg()%></h2>
-        </form>
-        <div class="col-md-4">
-            <div class="col-md-8">
+        <h1 class="page-header">Repository-<%=repoName%></h1>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
                 <form method="Post" action="WcServlet">
                     <input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>">
                     <button type="submit">WC</button>
                 </form>
+                </div>
+                <div class="col">
+                <form method="Post" action="MakeNewBranch">
+            <label>
+                <input type="text" name="newBranch">
+            </label>
+            <button class="btn btn-default" type="submit">Make New Branch</button>
+        </form>
             </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <h2>Branches</h2>
+                    <form method="Post" action="BranchServlet">
+                        <input type="hidden" name="branch" value="<%=repo.getHeadBranchName()%>">
+                        <input type="hidden" name="branchSha1" value="<%=repo.getHeadBranch().getSha1()%>">
+                        <button class="btn btn-default" type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
+                        </form>
+                            <%for(Branch branch:repo.getBranches()) {%>
+                        <form method="Post" action="BranchServlet">
+                            <input type="hidden" name="branch" value="<%=branch.getName()%>">
+                            <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
+                            <%if(branch.getType().equals("remote")){
+                            %>
+                            <button class="btn btn-default" type="submit">Remote branch : <%=branch.getName()%></button>
+                            <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
+                            <%}if(branch.getType().equals("local")){
+                        %>
+                            <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
+                            <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
+                            <%}%>
+                        <%}%>
+                            <h2><%=repo.getCheckOutMsg()%></h2>
+                        </form>
+
             <%if(repo.getWcHasOpenChanges()){%>
             <br><h3>Open changes in working copy</h3>
             <%}%>
@@ -99,11 +95,13 @@
             %>
             <form method="Post" action="commitServlet">
                 <input type="hidden" name="commitSha1" value="<%=commit.getSha1()%>">
-                 <p>Sha1:   <%=commit.getSha1()%></p>
-                <p>Date:   <%=commit.getDateAndTime().getDate()%></p>
-                <p>Message: <%=commit.getCommitPurposeMSG()%></p>
-                <p>Modifier: <%=commit.getNameOfModifier()%></p>
-                <button type="submit">Show commit</button>
+                <blockquote class="blockquote">
+                    <p>Sha1:   <%=commit.getSha1()%></p>
+                    <p>Date:   <%=commit.getDateAndTime().getDate()%></p>
+                    <p>Message: <%=commit.getCommitPurposeMSG()%></p>
+                    <p>Modifier: <%=commit.getNameOfModifier()%></p>
+                    <button type="submit">Show commit</button>
+                </blockquote>
             </form>
             <%}%>
             <h2>Files of commit</h2>
@@ -118,7 +116,7 @@
                 local branch name:<input type="input" name="localBranch" >
                 remote branch name:<input type="input" name="remoteBranch" >
                 PR purpose:<input type="input" name="PrPurpose" >
-                <button type="submit">Pull request</button>
+                <button class="btn btn-default" type="submit">Pull request</button>
             </form>
             <%}%>
             <h1>PR List</h1>
@@ -130,13 +128,13 @@
             <form method="Post" action="BranchServlet">
                 <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
                 <input type="hidden" name="isPR" value="true">
-                <button type="submit">Show branch</button>
-                <button type="submit" formaction="checkOutServlet">checkOut</button>
+                <button class="btn btn-default" type="submit">Show branch</button>
+                <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
 
             </form>
             <form method="Post" action="PrChanges">
                 <input type="hidden" name="PrDeltaUsername" value="<%=entry.getValue().Sender%>">
-                <button type="submit">Show PR changes</button>
+                <button class="btn btn-default" type="submit">Show PR changes</button>
             </form>
             <%}%>
 
