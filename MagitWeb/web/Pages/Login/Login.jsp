@@ -17,15 +17,15 @@
         response.sendRedirect(redirectURL);
     }%>
 
-    <div class="container">
+    <div class="text-center">
             <h1>Login</h1>
             <br/>
             <h3>
                 Enter user name:
             </h3>
             <input type="text" id="userName" name="userName">
-            <button id="signUpBtn">Sign up</button>
-            <button id="signInBtn">Sign in</button>
+            <button class="btn btn-default" id="signUpBtn">Sign up</button>
+            <button class="btn btn-default" id="signInBtn">Sign in</button>
 
             <div id="s">
             </div>

@@ -33,47 +33,58 @@
     String blobContent = "";
 
 %>
-    <form method="Post" action="ExecuteCommit">
-        <label><input type="text" name="commitMsg" placeholder="Commit Message"></label>
-        <button type="submit" >Commit</button>
-        <% if(!CommitSuccessOrFail.equals("")){%>
-        <h3><%=CommitSuccessOrFail%></h3>
-        <%}%>
-        <a class="btn btn-default" href="../RepositoryPage/RepoPage.jsp" role="button">back</a>
-
-    </form>
-
-    <form method="Post" action="MakeNewFile">
-        <label><input type="text" name="fileName" placeholder="<%=repo.getName()+"/"%>"></label>
-        <button class="btn btn-default" type="submit">Make New File</button>
-    </form>
-
+<div class="container">
+    <h1 class="page-header">Working Copy</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <form method="Post" action="ExecuteCommit">
+                <label><input type="text" name="commitMsg" placeholder="Commit Message"></label>
+                <button class="btn btn-success" type="submit" >Commit</button>
+                <% if(!CommitSuccessOrFail.equals("")){%>
+                <h3><%=CommitSuccessOrFail%></h3>
+                <%}%>
+            </form>
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-default" href="../RepositoryPage/RepoPage.jsp" role="button">back</a>
+        </div>
+    </div>
+</div>
         <div class="container">
-            <h1>Files</h1>
-            <%for(Map.Entry<String, Fof> entry: repo.getCommitFiles_ex3(repo.getWc_ex3()).entrySet()){%>
-                <form method="Post" action="FileContentServlet">
-                    <label><input type="hidden" name="filePath" value="<%=entry.getKey()%>"></label>
-                    <label><input type="hidden" name="blobSha1" value="<%=entry.getValue().getSha1()%>"></label>
-                    <button class="btn btn-default" type="submit"><%=entry.getKey()%></button>
-                </form>
-            <%}%>
-
+            <div class="row">
+                <div class="col-md-8">
+                    <h1>Files</h1>
+                    <%for(Map.Entry<String, Fof> entry: repo.getCommitFiles_ex3(repo.getWc_ex3()).entrySet()){%>
+                        <form method="Post" action="FileContentServlet">
+                            <label><input type="hidden" name="filePath" value="<%=entry.getKey()%>"></label>
+                            <label><input type="hidden" name="blobSha1" value="<%=entry.getValue().getSha1()%>"></label>
+                            <button class="btn btn-default" type="submit"><%=entry.getKey()%></button>
+                        </form>
+                    <%}%>
+                </div>
+                <div class="col-md-4">
+                    <h1>File Content</h1>
+                    <h2>File Name : <%=pressedFile%></h2>
+                    <%if(!pressedFile.equals("")){
+                        blobContent = repo.getFileContent_ex3(SessionUtils.getBlobSha1(request));}%>
+                    <form method="Post" action="saveFileContent">
+                    <label><textarea name="fileContent"><%=blobContent%></textarea></label>
+                        <label><input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>"></label>
+                        <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
+                        <label><input type="hidden" name="blobSha1" value="<%=SessionUtils.getBlobSha1(request)%>"></label>
+                        <button class="btn btn-default" type="submit">save</button>
+                    </form>
+                    <form method="Post" action="deleteFileServlet">
+                        <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
+                        <button class="btn btn-default" type="submit">delete File</button>
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="container">
-            <h1>File Content</h1>
-            <h2>File Name : <%=pressedFile%></h2>
-            <%if(!pressedFile.equals("")){
-                blobContent = repo.getFileContent_ex3(SessionUtils.getBlobSha1(request));}%>
-            <form method="Post" action="saveFileContent">
-            <label><textarea name="fileContent"><%=blobContent%></textarea></label>
-                <label><input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>"></label>
-                <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
-                <label><input type="hidden" name="blobSha1" value="<%=SessionUtils.getBlobSha1(request)%>"></label>
-                <button class="btn btn-default" type="submit">save</button>
-            </form>
-            <form method="Post" action="deleteFileServlet">
-                <label><input type="hidden" name="filePath" value="<%=SessionUtils.getFile(request)%>"></label>
-                <button class="btn btn-default" type="submit">delete File</button>
+            <form method="Post" action="MakeNewFile">
+                <label><input type="text" name="fileName" placeholder="<%=repo.getName()+"/"%>"></label>
+                <button class="btn btn-default" type="submit">Make New File</button>
             </form>
         </div>
     </body>

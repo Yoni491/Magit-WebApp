@@ -46,24 +46,17 @@
         <h1 class="page-header">Repository-<%=repoName%></h1>
         <div class="container-fluid">
             <div class="row">
-                <div class="col">
+                <div class="col-md-8">
                 <form method="Post" action="WcServlet">
                     <input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>">
-                    <button type="submit">WC</button>
+                    <button class="btn btn-default" type="submit">WC</button>
                 </form>
                 </div>
-                <div class="col">
-                <form method="Post" action="MakeNewBranch">
-            <label>
-                <input type="text" name="newBranch">
-            </label>
-            <button class="btn btn-default" type="submit">Make New Branch</button>
-        </form>
-            </div>
+
             </div>
 
             <div class="row">
-                <div class="col">
+                <div class="col-md-4">
                     <h2>Branches</h2>
                     <form method="Post" action="BranchServlet">
                         <input type="hidden" name="branch" value="<%=repo.getHeadBranchName()%>">
@@ -81,15 +74,23 @@
                             <%}if(branch.getType().equals("local")){
                         %>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
-                            <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
+                            <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
                             <%}%>
                         <%}%>
                             <h2><%=repo.getCheckOutMsg()%></h2>
                         </form>
+                        <%if(repo.getWcHasOpenChanges()){%>
+                        <br><h3>Open changes in working copy</h3>
+                        <%}%>
+                    <form method="Post" action="MakeNewBranch">
+                    <label>
+                        <input type="text" name="newBranch">
+                    </label>
+                    <button class="btn btn-default" type="submit">Make New Branch</button>
+                </form>
+                </div>
 
-            <%if(repo.getWcHasOpenChanges()){%>
-            <br><h3>Open changes in working copy</h3>
-            <%}%>
+                <div class="col-md-4">
             <br><h2>Commits</h2>
             <%for(Commit commit:repo.getBranchCommits(pressedBranch)) {
             %>
@@ -100,25 +101,30 @@
                     <p>Date:   <%=commit.getDateAndTime().getDate()%></p>
                     <p>Message: <%=commit.getCommitPurposeMSG()%></p>
                     <p>Modifier: <%=commit.getNameOfModifier()%></p>
-                    <button type="submit">Show commit</button>
+                    <button class="btn btn-default" type="submit">Show commit</button>
                 </blockquote>
             </form>
             <%}%>
-            <h2>Files of commit</h2>
-            <ul>
-            <%for(String fileDetails :repo.commitFileNames_ex3(pressedCommit)) {%>
-                <li><%=fileDetails%></li>
-            <%}%>
+                </div>
+                <div class="col-md-4">
 
-            </ul>
-            <%if(repo.isForkOfOtherRepo_ex3()){%>
-            <form method="Post" action="PullRequestServlet">
-                local branch name:<input type="input" name="localBranch" >
-                remote branch name:<input type="input" name="remoteBranch" >
-                PR purpose:<input type="input" name="PrPurpose" >
-                <button class="btn btn-default" type="submit">Pull request</button>
-            </form>
-            <%}%>
+                    <h2>Files of commit</h2>
+                    <ul>
+                    <%for(String fileDetails :repo.commitFileNames_ex3(pressedCommit)) {%>
+                        <li><%=fileDetails%></li>
+                    <%}%>
+                    </ul>
+                    <%if(repo.isForkOfOtherRepo_ex3()){%>
+                    <form method="Post" action="PullRequestServlet">
+                        local branch name:<input type="input" name="localBranch" >
+                        remote branch name:<input type="input" name="remoteBranch" >
+                        PR purpose:<input type="input" name="PrPurpose" >
+                        <button class="btn btn-default" type="submit">Pull request</button>
+                    </form>
+                    <%}%>
+                </div>
+            </div>
+
             <h1>PR List</h1>
             <%for(Map.Entry<String, PR> entry: repo.PrMap.entrySet()){%>
                 <p>remote branch name:<%=entry.getValue().SenderBranch%></p>
@@ -139,8 +145,6 @@
             <%}%>
 
         </div>
-
-
 
     </body>
 </html>
