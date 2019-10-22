@@ -115,12 +115,15 @@
                     <%}%>
                     </ul>
                     <%if(repo.isForkOfOtherRepo_ex3()){%>
-                    <form method="Post" action="PullRequestServlet">
-                        local branch name:<input type="input" name="localBranch" >
-                        remote branch name:<input type="input" name="remoteBranch" >
-                        PR purpose:<input type="input" name="PrPurpose" >
-                        <button class="btn btn-default" type="submit">Pull request</button>
-                    </form>
+                    <div class="panel panel-default">
+                        <div class="panel-body"><form method="Post" action="PullRequestServlet">
+                            local branch name:<input type="input" name="localBranch" >
+                            remote branch name:<input type="input" name="remoteBranch" >
+                            PR purpose:<input type="input" name="PrPurpose" >
+                            <button class="btn btn-default" type="submit">Pull request</button>
+                        </form></div>
+                    </div>
+
                     <%}%>
                 </div>
             </div>
