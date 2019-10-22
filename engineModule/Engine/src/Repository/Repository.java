@@ -45,6 +45,7 @@ public class Repository {
     private String remoteRepoUsername;//update
     public HashMap<String, PR> PrMap=new HashMap<>();//<username of other repo, PR>
     public Commit Wc = null;
+    private String checkOutMsg="";
 
     public Boolean getWcHasOpenChanges(){
         return WC_HAS_OPEN_CHANGES;
@@ -348,6 +349,19 @@ public class Repository {
         recursiveWcToObjectBuilder(commitPath, "", false, username, delta);
         return delta.showChanges();
     }
+
+    public void checkOut_ex3(Branch branch){
+        if(WC_HAS_OPEN_CHANGES || (!branch.getType().equals("remote")&& !branch.getType().equals("local")&&!branch.getType().equals("PR"))){
+            checkOutMsg="Cannot checkOut";
+        }
+        else{
+            checkOutMsg="checkOut successful";
+            branches.add(headBranch);
+            branches.remove(branch);
+            headBranch = branch;
+        }
+    }
+
 
     public void switchHead(String name) throws NoSuchBranchException, IOException,CheckOutHeadException {
         if(headBranch.getName().equals(name))
@@ -1160,6 +1174,9 @@ public class Repository {
     }
 
 
+    public String getCheckOutMsg() {
+        return this.checkOutMsg;
+    }
 }
 
 
