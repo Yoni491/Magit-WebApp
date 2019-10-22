@@ -1146,7 +1146,7 @@ public class Repository {
             String oldSha1 = lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null).getSha1();
             lastFolder.getFofList().remove(lastFolder.getFofList().stream().filter(fof -> fof.getName().equals(path[0])).findFirst().orElse(null));
             Blob updatedFile = new Blob(newContent);
-            if (!oldSha1.equals(updatedFile.getContent()))
+            if (!oldSha1.equals(updatedFile.getSha1()))
                 WC_HAS_OPEN_CHANGES = true;
             objList.put(updatedFile.getSha1(),updatedFile);
             Fof fofOfUpdatedFile = new Fof(updatedFile.getSha1(),path[0],true,username,new DateAndTime());
