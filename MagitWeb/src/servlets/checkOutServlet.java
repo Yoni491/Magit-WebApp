@@ -20,7 +20,7 @@ public class checkOutServlet extends HttpServlet {
         if(branchSha1!=null) {
             repo.checkOut_ex3(repo.getBranches().stream().filter(br->br.getSha1().equals(branchSha1)).findFirst().orElse(null));
         }
-        response.sendRedirect("../RepositoryPage/RepoPage.jsp");
+        response.sendRedirect("../RepositoryPage/BranchServlet");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

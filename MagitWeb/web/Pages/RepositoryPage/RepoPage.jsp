@@ -75,11 +75,12 @@
             <%if(branch.getType().equals("remote")){
             %>
             <button type="submit">Remote branch : <%=branch.getName()%></button>
+            <button type="submit" formaction="checkOutServlet">checkOut</button>
             <%}if(branch.getType().equals("local")){
         %>
             <button type="submit">Branch : <%=branch.getName()%></button>
-            <%}%>
             <button type="submit" formaction="checkOutServlet">checkOut</button>
+            <%}%>
         <%}%>
             <h2><%=repo.getCheckOutMsg()%></h2>
         </form>
@@ -130,6 +131,8 @@
                 <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
                 <input type="hidden" name="isPR" value="true">
                 <button type="submit">Show branch</button>
+                <button type="submit" formaction="checkOutServlet">checkOut</button>
+
             </form>
             <form method="Post" action="PrChanges">
                 <input type="hidden" name="PrDeltaUsername" value="<%=entry.getValue().Sender%>">
