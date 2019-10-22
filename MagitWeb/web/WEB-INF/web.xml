@@ -133,4 +133,12 @@
         <servlet-name>ExecuteCommit</servlet-name>
         <url-pattern>/Pages/WcPage/ExecuteCommit</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>checkOutServlet</servlet-name>
+        <servlet-class>servlets.checkOutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkOutServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/checkOutServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

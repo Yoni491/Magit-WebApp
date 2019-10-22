@@ -78,8 +78,11 @@
             <%}if(branch.getType().equals("local")){
         %>
             <button type="submit">Branch : <%=branch.getName()%></button>
+            <%}%>
+            <button type="submit" formaction="checkOutServlet">checkOut</button>
+        <%}%>
+            <h2><%=repo.getCheckOutMsg()%></h2>
         </form>
-        <%}}%>
         <div class="col-md-4">
             <div class="col-md-8">
                 <form method="Post" action="WcServlet">
