@@ -13,15 +13,14 @@ public class PrChangesServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String branchName = request.getParameter("branch");
-        String isPr = request.getParameter("isPR");
-        String branchSha1 = request.getParameter("branchSha1");
-        if(isPr!=null)
+        String PrDeltaUsername = request.getParameter("PrDeltaUsername");
+        if(PrDeltaUsername!=null)
         {
+            SessionUtils.setPrDeltaUsername(request,PrDeltaUsername);
             //צריך לעדכן את הענף ברפוסיטורי הקודם לremote
 
         }
-        response.sendRedirect("../RepositoryPage/RepoPage.jsp");
+        response.sendRedirect("../ShowDeltaPage/ShowDeltaPage.jsp");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

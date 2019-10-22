@@ -111,6 +111,17 @@ public class SessionUtils {
         Object sessionAttribute = session != null ? session.getAttribute("RpBranchName") : null;
         return sessionAttribute != null ? sessionAttribute.toString() : "";
     }
+    public static void setPrDeltaUsername(HttpServletRequest request, String PrDeltaUsername) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("PrDeltaUsername", PrDeltaUsername);
+        }
+    }
+    public static String getPrDeltaUsername (HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Object sessionAttribute = session != null ? session.getAttribute("PrDeltaUsername") : null;
+        return sessionAttribute != null ? sessionAttribute.toString() : "";
+    }
     public static void clearSession (HttpServletRequest request) {
         request.getSession().invalidate();
     }

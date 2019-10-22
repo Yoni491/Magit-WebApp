@@ -1,5 +1,6 @@
 <%@ page import="servlets.SessionUtils" %>
-<%@ page import="Repository.Repository" %><%--
+<%@ page import="Repository.Repository" %>
+<%@ page import="Users.PR" %><%--
   Created by IntelliJ IDEA.
   User: yonie
   Date: 20/10/2019
@@ -15,10 +16,12 @@
 The following changes had been made:
 <%
     Repository repo = SessionUtils.getRepo(request);
-    String PrPath=repo.getPath()+"/.magit/"+SessionUtils.getRpName(request);
-    repo.deltaChangesBetweenCommitsToString(,PrPath);
+    PR pr=repo.PrMap.get(SessionUtils.getPrDeltaUsername(request));
+    String changes=repo.deltaChangesBetweenCommitsToString(pr.ReceiverCommitSha1,pr.path);
 %>
+<p><%=changes%></p>
 <%--<%SessionUtils.getRepo(request).deltaChangesBetweenCommitsToString()%>--%>
+<h2>Do you wish to update the branch:<%=pr.ReceiverBranch%> with those changes?</h2>
 
 </body>
 </html>

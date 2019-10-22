@@ -133,4 +133,12 @@
         <servlet-name>ExecuteCommit</servlet-name>
         <url-pattern>/Pages/WcPage/ExecuteCommit</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PrChangesServlet</servlet-name>
+        <servlet-class>servlets.PrChangesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PrChangesServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/PrChanges</url-pattern>
+    </servlet-mapping>
 </web-app>

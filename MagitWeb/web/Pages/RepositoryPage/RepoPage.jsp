@@ -126,10 +126,9 @@
                 <input type="hidden" name="isPR" value="true">
                 <button type="submit">Show branch</button>
             </form>
-            <form method="Post" action="ShowPrChanges">
-                <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
-                <input type="hidden" name="isPR" value="true">
-                <button type="submit">Show changes</button>
+            <form method="Post" action="PrChanges">
+                <input type="hidden" name="PrDeltaUsername" value="<%=entry.getValue().Sender%>">
+                <button type="submit">Show PR changes</button>
             </form>
             <%}%>
 
