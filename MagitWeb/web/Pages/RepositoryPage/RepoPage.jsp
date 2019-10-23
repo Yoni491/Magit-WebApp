@@ -52,7 +52,9 @@
                     <button class="btn btn-default" type="submit">WC</button>
                 </form>
                 </div>
-
+                <div class="col-md-4">
+                    <a class="btn btn-default" href="../UserPage/UserPage.jsp" role="button">back</a>
+                </div>
             </div>
 
             <div class="row">
