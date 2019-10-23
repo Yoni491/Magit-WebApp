@@ -149,4 +149,12 @@
         <servlet-name>PrChangesServlet</servlet-name>
         <url-pattern>/Pages/RepositoryPage/PrChanges</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ExecutePR</servlet-name>
+        <servlet-class>servlets.ExecutePR</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExecutePR</servlet-name>
+        <url-pattern>/Pages/ShowDeltaPage/ExecutePR</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -27,7 +27,7 @@ public class MakeNewBranchServlet extends HttpServlet {
         if(newBranchName.equals(""))
             response.sendRedirect("../RepositoryPage/RepoPage.jsp");
         Repository repo = SessionUtils.getRepo(request);
-        repo.addNewBranch(newBranchName,repo.getHeadBranch().getSha1());
+        repo.addNewBranch(newBranchName,repo.getHeadBranch().getSha1(),"local");
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 

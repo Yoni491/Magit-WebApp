@@ -84,7 +84,7 @@ public class ModuleTwo {
 
 
         checkIfActiveRepoExists();
-        activeRepo.addNewBranch(name, sha1);
+        activeRepo.addNewBranch(name, sha1,"local");
     }
 
     public static boolean checkChanges() throws NoActiveRepositoryException, IOException {

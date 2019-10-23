@@ -33,7 +33,6 @@
         Repository repo=UsersDataBase.getRepo(repoName,username);
         String pressedCommitSha1 = SessionUtils.getCommit(request);
         Commit pressedCommit;
-        String PrBranch=SessionUtils.getPrBranchName(request);
         if(pressedCommitSha1.equals(""))
             pressedCommit=repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1());
         else {
@@ -59,13 +58,13 @@
                 <div class="col-md-4">
                     <h2>Branches</h2>
                     <form method="Post" action="BranchServlet">
-                        <input type="hidden" name="branch" value="<%=repo.getHeadBranchName()%>">
+                        <input type="hidden" name="branchName" value="<%=repo.getHeadBranchName()%>">
                         <input type="hidden" name="branchSha1" value="<%=repo.getHeadBranch().getSha1()%>">
                         <button class="btn btn-default" type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
                         </form>
                             <%for(Branch branch:repo.getBranches()) {%>
                         <form method="Post" action="BranchServlet">
-                            <input type="hidden" name="branch" value="<%=branch.getName()%>">
+                            <input type="hidden" name="branchName" value="<%=branch.getName()%>">
                             <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
                             <%if(branch.getType().equals("remote")){
                             %>
@@ -76,9 +75,9 @@
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
                             <%}%>
-                        <%}%>
-                            <h2><%=repo.getCheckOutMsg()%></h2>
                         </form>
+                        <%}%>
+                        <h2><%=repo.getCheckOutMsg()%></h2>
                         <%if(repo.getWcHasOpenChanges()){%>
                         <br><h3>Open changes in working copy</h3>
                         <%}%>

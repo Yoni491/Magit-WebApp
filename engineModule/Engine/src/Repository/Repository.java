@@ -307,7 +307,7 @@ public class Repository {
         }
     }
 
-    public void addNewBranch(String name,String sha1) throws AlreadyExistingBranchException, NoCommitHasBeenMadeException, BranchNoNameException, FileNotFoundException {
+    public void addNewBranch(String name,String sha1,String type) throws AlreadyExistingBranchException, NoCommitHasBeenMadeException, BranchNoNameException, FileNotFoundException {
         Branch branch;
         if(name.equals(""))
         {
@@ -317,9 +317,8 @@ public class Repository {
             throw new NoCommitHasBeenMadeException();
         if (branches.stream().filter(Branch -> Branch.getName().equals(name)).findFirst().orElse(null) == null
                 && !headBranch.getName().equals(name)) {
-            branch = new Branch(sha1, name,"local");
+            branch = new Branch(sha1, name,type);
             branches.add(branch);
-            makeFileForBranch(branch.getSha1(), branch.getName());
         } else
             throw new AlreadyExistingBranchException();
     }
