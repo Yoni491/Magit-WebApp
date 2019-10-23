@@ -51,7 +51,9 @@
                     <button class="btn btn-default" type="submit">WC</button>
                 </form>
                 </div>
-
+                <div class="col-md-4">
+                    <a class="btn btn-default" href="../UserPage/UserPage.jsp" role="button">back</a>
+                </div>
             </div>
 
             <div class="row">
@@ -114,34 +116,37 @@
                     <%}%>
                     </ul>
                     <%if(repo.isForkOfOtherRepo_ex3()){%>
-                    <form method="Post" action="PullRequestServlet">
-                        local branch name:<input type="input" name="localBranch" >
-                        remote branch name:<input type="input" name="remoteBranch" >
-                        PR purpose:<input type="input" name="PrPurpose" >
-                        <button class="btn btn-default" type="submit">Pull request</button>
+                    <div class="panel panel-default">
+                        <div class="panel-body"><form method="Post" action="PullRequestServlet">
+                            local branch name:<input type="input" name="localBranch" >
+                            remote branch name:<input type="input" name="remoteBranch" >
+                            PR purpose:<input type="input" name="PrPurpose" >
+                            <button class="btn btn-default" type="submit">Pull request</button>
+                        </form></div>
+                    </div>
+                    <%}%>
+                    <h1>PR List</h1>
+                    <%for(Map.Entry<String, PR> entry: repo.PrMap.entrySet()){%>
+                    <p>remote branch name:<%=entry.getValue().SenderBranch%></p>
+                    <p>local branch name:<%=entry.getValue().ReceiverBranch%></p>
+                    <p>PR purpose:<%=entry.getValue().purpose%></p>
+                    <p>from user:<%=entry.getValue().Sender%></p>
+                    <form method="Post" action="BranchServlet">
+                        <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
+                        <input type="hidden" name="isPR" value="true">
+                        <button class="btn btn-default" type="submit">Show branch</button>
+                        <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
+
+                    </form>
+                    <form method="Post" action="PrChanges">
+                        <input type="hidden" name="PrDeltaUsername" value="<%=entry.getValue().Sender%>">
+                        <button class="btn btn-default" type="submit">Show PR changes</button>
                     </form>
                     <%}%>
                 </div>
             </div>
 
-            <h1>PR List</h1>
-            <%for(Map.Entry<String, PR> entry: repo.PrMap.entrySet()){%>
-                <p>remote branch name:<%=entry.getValue().SenderBranch%></p>
-                <p>local branch name:<%=entry.getValue().ReceiverBranch%></p>
-                <p>PR purpose:<%=entry.getValue().purpose%></p>
-                <p>from user:<%=entry.getValue().Sender%></p>
-            <form method="Post" action="BranchServlet">
-                <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
-                <input type="hidden" name="isPR" value="true">
-                <button class="btn btn-default" type="submit">Show branch</button>
-                <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
 
-            </form>
-            <form method="Post" action="PrChanges">
-                <input type="hidden" name="PrDeltaUsername" value="<%=entry.getValue().Sender%>">
-                <button class="btn btn-default" type="submit">Show PR changes</button>
-            </form>
-            <%}%>
 
         </div>
 
