@@ -33,15 +33,12 @@
         Repository repo=UsersDataBase.getRepo(repoName,username);
         String pressedCommitSha1 = SessionUtils.getCommit(request);
         Commit pressedCommit;
-        String PrBranch=SessionUtils.getPrBranchName(request);
         if(pressedCommitSha1.equals(""))
             pressedCommit=repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1());
         else {
             pressedCommit=repo.sha1ToCommit_ex3(pressedCommitSha1);
         }
         Branch pressedBranch = repo.branchLambda_ex3(SessionUtils.getBranch(request));
-        if(pressedBranch==null)
-            pressedBranch=repo.getHeadBranch();
         %>
         <h1 class="page-header">Repository-<%=repoName%></h1>
         <div class="container-fluid">
@@ -65,22 +62,29 @@
                         <input type="hidden" name="branchSha1" value="<%=repo.getHeadBranch().getSha1()%>">
                         <button class="btn btn-default" type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
                         </form>
-                            <%for(Branch branch:repo.getBranches()) {%>
-                        <form method="Post" action="BranchServlet">
+                            <%for(Branch branch:repo.getBranches()) {
+                            if(!branch.getName().equals(repo.getHeadBranchName()))
+                            {
+                            %>
+
+                    <form method="Post" action="BranchServlet">
+                        <p></p>
                             <input type="hidden" name="branch" value="<%=branch.getName()%>">
                             <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
-                            <%if(branch.getType().equals("remote")){
-                            %>
+                            <%if(branch.getType().equals("remote")){%>
                             <button class="btn btn-default" type="submit">Remote branch : <%=branch.getName()%></button>
+                            <%if(repo.rtbExists(branch.getName())){%>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
-                            <%}if(branch.getType().equals("local")){
+                            <%}else{%>
+                            <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut (Make RTB)</button>
+                            <%}}if(branch.getType().equals("local")){
                         %>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
                             <%}%>
-                        <%}%>
-                            <h2><%=repo.getCheckOutMsg()%></h2>
                         </form>
+                        <%}}%>
+                            <h2><%=repo.getCheckOutMsg()%></h2>
                         <%if(repo.getWcHasOpenChanges()){%>
                         <br><h3>Open changes in working copy</h3>
                         <%}%>

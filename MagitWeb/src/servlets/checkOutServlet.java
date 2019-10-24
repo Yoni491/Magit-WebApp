@@ -18,7 +18,7 @@ public class checkOutServlet extends HttpServlet {
         String branchSha1 = request.getParameter("branchSha1");
         Repository repo = SessionUtils.getRepo(request);
         if(branchSha1!=null) {
-            repo.checkOut_ex3(repo.getBranches().stream().filter(br->br.getSha1().equals(branchSha1)).findFirst().orElse(null));
+            repo.checkOut_ex3(repo.getBranches().stream().filter(br->br.getSha1().equals(branchSha1)).filter(br->!br.getType().equals("tracking")).findFirst().orElse(null));
         }
         response.sendRedirect("../RepositoryPage/BranchServlet");
     }
