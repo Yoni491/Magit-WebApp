@@ -62,7 +62,9 @@
                         <input type="hidden" name="branchSha1" value="<%=repo.getHeadBranch().getSha1()%>">
                         <button class="btn btn-default" type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
                         </form>
-                            <%for(Branch branch:repo.getBranches()) {%>
+                            <%for(Branch branch:repo.getBranches()) {
+                            if(!branch.getName().equals(repo.getHeadBranchName())){
+                            %>
                         <form method="Post" action="BranchServlet">
                             <input type="hidden" name="branchName" value="<%=branch.getName()%>">
                             <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
@@ -72,10 +74,12 @@
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
                             <%}else{%>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut (Make RTB)</button>
-                            <%}}if(branch.getType().equals("local")){
-                        %>
+                            <%}}if(branch.getType().equals("local")){%>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
+                                <%if(!repo.isForkOfOtherRepo_ex3()){%>
+                            <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
+                            <button class="btn btn-default" type="submit" formaction="Push6">Push branch</button>
                             <%}%>
                         </form>
                         <%}}%>
@@ -119,8 +123,11 @@
                     <div class="panel panel-default">
                         <div class="panel-body"><form method="Post" action="PullRequestServlet">
                             local branch name:<input type="input" name="localBranch" >
+                            <p></p>
                             remote branch name:<input type="input" name="remoteBranch" >
+                            <p></p>
                             PR purpose:<input type="input" name="PrPurpose" >
+                            <p></p>
                             <button class="btn btn-default" type="submit">Pull request</button>
                         </form></div>
                     </div>
@@ -133,12 +140,14 @@
                     <p>from user:<%=entry.getValue().Sender%></p>
                     <form method="Post" action="BranchServlet">
                         <input type="hidden" name="branchSha1" value="<%=entry.getValue().SenderCommitSha1%>">
+                        <input type="hidden" name="branchName" value="<%=entry.getValue().SenderBranch%>">
                         <input type="hidden" name="isPR" value="true">
                         <button class="btn btn-default" type="submit">Show branch</button>
                         <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
 
                     </form>
                     <form method="Post" action="PrChanges">
+
                         <input type="hidden" name="PrDeltaUsername" value="<%=entry.getValue().Sender%>">
                         <button class="btn btn-default" type="submit">Show PR changes</button>
                     </form>

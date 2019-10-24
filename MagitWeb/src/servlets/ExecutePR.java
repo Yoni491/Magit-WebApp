@@ -24,6 +24,9 @@ public class ExecutePR extends HttpServlet {
         if(remoteRepo.getHeadBranch().getName().equals(pr.SenderBranch))
             remoteRepo.getHeadBranch().setType("remote");
         Branch branch=remoteRepo.getBranches().stream().filter(br->br.getName().equals(pr.SenderBranch)).findFirst().orElse(null);
+        repo.PrMap.remove(pr);
+
+        //delete msg(maybe)
         if(branch!=null)
             branch.setType("remote");
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");

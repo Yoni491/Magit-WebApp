@@ -157,4 +157,12 @@
         <servlet-name>ExecutePR</servlet-name>
         <url-pattern>/Pages/ShowDeltaPage/ExecutePR</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Push6</servlet-name>
+        <servlet-class>servlets.Push6</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Push6</servlet-name>
+        <url-pattern>/Pages/ShowDeltaPage/Push6</url-pattern>
+    </servlet-mapping>
 </web-app>
