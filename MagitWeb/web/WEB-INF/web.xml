@@ -165,4 +165,12 @@
         <servlet-name>Push6</servlet-name>
         <url-pattern>/Pages/ShowDeltaPage/Push6</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PushServlet</servlet-name>
+        <servlet-class>servlets.Push6</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PushServlet</servlet-name>
+        <url-pattern>/Pages/ShowDeltaPage/PushServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

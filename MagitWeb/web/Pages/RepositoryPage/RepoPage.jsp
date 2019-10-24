@@ -30,22 +30,23 @@
     <body>
         <% String repoName = SessionUtils.getRepoName(request);
         String username = SessionUtils.getUsername(request);
-        Repository repo=UsersDataBase.getRepo(repoName,username);
+        Repository localRepo =UsersDataBase.getRepo(repoName,username);
         String pressedCommitSha1 = SessionUtils.getCommit(request);
+        Repository remoteRepo = UsersDataBase.getRepo(localRepo.getRemoteRepoName(), localRepo.getRemoteRepoUserName());
         Commit pressedCommit;
         if(pressedCommitSha1.equals(""))
-            pressedCommit=repo.sha1ToCommit_ex3(repo.getHeadBranch().getSha1());
+            pressedCommit= localRepo.sha1ToCommit_ex3(localRepo.getHeadBranch().getSha1());
         else {
-            pressedCommit=repo.sha1ToCommit_ex3(pressedCommitSha1);
+            pressedCommit= localRepo.sha1ToCommit_ex3(pressedCommitSha1);
         }
-        Branch pressedBranch = repo.branchLambda_ex3(SessionUtils.getBranch(request));
+        Branch pressedBranch = localRepo.branchLambda_ex3(SessionUtils.getBranch(request));
         %>
         <h1 class="page-header">Repository-<%=repoName%></h1>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8">
                 <form method="Post" action="WcServlet">
-                    <input type="hidden" name="currCommit" value="<%=repo.getHeadBranch().getSha1()%>">
+                    <input type="hidden" name="currCommit" value="<%=localRepo.getHeadBranch().getSha1()%>">
                     <button class="btn btn-default" type="submit">WC</button>
                 </form>
                 </div>
@@ -58,33 +59,39 @@
                 <div class="col-md-4">
                     <h2>Branches</h2>
                     <form method="Post" action="BranchServlet">
-                        <input type="hidden" name="branchName" value="<%=repo.getHeadBranchName()%>">
-                        <input type="hidden" name="branchSha1" value="<%=repo.getHeadBranch().getSha1()%>">
-                        <button class="btn btn-default" type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
+                        <input type="hidden" name="branchName" value="<%=localRepo.getHeadBranchName()%>">
+                        <input type="hidden" name="branchSha1" value="<%=localRepo.getHeadBranch().getSha1()%>">
+                        <button class="btn btn-default" type="submit">Head Branch : <%=localRepo.getHeadBranchName()%></button>
+                        <%if((!localRepo.isForkOfOtherRepo_ex3())&& localRepo.getHeadBranch().getType().equals("tracking")){
+                        if(!remoteRepo.getWcHasOpenChanges())%>
+                        <button class="btn btn-default" type="submit" formaction="PushServlet">Push branch</button>
+                        <%}else{%>
+                        Cannot push-RR has open changes.
+                        <%}%>
                         </form>
-                            <%for(Branch branch:repo.getBranches()) {
-                            if(!branch.getName().equals(repo.getHeadBranchName())){
+                            <%for(Branch branch: localRepo.getBranches()) {
+                            if(!branch.getName().equals(localRepo.getHeadBranchName())){
                             %>
                         <form method="Post" action="BranchServlet">
                             <input type="hidden" name="branchName" value="<%=branch.getName()%>">
                             <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
                             <%if(branch.getType().equals("remote")){%>
                             <button class="btn btn-default" type="submit">Remote branch : <%=branch.getName()%></button>
-                            <%if(repo.rtbExists(branch.getName())){%>
+                            <%if(localRepo.rtbExists(branch.getName())){%>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
                             <%}else{%>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut (Make RTB)</button>
                             <%}}if(branch.getType().equals("local")){%>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
-                                <%if(!repo.isForkOfOtherRepo_ex3()){%>
+                                <%if(!localRepo.isForkOfOtherRepo_ex3()){%>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="Push6">Push branch</button>
                             <%}%>
                         </form>
                         <%}}%>
-                            <h2><%=repo.getCheckOutMsg()%></h2>
-                        <%if(repo.getWcHasOpenChanges()){%>
+                            <h2><%=localRepo.getCheckOutMsg()%></h2>
+                        <%if(localRepo.getWcHasOpenChanges()){%>
                         <br><h3>Open changes in working copy</h3>
                         <%}%>
                     <form method="Post" action="MakeNewBranch">
@@ -97,7 +104,7 @@
 
                 <div class="col-md-4">
             <br><h2>Commits</h2>
-            <%for(Commit commit:repo.getBranchCommits(pressedBranch)) {
+            <%for(Commit commit: localRepo.getBranchCommits(pressedBranch)) {
             %>
             <form method="Post" action="commitServlet">
                 <input type="hidden" name="commitSha1" value="<%=commit.getSha1()%>">
@@ -115,11 +122,11 @@
 
                     <h2>Files of commit</h2>
                     <ul>
-                    <%for(String fileDetails :repo.commitFileNames_ex3(pressedCommit)) {%>
+                    <%for(String fileDetails : localRepo.commitFileNames_ex3(pressedCommit)) {%>
                         <li><%=fileDetails%></li>
                     <%}%>
                     </ul>
-                    <%if(repo.isForkOfOtherRepo_ex3()){%>
+                    <%if(localRepo.isForkOfOtherRepo_ex3()){%>
                     <div class="panel panel-default">
                         <div class="panel-body"><form method="Post" action="PullRequestServlet">
                             local branch name:<input type="input" name="localBranch" >
@@ -133,7 +140,7 @@
                     </div>
                     <%}%>
                     <h1>PR List</h1>
-                    <%for(Map.Entry<String, PR> entry: repo.PrMap.entrySet()){%>
+                    <%for(Map.Entry<String, PR> entry: localRepo.PrMap.entrySet()){%>
                     <p>remote branch name:<%=entry.getValue().SenderBranch%></p>
                     <p>local branch name:<%=entry.getValue().ReceiverBranch%></p>
                     <p>PR purpose:<%=entry.getValue().purpose%></p>
