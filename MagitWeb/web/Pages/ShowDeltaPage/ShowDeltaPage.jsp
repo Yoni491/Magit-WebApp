@@ -20,6 +20,9 @@ The following changes had been made:
     String changes=repo.deltaChangesBetweenCommitsToString(pr.ReceiverCommitSha1,pr.path);
 %>
 <p><%=changes%></p>
+<form method="Post" action="ExecutePR">
+    <button class="btn btn-default" type="submit">Accept changes</button>
+</form>
 <%--<%SessionUtils.getRepo(request).deltaChangesBetweenCommitsToString()%>--%>
 <h2>Do you wish to update the branch:<%=pr.ReceiverBranch%> with those changes?</h2>
 

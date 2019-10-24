@@ -1,7 +1,10 @@
 package servlets;
 
 import Objects.Api.MagitObject;
+import Objects.Branch.AlreadyExistingBranchException;
 import Objects.Branch.Branch;
+import Objects.Branch.BranchNoNameException;
+import Objects.Branch.NoCommitHasBeenMadeException;
 import Repository.Repository;
 import Users.Message;
 import Users.PR;
@@ -18,9 +21,18 @@ import java.util.Map;
 public class PullRequestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request,response);}
+        try {
+            processRequest(request,response);
+        } catch (NoCommitHasBeenMadeException e) {
+            e.printStackTrace();
+        } catch (BranchNoNameException e) {
+            e.printStackTrace();
+        } catch (AlreadyExistingBranchException e) {
+            e.printStackTrace();
+        }
+    }
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NoCommitHasBeenMadeException, BranchNoNameException, AlreadyExistingBranchException {
         String localBranchName = request.getParameter("localBranch");
         String remoteBranchName = request.getParameter("remoteBranch");
         String PrPurpose = request.getParameter("PrPurpose");
@@ -55,10 +67,10 @@ public class PullRequestServlet extends HttpServlet {
                         Message msg = new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
                                 localBranchName, remoteBranchName, localBranch.getSha1());
                         PR pr = new PR(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                                localBranchName, remoteBranchName,remoteBranch.getSha1(), localBranch.getSha1(), PrPurpose, path);
+                                localBranchName, remoteBranchName, localBranch.getSha1(),remoteBranch.getSha1(), PrPurpose, path);
                         UsersDataBase.getUserData(localRepo.getRemoteRepoUserName()).MsgList.add(msg);
                         remoteRepo.PrMap.put(SessionUtils.getUsername(request), pr);
-                        remoteRepo.getBranches().add(new Branch(localBranch.getSha1(),localBranchName,"PR"));
+                        remoteRepo.addNewBranch(localBranchName,localBranch.getSha1(),"PR");
                     } else {
                         //print error msg: no remote branch with this name exists.
                     }
@@ -72,5 +84,14 @@ public class PullRequestServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request,response);}
+        try {
+            processRequest(request,response);
+        } catch (NoCommitHasBeenMadeException e) {
+            e.printStackTrace();
+        } catch (BranchNoNameException e) {
+            e.printStackTrace();
+        } catch (AlreadyExistingBranchException e) {
+            e.printStackTrace();
+        }
+    }
 }

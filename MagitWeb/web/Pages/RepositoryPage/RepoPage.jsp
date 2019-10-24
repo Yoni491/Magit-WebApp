@@ -58,18 +58,13 @@
                 <div class="col-md-4">
                     <h2>Branches</h2>
                     <form method="Post" action="BranchServlet">
-                        <input type="hidden" name="branch" value="<%=repo.getHeadBranchName()%>">
+                        <input type="hidden" name="branchName" value="<%=repo.getHeadBranchName()%>">
                         <input type="hidden" name="branchSha1" value="<%=repo.getHeadBranch().getSha1()%>">
                         <button class="btn btn-default" type="submit">Head Branch : <%=repo.getHeadBranchName()%></button>
                         </form>
-                            <%for(Branch branch:repo.getBranches()) {
-                            if(!branch.getName().equals(repo.getHeadBranchName()))
-                            {
-                            %>
-
-                    <form method="Post" action="BranchServlet">
-                        <p></p>
-                            <input type="hidden" name="branch" value="<%=branch.getName()%>">
+                            <%for(Branch branch:repo.getBranches()) {%>
+                        <form method="Post" action="BranchServlet">
+                            <input type="hidden" name="branchName" value="<%=branch.getName()%>">
                             <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
                             <%if(branch.getType().equals("remote")){%>
                             <button class="btn btn-default" type="submit">Remote branch : <%=branch.getName()%></button>
