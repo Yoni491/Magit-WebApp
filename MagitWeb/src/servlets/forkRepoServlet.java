@@ -29,9 +29,9 @@ public class forkRepoServlet extends HttpServlet {
         UsersDataBase.getUserData(SessionUtils.getUsername(request)).addForkedRepo(localRepo.getName());
         UsersDataBase.addRepo(SessionUtils.getUsername(request),localRepo.getName(),localRepo);
         response.sendRedirect("../UserPage/UserPage.jsp");
-        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                br.getName());
-        UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
+//        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+//                br.getName());
+//        UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
