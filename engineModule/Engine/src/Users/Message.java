@@ -12,7 +12,7 @@ public class Message {
     public String msg;
     //boolean isPR;
     public Message(String RepoName, String Sender, String Receiver, String SenderBranch, String ReceiverBranch, String SenderCommitSha1)
-    {
+    {//For PR
         this.RepoName=RepoName;
         this.Sender=Sender;
         this.Receiver=Receiver;
@@ -22,12 +22,30 @@ public class Message {
         msg="The user:"+Sender+" sent you a pull request for your repository: "+RepoName+".";
     }
     public Message(String RepoName, String Sender, String Receiver, String SenderBranch)
-    {
+    {//For push
         this.RepoName=RepoName;
         this.Sender=Sender;
         this.Receiver=Receiver;
         this.SenderBranch=SenderBranch;
         msg="The user:"+Sender+"has pushed the branch:"+SenderBranch +"for your repository: "+RepoName+".";
     }
+    public Message(String RepoName, String Sender, String Receiver, String SenderBranch,String pull)
+    {//For pull
+        this.RepoName=RepoName;
+        this.Sender=Sender;
+        this.Receiver=Receiver;
+        this.SenderBranch=SenderBranch;
+        msg="The user:"+Sender+"has pulled the branch:"+SenderBranch +"from your repository: "+RepoName+".";
+    }
+    public Message(String RepoName, String Sender, String Receiver)
+    {//For fork
+        this.RepoName=RepoName;
+        this.Sender=Sender;
+        this.Receiver=Receiver;
+        this.SenderBranch=SenderBranch;
+        msg="The user:"+Sender+"has forked your repository:"+RepoName+".";
+    }
+
+
     //need to do other constructors
 }

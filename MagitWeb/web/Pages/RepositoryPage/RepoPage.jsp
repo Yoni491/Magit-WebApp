@@ -11,6 +11,7 @@
 <%@ page import="Users.PR" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="Users.Message" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -62,7 +63,7 @@
                         <input type="hidden" name="branchName" value="<%=localRepo.getHeadBranchName()%>">
                         <input type="hidden" name="branchSha1" value="<%=localRepo.getHeadBranch().getSha1()%>">
                         <button class="btn btn-default" type="submit">Head Branch : <%=localRepo.getHeadBranchName()%></button>
-                        <%if((!localRepo.isForkOfOtherRepo_ex3())&& localRepo.getHeadBranch().getType().equals("tracking")){
+                        <%if((localRepo.isForkOfOtherRepo_ex3())&& localRepo.getHeadBranch().getType().equals("tracking")){
                         if(remoteRepo!=null && !remoteRepo.getWcHasOpenChanges())%>
                         <button class="btn btn-default" type="submit" formaction="PushServlet">Push branch</button>
                         <%}else if(remoteRepo!=null){%>
@@ -87,7 +88,7 @@
                             <%}}if(branch.getType().equals("local")){%>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
-                                <%if(!localRepo.isForkOfOtherRepo_ex3()){%>
+                                <%if(localRepo.isForkOfOtherRepo_ex3()){%>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="Push6">Push branch</button>
                             <%}}%>
@@ -163,6 +164,12 @@
 
                         <input type="hidden" name="PrDeltaUsername" value="<%=entry.getValue().Sender%>">
                         <button class="btn btn-default" type="submit">Show PR changes</button>
+                    </form>
+                    <%}%>
+                    <h1>Message List</h1>
+                    <% for(Message message: UsersDataBase.getUserData(SessionUtils.getUsername(request)).MsgList){%>
+                    <form method="Post" action="selectUser">
+                        <h2><%=message.msg%></h2>
                     </form>
                     <%}%>
                 </div>

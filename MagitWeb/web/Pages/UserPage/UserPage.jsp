@@ -107,9 +107,10 @@
                                 </form>
                                 <%}}%>
                             </ul>
+                        <h1>Message List</h1>
                         <% for(Message message: UsersDataBase.getUserData(SessionUtils.getUsername(request)).MsgList){%>
                         <form method="Post" action="selectUser">
-                            <%=message.msg%>
+                            <h2><%=message.msg%></h2>
                         </form>
                         <%}%>
                     </div>

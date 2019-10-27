@@ -4,6 +4,7 @@ import Objects.Branch.AlreadyExistingBranchException;
 import Objects.Branch.BranchNoNameException;
 import Objects.Branch.NoCommitHasBeenMadeException;
 import Repository.Repository;
+import Users.Message;
 import Users.UsersDataBase;
 
 import javax.servlet.ServletException;
@@ -22,12 +23,15 @@ public class forkRepoServlet extends HttpServlet {
             throws ServletException, IOException {
         String press = request.getParameter("forkRepoName");
         String username = request.getParameter("ForkUsername");
-        Repository repo= null;
-            repo = new Repository(UsersDataBase.getRepo(press,username));
-        repo.updateUsername(SessionUtils.getUsername(request));
-        UsersDataBase.getUserData(SessionUtils.getUsername(request)).addForkedRepo(repo.getName());
-        UsersDataBase.addRepo(SessionUtils.getUsername(request),repo.getName(),repo);
+        Repository localRepo= null;
+            localRepo = new Repository(UsersDataBase.getRepo(press,username));
+        localRepo.updateUsername(SessionUtils.getUsername(request));
+        UsersDataBase.getUserData(SessionUtils.getUsername(request)).addForkedRepo(localRepo.getName());
+        UsersDataBase.addRepo(SessionUtils.getUsername(request),localRepo.getName(),localRepo);
         response.sendRedirect("../UserPage/UserPage.jsp");
+        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+                br.getName());
+        UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
