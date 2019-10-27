@@ -320,8 +320,7 @@ public class Repository {
         }
         if(headBranch==null)
             throw new NoCommitHasBeenMadeException();
-        if (branches.stream().filter(Branch -> Branch.getName().equals(name)).findFirst().orElse(null) == null
-                && !headBranch.getName().equals(name)) {
+        if (!headBranch.getName().equals(name)) {
             branch = new Branch(sha1, name,type);
             branches.add(branch);
         } else
