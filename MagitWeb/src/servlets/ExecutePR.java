@@ -28,7 +28,7 @@ public class ExecutePR extends HttpServlet {
         if(localRepo.getHeadBranch().getName().equals(pr.SenderBranch))
             localRepo.getHeadBranch().setType("remote");
         Branch branch=localRepo.branchLambda_ex3(pr.SenderBranch);
-        String Receiver=pr.Receiver;
+        String Sender=pr.Sender;
         repo.PrMap.remove(pr);
 
         //delete msg(maybe)
@@ -45,7 +45,7 @@ public class ExecutePR extends HttpServlet {
         }
         Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
                 branch.getName(),"PrAccepted");
-        UsersDataBase.addMessageToUser(Receiver,msg);
+        UsersDataBase.addMessageToUser(Sender,msg);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 

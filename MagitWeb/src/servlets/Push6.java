@@ -48,9 +48,7 @@ public class Push6 extends HttpServlet {
             } catch (BranchNoNameException e) {
                 e.printStackTrace();
             }
-            Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                    br.getName());
-            UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
+
         }
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }

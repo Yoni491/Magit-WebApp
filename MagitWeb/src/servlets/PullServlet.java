@@ -3,6 +3,7 @@ package servlets;
 import Objects.Api.MagitObject;
 import Objects.Branch.Branch;
 import Repository.Repository;
+import Users.Message;
 import Users.UsersDataBase;
 
 import javax.servlet.ServletException;

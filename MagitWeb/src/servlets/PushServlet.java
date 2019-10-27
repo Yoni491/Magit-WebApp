@@ -33,9 +33,7 @@ public class PushServlet extends HttpServlet {
                 remoteRepo.getObjList().put(entry.getKey(), entry.getValue());
         }
             remoteRepo.branchLambda_ex3(br.getName()).UpdateSha1(br.getSha1());
-        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                br.getName());
-        UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
+
         localRepo.setPushedHeadChanges(true);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
