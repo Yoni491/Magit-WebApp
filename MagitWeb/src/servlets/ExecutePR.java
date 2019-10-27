@@ -28,6 +28,7 @@ public class ExecutePR extends HttpServlet {
         if(localRepo.getHeadBranch().getName().equals(pr.SenderBranch))
             localRepo.getHeadBranch().setType("remote");
         Branch branch=localRepo.branchLambda_ex3(pr.SenderBranch);
+        String Receiver=pr.Receiver;
         repo.PrMap.remove(pr);
 
         //delete msg(maybe)
@@ -42,9 +43,9 @@ public class ExecutePR extends HttpServlet {
         } catch (BranchNoNameException e) {
             e.printStackTrace();
         }
-//        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-//                br.getName());
-//        UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
+        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+                branch.getName(),"PrAccepted");
+        UsersDataBase.addMessageToUser(Receiver,msg);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 
