@@ -60,23 +60,27 @@
                 <div class="col-md-4">
                     <h2>Branches</h2>
                     <form method="Post" action="BranchServlet">
+                        <blockquote class="blockquote">
                         <input type="hidden" name="branchName" value="<%=localRepo.getHeadBranchName()%>">
                         <input type="hidden" name="branchSha1" value="<%=localRepo.getHeadBranch().getSha1()%>">
                         <button class="btn btn-default" type="submit">Head Branch : <%=localRepo.getHeadBranchName()%></button>
                         <%if((localRepo.isForkOfOtherRepo_ex3())&& localRepo.getHeadBranch().getType().equals("tracking")){
                         if(remoteRepo!=null && !remoteRepo.getWcHasOpenChanges())%>
                         <button class="btn btn-default" type="submit" formaction="PushServlet">Push branch</button>
-                        <%}else if(remoteRepo!=null){%>
+                        <%}else if(remoteRepo!=null && !localRepo.getHeadBranch().getType().equals("local")){%>
                         Cannot push-RR has open changes.
-                        <%}%>
-                        <%if(!localRepo.getWcHasOpenChanges()&& remoteRepo!=null && remoteRepo.getHeadBranch().getName().equals(localRepo.getHeadBranch().getName()) && localRepo.getPushedHeadChanges()){%>
+                        <%}else{%>
+                            <%}%>
+                            <%if(!localRepo.getWcHasOpenChanges()&& remoteRepo!=null && remoteRepo.getHeadBranch().getName().equals(localRepo.getHeadBranch().getName()) && localRepo.getPushedHeadChanges()){%>
                             <button class="btn btn-default" type="submit" formaction="PullServlet">Pull branch</button>
                         <%}%>
+                        </blockquote>
                     </form>
                             <%for(Branch branch: localRepo.getBranches()) {
                             if(!branch.getName().equals(localRepo.getHeadBranchName())){
                             %>
                         <form method="Post" action="BranchServlet">
+                            <blockquote class="blockquote">
                             <input type="hidden" name="branchName" value="<%=branch.getName()%>">
                             <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
                             <%if(branch.getType().equals("remote")){%>
@@ -88,12 +92,13 @@
                             <%}}if(branch.getType().equals("local")){%>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
-                                <%if(localRepo.isForkOfOtherRepo_ex3()){%>
+                                <%if(localRepo.isForkOfOtherRepo_ex3()&& !branch.equals(localRepo.getHeadBranch())){%>
                             <button class="btn btn-default" type="submit" formaction="Push6">Push branch</button>
                             <%}}%>
-                            <%if(remoteRepo!=null && !localRepo.getWcHasOpenChanges()&& branch.getName().equals(remoteRepo.getHeadBranch().getName()) && !branch.equals(localRepo.getHeadBranch())){%>
+                            <%if(!branch.getType().equals("tracking")&&remoteRepo!=null && !localRepo.getWcHasOpenChanges()&& branch.getName().equals(remoteRepo.getHeadBranch().getName())){%>
                             <button class="btn btn-default" type="submit" formaction="PullServlet">Pull branch</button>
                             <%}%>
+                            </blockquote>
                         </form>
                         <%}}%>
                             <h2><%=localRepo.getCheckOutMsg()%></h2>
