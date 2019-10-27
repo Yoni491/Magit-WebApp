@@ -21,5 +21,13 @@ public class Message {
         this.SenderCommitSha1=SenderCommitSha1;
         msg="The user:"+Sender+" sent you a pull request for your repository: "+RepoName+".";
     }
+    public Message(String RepoName, String Sender, String Receiver, String SenderBranch)
+    {
+        this.RepoName=RepoName;
+        this.Sender=Sender;
+        this.Receiver=Receiver;
+        this.SenderBranch=SenderBranch;
+        msg="The user:"+Sender+"has pushed the branch:"+SenderBranch +"for your repository: "+RepoName+".";
+    }
     //need to do other constructors
 }

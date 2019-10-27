@@ -23,15 +23,7 @@ public class forkRepoServlet extends HttpServlet {
         String press = request.getParameter("forkRepoName");
         String username = request.getParameter("ForkUsername");
         Repository repo= null;
-        try {
             repo = new Repository(UsersDataBase.getRepo(press,username));
-        } catch (NoCommitHasBeenMadeException e) {
-            e.printStackTrace();
-        } catch (BranchNoNameException e) {
-            e.printStackTrace();
-        } catch (AlreadyExistingBranchException e) {
-            e.printStackTrace();
-        }
         repo.updateUsername(SessionUtils.getUsername(request));
         UsersDataBase.getUserData(SessionUtils.getUsername(request)).addForkedRepo(repo.getName());
         UsersDataBase.addRepo(SessionUtils.getUsername(request),repo.getName(),repo);

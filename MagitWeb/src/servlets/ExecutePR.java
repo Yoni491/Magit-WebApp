@@ -5,6 +5,7 @@ import Objects.Branch.Branch;
 import Objects.Branch.BranchNoNameException;
 import Objects.Branch.NoCommitHasBeenMadeException;
 import Repository.Repository;
+import Users.Message;
 import Users.PR;
 import Users.UsersDataBase;
 
@@ -41,7 +42,9 @@ public class ExecutePR extends HttpServlet {
         } catch (BranchNoNameException e) {
             e.printStackTrace();
         }
-
+//        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+//                br.getName());
+//        UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 

@@ -32,5 +32,8 @@ public class UsersDataBase {
     public static UserData getUserData(String nameOfUser){
          return usersMap.get(nameOfUser);
     }
+    public static void addMessageToUser(String username,Message msg){
+        usersMap.get(username).MsgList.add(msg);
+    }
 }
 

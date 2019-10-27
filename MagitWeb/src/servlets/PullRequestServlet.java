@@ -68,7 +68,7 @@ public class PullRequestServlet extends HttpServlet {
                                 localBranchName, remoteBranchName, localBranch.getSha1());
                         PR pr = new PR(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
                                 localBranchName, remoteBranchName, localBranch.getSha1(),remoteBranch.getSha1(), PrPurpose, path,msg);
-                        UsersDataBase.getUserData(localRepo.getRemoteRepoUserName()).MsgList.add(msg);
+                        UsersDataBase.addMessageToUser(localRepo.getRemoteRepoUserName(),msg);
                         remoteRepo.PrMap.put(SessionUtils.getUsername(request), pr);
                         remoteRepo.addNewBranch(localBranchName,localBranch.getSha1(),"PR");
                     } else {

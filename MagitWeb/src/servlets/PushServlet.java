@@ -6,6 +6,7 @@ import Objects.Branch.Branch;
 import Objects.Branch.BranchNoNameException;
 import Objects.Branch.NoCommitHasBeenMadeException;
 import Repository.Repository;
+import Users.Message;
 import Users.UsersDataBase;
 
 import javax.servlet.ServletException;
@@ -32,7 +33,9 @@ public class PushServlet extends HttpServlet {
                 remoteRepo.getObjList().put(entry.getKey(), entry.getValue());
         }
             remoteRepo.branchLambda_ex3(br.getName()).UpdateSha1(br.getSha1());
-
+        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+                br.getName());
+        UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 

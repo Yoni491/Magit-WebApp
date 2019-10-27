@@ -6,6 +6,8 @@ import Objects.Branch.Branch;
 import Objects.Branch.BranchNoNameException;
 import Objects.Branch.NoCommitHasBeenMadeException;
 import Repository.Repository;
+import Users.Message;
+import Users.UserData;
 import Users.UsersDataBase;
 
 import javax.servlet.ServletException;
@@ -29,6 +31,7 @@ public class Push6 extends HttpServlet {
         {
             Repository localRepo=getRepo(request);
             Repository remoteRepo = UsersDataBase.getRepo(localRepo.getRemoteRepoName(), localRepo.getRemoteRepoUserName());
+
             Branch br=localRepo.branchLambda_ex3(branchName);
             for (Map.Entry<String, MagitObject> entry : localRepo.getObjList().entrySet()) {
                 if (!remoteRepo.getObjList().entrySet().contains(entry))
@@ -45,7 +48,9 @@ public class Push6 extends HttpServlet {
             } catch (BranchNoNameException e) {
                 e.printStackTrace();
             }
-
+            Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
+                    br.getName());
+            UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
         }
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
