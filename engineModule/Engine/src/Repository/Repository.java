@@ -30,6 +30,7 @@ import java.util.zip.*;
 public class Repository {
 
 
+    private boolean PUSHED_HEAD_CHANGES = true;
     private boolean WC_HAS_OPEN_CHANGES = false;
     private Map<String, MagitObject> objList; //<sha1,object>
     private ArrayList<Branch> branches=new ArrayList<>();
@@ -46,6 +47,12 @@ public class Repository {
     public HashMap<String, PR> PrMap=new HashMap<>();//<username of other repo, PR>
     public Commit Wc = null;
     private String checkOutMsg="";
+
+    public Boolean getPushedHeadChanges(){
+        return PUSHED_HEAD_CHANGES;
+    }
+    public void setPushedHeadChanges(boolean answer){ PUSHED_HEAD_CHANGES = answer; }
+
 
     public Boolean getWcHasOpenChanges(){
         return WC_HAS_OPEN_CHANGES;

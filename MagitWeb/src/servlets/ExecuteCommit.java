@@ -19,6 +19,7 @@ public class ExecuteCommit extends HttpServlet {
         Repository repo = SessionUtils.getRepo(request);
         if(repo.getWcHasOpenChanges()) {
             repo.executeCommit_ex3(commitMsg);
+            repo.setPushedHeadChanges(false);
             SessionUtils.CommitSuccessOrFail="Committed successfully";
         }
         else

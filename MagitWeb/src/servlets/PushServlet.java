@@ -36,6 +36,7 @@ public class PushServlet extends HttpServlet {
         Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
                 br.getName());
         UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
+        localRepo.setPushedHeadChanges(true);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 

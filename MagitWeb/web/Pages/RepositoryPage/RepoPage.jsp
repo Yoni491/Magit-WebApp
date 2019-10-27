@@ -69,7 +69,7 @@
                         <%}else if(remoteRepo!=null){%>
                         Cannot push-RR has open changes.
                         <%}%>
-                        <%if(!localRepo.getWcHasOpenChanges()&& remoteRepo!=null && remoteRepo.getHeadBranch().getName().equals(localRepo.getHeadBranch().getName())){%>
+                        <%if(!localRepo.getWcHasOpenChanges()&& remoteRepo!=null && remoteRepo.getHeadBranch().getName().equals(localRepo.getHeadBranch().getName()) && localRepo.getPushedHeadChanges()){%>
                             <button class="btn btn-default" type="submit" formaction="PullServlet">Pull branch</button>
                         <%}%>
                     </form>
