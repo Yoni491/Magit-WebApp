@@ -1,5 +1,8 @@
 package servlets;
 
+import Objects.Branch.AlreadyExistingBranchException;
+import Objects.Branch.BranchNoNameException;
+import Objects.Branch.NoCommitHasBeenMadeException;
 import Repository.Repository;
 import Users.UsersDataBase;
 
@@ -19,7 +22,16 @@ public class forkRepoServlet extends HttpServlet {
             throws ServletException, IOException {
         String press = request.getParameter("forkRepoName");
         String username = request.getParameter("ForkUsername");
-        Repository repo= new Repository(UsersDataBase.getRepo(press,username));
+        Repository repo= null;
+        try {
+            repo = new Repository(UsersDataBase.getRepo(press,username));
+        } catch (NoCommitHasBeenMadeException e) {
+            e.printStackTrace();
+        } catch (BranchNoNameException e) {
+            e.printStackTrace();
+        } catch (AlreadyExistingBranchException e) {
+            e.printStackTrace();
+        }
         repo.updateUsername(SessionUtils.getUsername(request));
         UsersDataBase.getUserData(SessionUtils.getUsername(request)).addForkedRepo(repo.getName());
         UsersDataBase.addRepo(SessionUtils.getUsername(request),repo.getName(),repo);

@@ -76,17 +76,16 @@ public class Repository {
         remoteRepoName = remoteName;
     }
 
-    public Repository(Repository repo) {
+    public Repository(Repository repo) throws FileNotFoundException, NoCommitHasBeenMadeException, BranchNoNameException, AlreadyExistingBranchException {
         objList = repo.objList;
         for(Branch br:repo.branches)
         {
             Branch newBranch=new Branch(br.getSha1(),br.getName(),"remote");
             branches.add(newBranch);
-            newBranch=new Branch(br.getSha1(),br.getName(),"tracking");
-            branches.add(newBranch);
+
         }
-        headBranch = repo.headBranch;
-        headBranch.setType("remote");
+        addNewBranch(repo.headBranch.getName(),repo.headBranch.getSha1(),"tracking");
+        headBranch=new Branch(repo.headBranch.getName(),repo.headBranch.getSha1(),"remote");
         path = repo.path;
         name = repo.name;
         currDelta = repo.currDelta;

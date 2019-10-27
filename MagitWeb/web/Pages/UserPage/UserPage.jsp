@@ -5,6 +5,7 @@
 <%@ page import="Repository.Repository" %>
 <%@ page import="static servlets.SessionUtils.successMsg" %>
 <%@ page import="static servlets.SessionUtils.*" %>
+<%@ page import="Users.Message" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -106,7 +107,11 @@
                                 </form>
                                 <%}}%>
                             </ul>
-
+                        <% for(Message message: UsersDataBase.getUserData(SessionUtils.getUsername(request)).MsgList){%>
+                        <form method="Post" action="selectUser">
+                            <%=message.msg%>
+                        </form>
+                        <%}%>
                     </div>
                 </div>
         </div>
