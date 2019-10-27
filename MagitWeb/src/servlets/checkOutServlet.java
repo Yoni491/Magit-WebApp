@@ -15,10 +15,10 @@ public class checkOutServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String branchSha1 = request.getParameter("branchSha1");
+        String branchName = request.getParameter("branchName");
         Repository repo = SessionUtils.getRepo(request);
-        if(branchSha1!=null) {
-            repo.checkOut_ex3(repo.getBranches().stream().filter(br->br.getSha1().equals(branchSha1)).findFirst().orElse(null));
+        if(branchName!=null) {
+            repo.checkOut_ex3(repo.getBranches().stream().filter(br->br.getName().equals(branchName)).filter(br->!br.getType().equals("tracking")).findFirst().orElse(null));
         }
         response.sendRedirect("../RepositoryPage/BranchServlet");
     }

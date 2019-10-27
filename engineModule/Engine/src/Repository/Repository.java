@@ -76,16 +76,15 @@ public class Repository {
         remoteRepoName = remoteName;
     }
 
-    public Repository(Repository repo) throws FileNotFoundException, NoCommitHasBeenMadeException, BranchNoNameException, AlreadyExistingBranchException {
+    public Repository(Repository repo) {
         objList = repo.objList;
         for(Branch br:repo.branches)
         {
             Branch newBranch=new Branch(br.getSha1(),br.getName(),"remote");
             branches.add(newBranch);
-
         }
-        addNewBranch(repo.headBranch.getName(),repo.headBranch.getSha1(),"tracking");
-        headBranch=new Branch(repo.headBranch.getName(),repo.headBranch.getSha1(),"remote");
+        branches.add(new Branch(repo.headBranch.getSha1(),repo.headBranch.getName(),"remote"));
+        headBranch = new Branch(repo.headBranch.getSha1(),repo.headBranch.getName(),"tracking");
         path = repo.path;
         name = repo.name;
         currDelta = repo.currDelta;
@@ -349,14 +348,29 @@ public class Repository {
     }
 
     public void checkOut_ex3(Branch branch){
-        if(WC_HAS_OPEN_CHANGES || (!branch.getType().equals("remote")&& !branch.getType().equals("local")&&!branch.getType().equals("PR"))){
+        if(WC_HAS_OPEN_CHANGES){
             checkOutMsg="Cannot checkOut";
         }
-        else{
-            checkOutMsg="checkOut successful";
-            branches.add(headBranch);
-            branches.remove(branch);
-            headBranch = branch;
+        else {
+            if (branch.getType().equals("remote")) {
+                if(!rtbExists(branch.getName())){
+                checkOutMsg = "checkOut successful";
+                branches.add(headBranch);
+                headBranch = new Branch(branch.getSha1(), branch.getName(), "tracking");
+                }
+                else{
+                    checkOutMsg = "checkOut successful";
+                    branches.add(headBranch);
+                    headBranch = branches.stream().filter(br->br.getName().equals(branch.getName())).filter(br->br.getType().equals("tracking")).findFirst().orElse(null);
+                    branches.remove(headBranch);
+                }
+            }
+            else {
+                checkOutMsg = "checkOut successful";
+                branches.add(headBranch);
+                branches.remove(branch);
+                headBranch = branch;
+            }
         }
     }
 
@@ -422,7 +436,12 @@ public class Repository {
     }
     public Branch branchLambda_ex3(String branchName)
     {
-        return (Branch)getBranches().stream().filter(br->br.getName().equals(branchName)).findFirst().orElse(null);
+        if(headBranch.getName().equals(branchName)||branchName.equals(""))
+            return headBranch;
+        Branch tracking=getBranches().stream().filter(br->br.getName().equals(branchName)).filter(br->br.getType().equals("tracking")).findFirst().orElse(null);
+        if(tracking!=null)
+            return tracking;
+        return getBranches().stream().filter(br->br.getName().equals(branchName)).findFirst().orElse(null);
 
     }
     private void recursiveRootFolderToList_ex3(List<String> res, Folder _folder, String _path) throws IOException {
@@ -1174,6 +1193,10 @@ public class Repository {
 
     public String getCheckOutMsg() {
         return this.checkOutMsg;
+    }
+
+    public boolean rtbExists(String name) {
+        return branches.stream().filter(br->br.getName().equals(name)).filter(br->br.getType().equals("tracking")).findFirst().orElse(null) !=null;
     }
 }
 

@@ -10,9 +10,10 @@ public class PR {
     public String ReceiverCommitSha1;
     public String purpose;
     public String path;
+    public Message msg;
     //boolean isPR;
     public PR(String RepoName, String Sender, String Receiver, String SenderBranch, String ReceiverBranch, String SenderCommitSha1
-    ,String ReceiverCommitSha1,String purpose,String path)
+    ,String ReceiverCommitSha1,String purpose,String path,Message msg)
     {
         this.RepoName=RepoName;
         this.Sender=Sender;
@@ -23,5 +24,6 @@ public class PR {
         this.ReceiverCommitSha1=ReceiverCommitSha1;
         this.purpose=purpose;
         this.path=path;
+        this.msg=msg;
     }
 }
