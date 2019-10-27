@@ -108,11 +108,11 @@
                                 <%}}%>
                             </ul>
                         <h1>Message List</h1>
-                        <% for(Message message: UsersDataBase.getUserData(SessionUtils.getUsername(request)).MsgList){%>
-                        <form method="Post" action="selectUser">
-                            <h2><%=message.msg%></h2>
-                        </form>
-                        <%}%>
+                        <ol type="1">
+                            <% for(Message message: UsersDataBase.getUserData(SessionUtils.getUsername(request)).MsgList){%>
+                            <li><%=message.msg%></li>
+                            <%}%>
+                        </ol>
                     </div>
                 </div>
         </div>
