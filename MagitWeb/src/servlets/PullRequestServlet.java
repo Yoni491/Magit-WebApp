@@ -65,7 +65,7 @@ public class PullRequestServlet extends HttpServlet {
                         remoteRepo.deployCommit(remoteRepo.sha1ToCommit_ex3(localBranch.getSha1()), path);
                         //second part of the function
                         Message msg = new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-                                localBranchName, remoteBranchName, localBranch.getSha1());
+                                localBranchName, remoteBranchName, localBranch.getSha1(),PrPurpose);
                         PR pr = new PR(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
                                 localBranchName, remoteBranchName, localBranch.getSha1(),remoteBranch.getSha1(), PrPurpose, path,msg);
                         UsersDataBase.addMessageToUser(localRepo.getRemoteRepoUserName(),msg);

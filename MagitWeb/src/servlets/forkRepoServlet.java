@@ -21,17 +21,15 @@ public class forkRepoServlet extends HttpServlet {
         processRequest(request,response);}
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String press = request.getParameter("forkRepoName");
-        String username = request.getParameter("ForkUsername");
-        Repository localRepo= null;
-            localRepo = new Repository(UsersDataBase.getRepo(press,username));
+        String forkRepoName = request.getParameter("forkRepoName");
+        String forkUsername = request.getParameter("ForkUsername");
+        Repository localRepo = new Repository(UsersDataBase.getRepo(forkRepoName,forkUsername));
         localRepo.updateUsername(SessionUtils.getUsername(request));
         UsersDataBase.getUserData(SessionUtils.getUsername(request)).addForkedRepo(localRepo.getName());
         UsersDataBase.addRepo(SessionUtils.getUsername(request),localRepo.getName(),localRepo);
         response.sendRedirect("../UserPage/UserPage.jsp");
-//        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName(),
-//                br.getName());
-//        UsersDataBase.addMessageToUser(remoteRepo.getUsername(),msg);
+        Message msg= new Message(localRepo.getName(), SessionUtils.getUsername(request), localRepo.getRemoteRepoUserName());
+        UsersDataBase.addMessageToUser(forkUsername,msg);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
