@@ -1,5 +1,6 @@
 package servlets;
 
+import Objects.Branch.Branch;
 import Repository.Repository;
 
 import javax.servlet.ServletException;
@@ -16,9 +17,12 @@ public class checkOutServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String branchName = request.getParameter("branchName");
+
         Repository repo = SessionUtils.getRepo(request);
         if(branchName!=null) {
-            repo.checkOut_ex3(repo.getBranches().stream().filter(br->br.getName().equals(branchName)).filter(br->!br.getType().equals("tracking")).findFirst().orElse(null));
+            Branch branch = repo.getBranches().stream().filter(br->br.getName().equals(branchName)).filter(br->!br.getType().equals("tracking")).findFirst().orElse(null);
+            repo.setWc_ex3(repo.sha1ToCommit_ex3(branch.getSha1()));
+            repo.checkOut_ex3(branch);
         }
         response.sendRedirect("../RepositoryPage/BranchServlet");
     }

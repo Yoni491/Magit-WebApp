@@ -167,11 +167,11 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>PushServlet</servlet-name>
-        <servlet-class>servlets.Push6</servlet-class>
+        <servlet-class>servlets.PushServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>PushServlet</servlet-name>
-        <url-pattern>/Pages/ShowDeltaPage/PushServlet</url-pattern>
+        <url-pattern>/Pages/RepositoryPage/PushServlet</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>PullServlet</servlet-name>
