@@ -41,11 +41,7 @@ public class Push6 extends HttpServlet {
                 remoteRepo.addNewBranch(br.getName(),br.getSha1(),"local");
             br.setType("tracking");
             localRepo.addNewBranch(br.getName(),br.getSha1(),"remote");
-            } catch (AlreadyExistingBranchException e) {
-                e.printStackTrace();
-            } catch (NoCommitHasBeenMadeException e) {
-                e.printStackTrace();
-            } catch (BranchNoNameException e) {
+            } catch (AlreadyExistingBranchException | BranchNoNameException | NoCommitHasBeenMadeException e) {
                 e.printStackTrace();
             }
 

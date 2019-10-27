@@ -89,7 +89,6 @@
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
                                 <%if(localRepo.isForkOfOtherRepo_ex3()){%>
-                            <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="Push6">Push branch</button>
                             <%}}%>
                             <%if(remoteRepo!=null && !localRepo.getWcHasOpenChanges()&& branch.getName().equals(remoteRepo.getHeadBranch().getName())){%>
