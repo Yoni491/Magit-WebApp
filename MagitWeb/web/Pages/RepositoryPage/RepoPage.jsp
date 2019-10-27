@@ -63,12 +63,15 @@
                         <input type="hidden" name="branchSha1" value="<%=localRepo.getHeadBranch().getSha1()%>">
                         <button class="btn btn-default" type="submit">Head Branch : <%=localRepo.getHeadBranchName()%></button>
                         <%if((!localRepo.isForkOfOtherRepo_ex3())&& localRepo.getHeadBranch().getType().equals("tracking")){
-                        if(!remoteRepo.getWcHasOpenChanges())%>
+                        if(remoteRepo!=null && !remoteRepo.getWcHasOpenChanges())%>
                         <button class="btn btn-default" type="submit" formaction="PushServlet">Push branch</button>
-                        <%}else{%>
+                        <%}else if(remoteRepo!=null){%>
                         Cannot push-RR has open changes.
                         <%}%>
-                        </form>
+                        <%if(!localRepo.getWcHasOpenChanges()&& remoteRepo!=null && remoteRepo.getHeadBranch().getName().equals(localRepo.getHeadBranch().getName())){%>
+                            <button class="btn btn-default" type="submit" formaction="PullServlet">Pull branch</button>
+                        <%}%>
+                    </form>
                             <%for(Branch branch: localRepo.getBranches()) {
                             if(!branch.getName().equals(localRepo.getHeadBranchName())){
                             %>
@@ -87,6 +90,9 @@
                                 <%if(!localRepo.isForkOfOtherRepo_ex3()){%>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
                             <button class="btn btn-default" type="submit" formaction="Push6">Push branch</button>
+                            <%}}%>
+                            <%if(remoteRepo!=null && !localRepo.getWcHasOpenChanges()&& branch.getName().equals(remoteRepo.getHeadBranch().getName())){%>
+                            <button class="btn btn-default" type="submit" formaction="PullServlet">Pull branch</button>
                             <%}%>
                         </form>
                         <%}}%>

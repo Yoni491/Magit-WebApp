@@ -173,4 +173,12 @@
         <servlet-name>PushServlet</servlet-name>
         <url-pattern>/Pages/ShowDeltaPage/PushServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PullServlet</servlet-name>
+        <servlet-class>servlets.PullServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PullServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/PullServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
