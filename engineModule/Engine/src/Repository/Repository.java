@@ -1209,8 +1209,9 @@ public class Repository {
         this.branches.remove(branchToRemove);
     }
 
-    public void removeRbBranch(Branch branchToRemove) {
-        branches.removeIf(branch -> branch.getName().equals(branchToRemove));
+    public void removeRbBranch(Branch branchToRemove, Repository remoteRepo) {
+        branches.removeIf(branch -> branch.getName().equals(branchToRemove.getName()));
+        remoteRepo.branches.removeIf(branch -> branch.getName().equals(branchToRemove.getName()));
     }
 }
 

@@ -23,11 +23,7 @@ public class PullRequestServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             processRequest(request,response);
-        } catch (NoCommitHasBeenMadeException e) {
-            e.printStackTrace();
-        } catch (BranchNoNameException e) {
-            e.printStackTrace();
-        } catch (AlreadyExistingBranchException e) {
+        } catch (NoCommitHasBeenMadeException | AlreadyExistingBranchException | BranchNoNameException e) {
             e.printStackTrace();
         }
     }
