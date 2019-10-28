@@ -17,7 +17,7 @@
 
         <title>M.A-GitHub</title>
         <script src="../../common/jquery-2.0.3.min.js"></script>
-
+        <script src="../../Pages/UserPage/UploadFile.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <link href="../../common/bootstrap.min.css" rel="stylesheet">
@@ -108,11 +108,11 @@
                                 <%}}%>
                             </ul>
                         <h1>Message List</h1>
-                        <ol type="1">
+                        <ul type="1" id="MessageList">
                             <% for(Message message: UsersDataBase.getUserData(SessionUtils.getUsername(request)).MsgList){%>
                             <li><%=message.msg%></li>
                             <%}%>
-                        </ol>
+                        </ul>
                     </div>
                 </div>
         </div>

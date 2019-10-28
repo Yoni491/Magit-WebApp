@@ -37,5 +37,9 @@ public class UsersDataBase {
     public static void addMessageToUser(String username,Message msg){
         usersMap.get(username).MsgList.add(msg);
     }
+    public static void deleteAllMessagesOfUser(String username){
+        usersMap.get(username).MsgList.clear();
+    }
+
 }
 

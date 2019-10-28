@@ -13,6 +13,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/resources/commons-codec-1.12.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/resources/commons-collections4-4.3.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/resources/fxgraph-0.0.3.jar" />
+          <element id="library" level="project" name="com.google.code.gson:gson:2.8.6" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="MagitWeb/web/Web" />

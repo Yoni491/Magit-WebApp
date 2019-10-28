@@ -181,4 +181,13 @@
         <servlet-name>PullServlet</servlet-name>
         <url-pattern>/Pages/RepositoryPage/PullServlet</url-pattern>
     </servlet-mapping>
+    ajaxMessageServlet
+    <servlet>
+        <servlet-name>ajaxMessageServlet</servlet-name>
+        <servlet-class>servlets.ajaxMessageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ajaxMessageServlet</servlet-name>
+        <url-pattern>/Pages/UserPage/ajaxMessageServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

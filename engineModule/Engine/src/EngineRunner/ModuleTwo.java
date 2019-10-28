@@ -8,6 +8,7 @@ import Objects.Commit.CommitCannotExecutException;
 import Repository.*;
 import XML.XmlData;
 import XML.XmlNotValidException;
+import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
@@ -17,14 +18,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 
 public class ModuleTwo {
-    public static String Username="";
+    public static String Username = "";
     private static Repository activeRepo = null;
 
     public static void updateUsername(String name) {
-        Username=name;
+        Username = name;
     }
 
     public static void makeRemoteRepositoryFiles(String path) throws IOException {
@@ -84,7 +86,7 @@ public class ModuleTwo {
 
 
         checkIfActiveRepoExists();
-        activeRepo.addNewBranch(name, sha1,"local");
+        activeRepo.addNewBranch(name, sha1, "local");
     }
 
     public static boolean checkChanges() throws NoActiveRepositoryException, IOException {
@@ -181,21 +183,20 @@ public class ModuleTwo {
     }
 
 
-
     public static void push() throws IOException, NoSuchRepoException, ClassNotFoundException {
-            ArrayList<String> arr = activeRepo.getWantedSha1sForPush();
-            String activeRepoPath = getActiveRepoPath();
-            SwitchRepo(activeRepo.getRemoteRepositoryPath());
-            activeRepo.updateCommits(activeRepoPath, arr);
-            activeRepo.updateHeadBranch(activeRepoPath);
-            SwitchRepo(activeRepoPath);
-            activeRepo.updateRB();
+        ArrayList<String> arr = activeRepo.getWantedSha1sForPush();
+        String activeRepoPath = getActiveRepoPath();
+        SwitchRepo(activeRepo.getRemoteRepositoryPath());
+        activeRepo.updateCommits(activeRepoPath, arr);
+        activeRepo.updateHeadBranch(activeRepoPath);
+        SwitchRepo(activeRepoPath);
+        activeRepo.updateRB();
     }
 
     public static void pull() throws IOException, NoSuchRepoException, ClassNotFoundException {
         if (activeRepo.isHeadBranchRTB() && activeRepo.lrIsPushed()) {
             String myPath = getActiveRepoPath();
-            File headBranchFile= new File(getActiveRepoPath()+"/.magit/branches/"+activeRepo.getHeadBranchName());
+            File headBranchFile = new File(getActiveRepoPath() + "/.magit/branches/" + activeRepo.getHeadBranchName());
             BufferedReader r = new BufferedReader(new FileReader(headBranchFile));
             String sha1OfCurrHeadCommit = r.readLine();
             SwitchRepo(ModuleTwo.activeRepo.getRemoteRepositoryPath());
@@ -207,31 +208,34 @@ public class ModuleTwo {
             activeRepo.updateRB();
         }
     }
-    public static void buildDir_Ex3()
-    {
+
+    public static void buildDir_Ex3() {
         new File("C:/magit-ex3").mkdir();
         new File("C:/magit-ex3/XML").mkdir();
     }
+
     public static void makeFileForXML_Ex3(String content) throws FileNotFoundException {
         File f = new File("C:/magit-ex3/XML/tempXML.xml");
-        if(f.exists())
+        if (f.exists())
             f.delete();
         PrintWriter out = new PrintWriter("C:/magit-ex3/XML/tempXML.xml");
         out.println(content);
         out.close();
     }
+
     public static void makeXMLfromRepo_Ex3() throws XmlNotValidException, IOException {
 
-        new File("C:/magit-ex3/"+Username).mkdir();
-        activeRepo =Repository.makeRepoFromXmlRepo(new XmlData("C:/magit-ex3/XML/tempXML.xml",Username));
-        new File("C:/magit-ex3/"+Username+"/"+activeRepo.getName()).mkdir();
+        new File("C:/magit-ex3/" + Username).mkdir();
+        activeRepo = Repository.makeRepoFromXmlRepo(new XmlData("C:/magit-ex3/XML/tempXML.xml", Username));
+        new File("C:/magit-ex3/" + Username + "/" + activeRepo.getName()).mkdir();
         activeRepo.createEmptyRepo();
         activeRepo.createFiles();
         activeRepo.updateUsername(Username);
-        Users.UsersDataBase.addRepo(Username,activeRepo.getName(),activeRepo);
+        Users.UsersDataBase.addRepo(Username, activeRepo.getName(), activeRepo);
     }
-    public static void getLastCommit_Ex3()
-    {
+
+    public static void getLastCommit_Ex3() {
 
     }
+
 }

@@ -29,7 +29,7 @@ public class ExecutePR extends HttpServlet {
             localRepo.getHeadBranch().setType("remote");
         Branch branch=localRepo.branchLambda_ex3(pr.SenderBranch);
         String Sender=pr.Sender;
-        repo.PrMap.remove(pr);
+        repo.PrMap.remove(pr.Sender);
 
         //delete msg(maybe)
         if(branch!=null)

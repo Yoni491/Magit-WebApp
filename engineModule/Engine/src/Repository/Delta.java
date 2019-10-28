@@ -58,15 +58,15 @@ class Delta {
      String showChanges() {
         String linesToPrint = "";
         if (newFilesFofs.entrySet().size() != 0) {
-            linesToPrint = linesToPrint.concat("The following files and folders have been created:\n");
+            linesToPrint = linesToPrint.concat("The following files and folders have been created:<p></p>");
             linesToPrint = showChangeInFiles(linesToPrint, newFilesFofs);
         }
         if (updatedFilesFofs.entrySet().size() != 0) {
-            linesToPrint = linesToPrint.concat("The following files and folder have been updated:\n");
+            linesToPrint = linesToPrint.concat("The following files and folder have been updated:<p></p>");
             linesToPrint = showChangeInFiles(linesToPrint, updatedFilesFofs);
         }
         if (deletedFilesFofs.entrySet().size() != 0) {
-            linesToPrint = linesToPrint.concat("The following files and folders have been deleted:\n");
+            linesToPrint = linesToPrint.concat("The following files and folders have been deleted:<p></p>");
             linesToPrint = showChangeInFiles(linesToPrint, deletedFilesFofs);
         }
         return linesToPrint;
@@ -75,7 +75,7 @@ class Delta {
     private String showChangeInFiles(String msg, Map<String, Fof> filesMap) {
         int i = 1;
         for (Map.Entry<String, Fof> entry : filesMap.entrySet()) {
-            msg = msg.concat(i + ")" + " Path: " + entry.getKey() + entry.getValue().getInfo())+"\n";
+            msg = msg.concat(i + ")" + " Path: " + entry.getKey() + entry.getValue().getInfo())+"<p></p>";
             i++;
         }
         return msg;

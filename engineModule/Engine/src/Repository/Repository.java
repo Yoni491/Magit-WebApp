@@ -289,7 +289,7 @@ public class Repository {
             obj = new Folder(fofLst);
         } else {
                 content = new String(Files.readAllBytes(Paths.get(location + _path)));
-                obj = new Blob(content);
+                obj = new Blob(content.substring(0, content.length() - 1));
         }
         assert obj != null;
         fof = new Fof(obj.getSha1(), file.getName(), !file.isDirectory(), modifier, new DateAndTime(file.lastModified()));

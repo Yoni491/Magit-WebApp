@@ -2,6 +2,8 @@ package servlets;
 
 
 
+import Users.UsersDataBase;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +21,7 @@ public class LogoutServlet extends HttpServlet {
     }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            UsersDataBase.deleteAllMessagesOfUser(SessionUtils.getUsername(request));
             SessionUtils.clearSession(request);
             response.sendRedirect("Pages/Login/Login.jsp");
         }
