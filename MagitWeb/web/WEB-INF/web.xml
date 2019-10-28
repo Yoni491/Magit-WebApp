@@ -181,6 +181,14 @@
         <servlet-name>PullServlet</servlet-name>
         <url-pattern>/Pages/RepositoryPage/PullServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteBranchServlet</servlet-name>
+        <servlet-class>servlets.DeleteBranchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteBranchServlet</servlet-name>
+        <url-pattern>/Pages/RepositoryPage/DeleteBranchServlet</url-pattern>
+    </servlet-mapping>
     ajaxMessageServlet
     <servlet>
         <servlet-name>ajaxMessageServlet</servlet-name>

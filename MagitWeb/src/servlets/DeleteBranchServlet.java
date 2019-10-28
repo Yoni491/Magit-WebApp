@@ -1,6 +1,7 @@
 package servlets;
 
 import Objects.Branch.AlreadyExistingBranchException;
+import Objects.Branch.Branch;
 import Objects.Branch.BranchNoNameException;
 import Objects.Branch.NoCommitHasBeenMadeException;
 import Repository.Repository;
@@ -11,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-public class MakeNewBranchServlet extends HttpServlet {
+public class DeleteBranchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -23,11 +23,14 @@ public class MakeNewBranchServlet extends HttpServlet {
     }
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NoCommitHasBeenMadeException, BranchNoNameException, AlreadyExistingBranchException {
-        String newBranchName = request.getParameter("newBranch");
-        if(newBranchName.equals(""))
-            response.sendRedirect("../RepositoryPage/RepoPage.jsp");
+        String branchName = request.getParameter("newBranch");
         Repository repo = SessionUtils.getRepo(request);
-        repo.addNewBranch(newBranchName,repo.getHeadBranch().getSha1(),"local");
+        Branch branchToRemove = repo.getBranches().stream().filter(br->br.getName().equals(branchName)).findFirst().orElse(null);
+        if(branchToRemove.getType().equals("local")){
+            repo.removeLocalBranch(branchToRemove);
+        }
+        else
+            repo.removeRbBranch(branchToRemove);
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 
