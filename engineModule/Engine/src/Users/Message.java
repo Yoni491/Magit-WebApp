@@ -29,13 +29,13 @@ public class Message {
         +PRmsg+"<p></p>"+date.getDate();
     }
     public Message(String RepoName, String Sender, String Receiver, String SenderBranch)
-    {//For push
+    {//For branch delete
         this.RepoName=RepoName;
         this.Sender=Sender;
         this.Receiver=Receiver;
         this.SenderBranch=SenderBranch;
         date=new DateAndTime();
-        msg="The user:"+Sender+" has pushed the branch:"+SenderBranch +" for your repository: "+RepoName+"."+"<p></p>"+date.getDate();
+        msg="The user:"+Sender+" has deleted the branch:"+SenderBranch +" in your repository: "+RepoName+"."+"<p></p>"+date.getDate();
     }
     public Message(String RepoName, String Sender, String Receiver, String SenderBranch,String type)
     {//For pull/The remote user accepted pr

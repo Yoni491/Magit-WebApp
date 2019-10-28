@@ -1,5 +1,7 @@
 package servlets;
 
+import Users.UsersDataBase;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +18,7 @@ public class RepoPageServlet extends HttpServlet {
         if(press!=null) {
             SessionUtils.setRepoName(request,press);
         }
+        UsersDataBase.deleteAllMessagesOfUser(SessionUtils.getUsername(request));
         response.sendRedirect("../RepositoryPage/RepoPage.jsp");
     }
 
