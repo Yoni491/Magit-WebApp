@@ -1204,6 +1204,14 @@ public class Repository {
     public boolean rtbExists(String name) {
         return branches.stream().filter(br->br.getName().equals(name)).filter(br->br.getType().equals("tracking")).findFirst().orElse(null) !=null;
     }
+
+    public void removeLocalBranch(Branch branchToRemove) {
+        this.branches.remove(branchToRemove);
+    }
+
+    public void removeRbBranch(Branch branchToRemove) {
+        branches.removeIf(branch -> branch.getName().equals(branchToRemove));
+    }
 }
 
 

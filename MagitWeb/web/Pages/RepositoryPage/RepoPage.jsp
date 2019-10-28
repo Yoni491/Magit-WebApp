@@ -85,16 +85,18 @@
                             <input type="hidden" name="branchSha1" value="<%=branch.getSha1()%>">
                             <%if(branch.getType().equals("remote")){%>
                             <button class="btn btn-default" type="submit">Remote branch : <%=branch.getName()%></button>
-                            <%if(localRepo.rtbExists(branch.getName())){%>
+                                <button class="btn btn-default" type="submit" formaction="DeleteBranchServlet">Delete branch</button>
+                                <%if(localRepo.rtbExists(branch.getName())){%>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut</button>
                             <%}else{%>
                             <button class="btn btn-default" type="submit" formaction="checkOutServlet">checkOut (Make RTB)</button>
                             <%}}if(branch.getType().equals("local")){%>
                             <button class="btn btn-default" type="submit">Branch : <%=branch.getName()%></button>
-                            <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
+                                <button class="btn btn-default" type="submit" formaction="DeleteBranchServlet">Delete branch</button>
+                                <button class="btn btn-default" type="submit" formaction="checkOutServlet">CheckOut</button>
                                 <%if(localRepo.isForkOfOtherRepo_ex3()&& !branch.equals(localRepo.getHeadBranch())){%>
                             <button class="btn btn-default" type="submit" formaction="Push6">Push branch</button>
-                            <%}}%>
+                                <%}}%>
                             <%if(!branch.getType().equals("tracking")&&remoteRepo!=null && !localRepo.getWcHasOpenChanges()&& branch.getName().equals(remoteRepo.getHeadBranch().getName())){%>
                             <button class="btn btn-default" type="submit" formaction="PullServlet">Pull branch</button>
                             <%}%>
