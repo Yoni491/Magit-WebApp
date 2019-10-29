@@ -25,6 +25,11 @@ The following changes had been made:
 <form method="Post" action="ExecutePR">
     <button class="btn btn-default" type="submit">Accept changes</button>
 </form>
+<form method="Post" action="DeniedPR">
+    Deny reason:
+    <input type="input" name="denyReason" >
+    <button class="btn btn-default" type="submit">Deny changes</button>
+</form>
 
 </body>
 </html>

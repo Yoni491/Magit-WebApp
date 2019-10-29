@@ -189,7 +189,6 @@
         <servlet-name>DeleteBranchServlet</servlet-name>
         <url-pattern>/Pages/RepositoryPage/DeleteBranchServlet</url-pattern>
     </servlet-mapping>
-    ajaxMessageServlet
     <servlet>
         <servlet-name>ajaxMessageServlet</servlet-name>
         <servlet-class>servlets.ajaxMessageServlet</servlet-class>
@@ -197,5 +196,13 @@
     <servlet-mapping>
         <servlet-name>ajaxMessageServlet</servlet-name>
         <url-pattern>/Pages/UserPage/ajaxMessageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeniedPR</servlet-name>
+        <servlet-class>servlets.DeniedPR</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeniedPR</servlet-name>
+        <url-pattern>/Pages/ShowDeltaPage/DeniedPR</url-pattern>
     </servlet-mapping>
 </web-app>

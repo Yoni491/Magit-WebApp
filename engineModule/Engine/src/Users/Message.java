@@ -37,17 +37,31 @@ public class Message {
         date=new DateAndTime();
         msg="The user:"+Sender+" has deleted the branch:"+SenderBranch +" in your repository: "+RepoName+"."+"<p></p>"+date.getDate();
     }
-    public Message(String RepoName, String Sender, String Receiver, String SenderBranch,String type)
-    {//For pull/The remote user accepted pr
-        this.RepoName=RepoName;
-        this.Sender=Sender;
-        this.Receiver=Receiver;
-        this.SenderBranch=SenderBranch;
-        date=new DateAndTime();
-        if(type.equals("pull"))
-            msg="The user:"+Sender+" has pulled the branch:"+SenderBranch +" from your repository: "+RepoName+"."+"<p></p>"+date.getDate();
-        if(type.equals("PrAccepted"))
-            msg="The user:"+Sender+" has accepted your pull request for repository:"+RepoName+"."+"<p></p>"+date.getDate();
+    public Message(String RepoName, String Sender, String Receiver, String SenderBranch,String type) {//For pull/The remote user accepted pr/Denied PR
+        this.RepoName = RepoName;
+        this.Sender = Sender;
+        this.Receiver = Receiver;
+        this.SenderBranch = SenderBranch;
+        date = new DateAndTime();
+        if (type.equals("pull"))
+            msg = "The user:" + Sender + " has pulled the branch:" + SenderBranch + " from your repository: " + RepoName + "." + "<p></p>" + date.getDate();
+        if (type.equals("PrAccepted"))
+            msg = "The user:" + Sender + " has accepted your pull request for repository:" + RepoName + "." + "<p></p>" + date.getDate();
+    }
+    public Message(String RepoName, String Sender, String Receiver, String SenderBranch,String type,String denyReason) {//Denied PR
+        this.RepoName = RepoName;
+        this.Sender = Sender;
+        this.Receiver = Receiver;
+        this.SenderBranch = SenderBranch;
+        date = new DateAndTime();
+        if (type.equals("PrDenied")) {
+            msg = "The user:" + Sender + " has denied your pull request for the repository:" + RepoName + "." + "<p></p>";
+        if(!denyReason.equals(""))
+        {
+            msg=msg+"Deny reason: "+denyReason+ "<p></p>";
+        }
+        msg=msg+date.getDate();
+        }
     }
     public Message(String RepoName, String Sender, String Receiver)
     {//For fork
