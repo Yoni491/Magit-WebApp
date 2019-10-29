@@ -175,7 +175,7 @@
                     <h1>Message List</h1>
                     <ol type="1">
                     <% for(Message message: UsersDataBase.getUserData(SessionUtils.getUsername(request)).MsgList){%>
-                        <li><%=message.msg%></li>
+                        <li class="text-success"><%=message.msg%></li>
                     <%}%>
                     </ol>
                 </div>

@@ -110,7 +110,7 @@
                         <h1>Message List</h1>
                         <ul type="1" id="MessageList">
                             <% for(Message message: UsersDataBase.getUserData(SessionUtils.getUsername(request)).MsgList){%>
-                            <li><%=message.msg%></li>
+                            <li class="text-success"><%=message.msg%></li>
                             <%}%>
                         </ul>
                     </div>
