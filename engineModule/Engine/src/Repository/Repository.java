@@ -1106,7 +1106,7 @@ public class Repository {
     }
 
     public void setWc_ex3(Commit commitToCopy) {
-        if(Wc==null) {
+        if(Wc==null||!WC_HAS_OPEN_CHANGES) {
             String sha1OfUpdatedRootFolder = copyFilesOfCommitWithDifferentSha1_ex3((Folder) objList.get(commitToCopy.getRootFolderSha1()));
             this.Wc = new Commit(sha1OfUpdatedRootFolder, commitToCopy.getSha1(), "", " ", username, commitToCopy.getDateAndTime());
         }
